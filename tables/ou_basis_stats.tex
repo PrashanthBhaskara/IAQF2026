@@ -1,0 +1,40 @@
+\begin{table}
+\caption{OU Mean Reversion and ADF Stationarity by Regime}
+\label{tab:ou_stats}
+\begin{tabular}{llrrrrrr}
+\toprule
+Regime & Basis & Mean (bps) & Std (bps) & Half-Life (min) & ADF Stat & ADF p-value & N \\
+\midrule
+Pre-SVB & basis_usdc_kraken & -0.320000 & 5.000000 & 1.370000 & -40.280000 & 0.0000 & 11197 \\
+Pre-SVB & basis_usdt_kraken & -0.600000 & 4.330000 & 1.270000 & -43.260000 & 0.0000 & 12618 \\
+Pre-SVB & basis_usdt_coinbase & -0.070000 & 2.670000 & 0.980000 & -39.960000 & 0.0000 & 12629 \\
+Pre-SVB & basis_usdc_usdt_binance & -4.140000 & 25.020000 & 5.270000 & -26.740000 & 0.0000 & 12960 \\
+Pre-SVB & xbasis_btcusdt_binance_kraken & -0.080000 & 4.560000 & 1.200000 & -44.870000 & 0.0000 & 12618 \\
+Pre-SVB & xbasis_btcusdt_coinbase_kraken & -0.080000 & 4.980000 & 1.250000 & -41.810000 & 0.0000 & 12308 \\
+Pre-SVB & xbasis_btcusd_coinbase_kraken & -0.330000 & 2.420000 & 1.000000 & -34.090000 & 0.0000 & 12688 \\
+Pre-SVB & usdt_peg_dev_kraken & -0.050000 & 1.340000 & 5.630000 & -8.150000 & 0.0000 & 12960 \\
+Pre-SVB & usdt_peg_dev_coinbase & 0.210000 & 1.230000 & 60.470000 & -5.750000 & 0.0000 & 12665 \\
+Pre-SVB & usdc_peg_dev_kraken & -0.450000 & 0.520000 & 1.450000 & -34.010000 & 0.0000 & 12445 \\
+Crisis & basis_usdc_kraken & 5.270000 & 21.210000 & 1.020000 & -20.270000 & 0.0000 & 4283 \\
+Crisis & basis_usdt_kraken & 0.680000 & 6.570000 & 1.350000 & -14.780000 & 0.0000 & 4312 \\
+Crisis & basis_usdt_coinbase & -0.950000 & 5.600000 & 1.540000 & -13.830000 & 0.0000 & 4318 \\
+Crisis & basis_usdc_usdt_binance & -0.490000 & 46.280000 & 1.590000 & -20.240000 & 0.0000 & 4320 \\
+Crisis & xbasis_btcusdt_binance_kraken & -0.880000 & 6.490000 & 1.160000 & -15.570000 & 0.0000 & 4312 \\
+Crisis & xbasis_btcusdt_coinbase_kraken & -0.830000 & 7.200000 & 1.150000 & -16.640000 & 0.0000 & 4310 \\
+Crisis & xbasis_btcusd_coinbase_kraken & 2.370000 & 6.890000 & 3.180000 & -9.420000 & 0.0000 & 4320 \\
+Crisis & usdt_peg_dev_kraken & 58.110000 & 46.610000 & 496.660000 & -1.850000 & 0.3541 & 4320 \\
+Crisis & usdt_peg_dev_coinbase & 59.680000 & 46.080000 & 542.490000 & -1.720000 & 0.4220 & 4320 \\
+Crisis & usdc_peg_dev_kraken & -306.600000 & 304.750000 & 571.960000 & -1.680000 & 0.4430 & 4292 \\
+Post-SVB & basis_usdc_kraken & 0.450000 & 9.060000 & 1.190000 & -40.610000 & 0.0000 & 12419 \\
+Post-SVB & basis_usdt_kraken & -1.230000 & 6.470000 & 0.980000 & -36.770000 & 0.0000 & 12837 \\
+Post-SVB & basis_usdt_coinbase & 0.280000 & 5.320000 & 1.140000 & -26.270000 & 0.0000 & 12956 \\
+Post-SVB & basis_usdc_usdt_binance & -2.580000 & 12.980000 & 2.320000 & -23.700000 & 0.0000 & 12959 \\
+Post-SVB & xbasis_btcusdt_binance_kraken & 0.390000 & 6.810000 & 0.900000 & -44.950000 & 0.0000 & 12837 \\
+Post-SVB & xbasis_btcusdt_coinbase_kraken & 0.380000 & 7.410000 & 0.930000 & -66.950000 & 0.0000 & 12834 \\
+Post-SVB & xbasis_btcusd_coinbase_kraken & 4.590000 & 7.450000 & 4.210000 & -10.040000 & 0.0000 & 12952 \\
+Post-SVB & usdt_peg_dev_kraken & 29.050000 & 12.060000 & 188.520000 & -4.560000 & 0.0002 & 12952 \\
+Post-SVB & usdt_peg_dev_coinbase & 34.780000 & 11.710000 & 154.830000 & -4.840000 & 0.0000 & 12959 \\
+Post-SVB & usdc_peg_dev_kraken & -10.680000 & 19.250000 & 360.820000 & -3.610000 & 0.0055 & 12837 \\
+\bottomrule
+\end{tabular}
+\end{table}

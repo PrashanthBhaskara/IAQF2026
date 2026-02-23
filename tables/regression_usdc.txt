@@ -1,0 +1,29 @@
+=== USDC/USD Basis Regression ===
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  Basis   R-squared:                       0.041
+Model:                            OLS   Adj. R-squared:                  0.040
+Method:                 Least Squares   F-statistic:                     13.63
+Date:                Mon, 23 Feb 2026   Prob (F-statistic):           7.04e-09
+Time:                        17:06:28   Log-Likelihood:            -1.0089e+05
+No. Observations:               26489   AIC:                         2.018e+05
+Df Residuals:                   26485   BIC:                         2.018e+05
+Df Model:                           3                                         
+Covariance Type:                  HAC                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -0.0788      0.374     -0.211      0.833      -0.812       0.655
+Crisis         4.2954      0.819      5.248      0.000       2.691       5.900
+Vol            0.0044      0.048      0.091      0.928      -0.090       0.099
+Liq            0.0480      0.017      2.810      0.005       0.015       0.082
+==============================================================================
+Omnibus:                     9123.180   Durbin-Watson:                   1.291
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):          1188394.867
+Skew:                           0.607   Prob(JB):                         0.00
+Kurtosis:                      35.791   Cond. No.                         80.5
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC) using 60 lags and without small sample correction

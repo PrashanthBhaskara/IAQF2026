@@ -1,0 +1,13 @@
+Pair,Regime,Mean |Basis| (bps),% Minutes > Fee,Mean Net Arb (bps),N Minutes
+USDC/USD (Kraken),Pre-SVB,3.53,5.8,3.81,11197
+USDC/USD (Kraken),Crisis,13.37,43.0,15.39,4283
+USDC/USD (Kraken),Post-SVB,6.68,21.5,6.0,12419
+USDT/USD (Kraken),Pre-SVB,3.02,3.8,3.98,12618
+USDT/USD (Kraken),Crisis,4.94,11.7,4.25,4312
+USDT/USD (Kraken),Post-SVB,4.92,11.4,4.24,12837
+Cross-Exch BTC/USDT (Bin−Kra),Pre-SVB,3.13,4.5,3.9,12618
+Cross-Exch BTC/USDT (Bin−Kra),Crisis,4.84,11.9,4.12,4312
+Cross-Exch BTC/USDT (Bin−Kra),Post-SVB,5.12,12.6,4.26,12837
+Cross-Exch BTC/USD (CB−Kra),Pre-SVB,1.76,0.2,1.61,12688
+Cross-Exch BTC/USD (CB−Kra),Crisis,4.74,11.3,6.36,4320
+Cross-Exch BTC/USD (CB−Kra),Post-SVB,5.98,19.4,7.38,12952
