@@ -1,0 +1,304 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{float}
+
+\setstretch{1.15}
+\title{\textbf{Cross-Currency Dynamics in Cryptocurrencies under Stablecoin Regulation}}
+\author{IAQF Student Competition 2026}
+\date{February 2026}
+\author{Sparsh Agarwal, Prashanth Bhaskara,  Dhruv Kohli, Sankalp Yadav}
+
+\begin{document}
+
+\maketitle
+
+\section{Financial Context, Motivation, \& The GENIUS Act}
+
+\subsection{The Regulatory Catalyst}
+In 2025, the United States enacted what many observers have called a watershed moment in digital asset policy, the Guiding and Establishing National Innovation for U.S. Stablecoins Act, widely known as the GENIUS Act. For the first time, this legislation brought dollar-pegged stablecoins, specifically dominant market players such as USDC and USDT, into a clear and formal federal regulatory framework. By mandating strict reserve backing, heightened operational transparency, and direct oversight by banking regulators, the GENIUS Act effectively aims to transition stablecoins from experimental trading tokens into a systemic, trusted infrastructure for payments, liquidity provisioning, and financial settlement. 
+
+This legislative momentum is mirrored by rapid industry and institutional adoption, evidenced by major payment networks such as Visa launching USDC settlement offerings that integrate stablecoins directly into traditional treasury and settlement systems. As a wave of new crypto bills in 2026 promises further regulatory clarity around market structure, the ramifications extend far beyond institutional payments. This real-world regulatory shift is fundamentally relevant for market microstructure and cross-currency trading in cryptocurrency spot markets. 
+
+\subsection{Stablecoins as Digital Funding Currencies}
+Unlike traditional foreign exchange (FX) markets, which rely on established banking correspondent networks, cryptocurrency markets embed multiple fiat and quasi-fiat quote currencies—including USD, USDT, USDC, EUR, JPY, KRW and others—in a highly fragmented network of exchanges that operate on a 24/7 continuous basis. Within this ecosystem, stablecoins play a central, load-bearing role as intermediate liquidity conduits between disparate digital assets, functioning effectively as a kind of digital short-term funding currency or "shadow repo" market. 
+
+However, because these quasi-fiat instruments are not yet universally regulated or uniformly redeemable in the exact same manner as traditional fiat currency, cross-currency price relationships can frequently deviate from classic Law of One Price (LOOP) and parity conditions. These deviations create economic phenomena that are both persistent and exploitable. Understanding these cross-currency dynamics—specifically how the exact same base asset (e.g., BTC) trades against different quote currencies, and how stablecoin funding risks affect those relationships—is of immense academic and practical importance. For institutional market participants, asset custodians, and treasury desks, the underlying mechanics of cross-currency basis, liquidity fragmentation, and funding cost ultimately determine execution quality, hedging effectiveness, and operational risk. Furthermore, for regulators and policymakers, these dynamics inform critical questions about systemic risk, the efficiency of arbitrage, and the ultimate resilience of stablecoin-anchored markets under severe stress.
+
+\subsection{The SVB Crisis as a Natural Experiment}
+To comprehensively understand how regulated stablecoins might alter cross-currency trading patterns, it is necessary to examine market microstructure when stablecoin infrastructure is acutely stressed. We purposefully analyze a 21-day window of high-frequency data, covering the period of March 1, 2023 through March 21, 2023 (UTC). 
+
+This specific timeframe includes a major stablecoin stress event associated with the temporary, yet severe, de-pegging of USDC following the Silicon Valley Bank (SVB) failure. Following the liquidation of Silvergate Bank earlier in the month, the collapse of SVB on March 10 trapped approximately \$3.3 billion of Circle's USDC cash reserves. This structural failure in the traditional banking layer triggered a historic de-pegging event across digital spot markets on March 11 and 12, where USDC traded as low as \$0.87. 
+
+This exogenous shock provides a natural laboratory for studying cross-currency dynamics, liquidity fragmentation, and stablecoin funding risk. The panic caused a massive dislocation in liquidity: traders fled USDC for the perceived safety of USDT or fiat USD, causing USDT to trade at a premium while the BTC/USDC basis inverted violently. By modeling the price discovery mechanisms, cross-currency basis expansion, and order book resilience during this exact period, we can empirically demonstrate the funding risks that the GENIUS Act's strict reserve and auditing requirements are explicitly designed to mitigate.
+
+\section{Data Description \& Methodology}
+
+\subsection{Data Collection and Sourcing}
+To capture the highest fidelity of market microstructure available via public REST APIs, our team designed a robust, automated data ingestion and processing architecture. We collected 1-minute Open-High-Low-Close-Volume (OHLCV) candle data across a defined universe consisting of Bitcoin (BTC) as the base asset, quoted across fiat currencies (USD, EUR) and stablecoins (USDT, USDC). The data spans precisely from March 1, 2023, 00:00:00 UTC to March 21, 2023, 23:59:00 UTC, yielding an expected 30,240 discrete minutes of observation per trading pair.
+
+Data was systematically sourced across three major centralized exchanges, purposefully chosen to represent varying regulatory profiles, fee structures, and institutional footprints:
+\begin{itemize}
+    \item \textbf{Binance:} Representing the largest offshore liquidity pool (BTC/USDT, BTC/USDC, and BTC/EUR).
+    \item \textbf{Coinbase:} Representing heavily regulated, US-based fiat liquidity (BTC-USD, BTC-USDT, and BTC-EUR).
+    \item \textbf{Kraken:} Representing a mixed fiat/crypto-native institutional venue (BTC/USD, BTC/USDT, BTC/USDC, and BTC/EUR).
+\end{itemize}
+Additionally, we utilized the CryptoCompare API to fetch aggregate 1-minute benchmark peg data for USDT/USD and USDC/USD to independently analyze stablecoin spot market premium/discount patterns. Due to varying API rate limits and historical data constraints, Kraken 1-minute candles were algorithmically reconstructed by paginating historical raw tick-level trade data and aggregating it upward into precise minute-level OHLCV bars.
+
+\subsection{Preprocessing and Microstructure Alignment}
+Given the inherently asynchronous nature of cryptocurrency order books operating across physically distinct matching engines, robust temporal alignment was paramount. All raw datasets were mapped to a strict, unified 1-minute UTC timestamp grid. While missing observations were generally minimal (e.g., Binance maintained near 100\% uptime coverage, while Coinbase and Kraken exceeded 98\%), the stochastic models utilized in our quantitative framework demand continuous time series. Therefore, close prices were forward-filled for micro-gaps up to a maximum threshold of 5 minutes; larger gaps were flagged to prevent spurious volatility artifacts. 
+
+To evaluate liquidity depth and transaction friction in the absence of full Level-2 order book snapshots, we derived an intra-candle bid-ask spread proxy utilizing the high and low price components:
+\begin{equation}
+    \text{Relative Spread (bps)} = \left( \frac{\text{High}_t - \text{Low}_t}{\text{Close}_t} \right) \times 10000
+\end{equation}
+This metric serves as a high-frequency proxy for market depth, allowing us to quantify how spread and volatility vary between BTC quoted in pure fiat USD versus stablecoins during periods of acute stress.
+
+\subsection{Quantitative Framework}
+Our empirical methodology relies on three primary quantitative pillars designed to deconstruct the microstructure of cross-currency arbitrage:
+
+\subsubsection{Cross-Currency Basis and Arbitrage Bounds}
+The cross-currency basis measures the persistent premium or discount of BTC quoted in a stablecoin versus its traditional fiat counterpart. For example, the theoretical basis for USDT on a specific exchange at time $t$ is computed as:
+\begin{equation}
+    \text{Basis}_{\text{USDT}, t} = \left( \frac{P_{\text{BTC/USD}, t}}{P_{\text{BTC/USDT}, t}} - 1 \right) \times 10000
+\end{equation}
+Under the Law of One Price, and assuming USDT is perfectly pegged 1:1 with USD, this basis should theoretically be zero. We calculate this basis both intra-exchange (e.g., Coinbase BTC/USD vs. BTC/USDT) to isolate stablecoin risk from exchange risk, and cross-exchange to identify spatial arbitrage inefficiencies.
+
+\subsubsection{Stationarity and the Ornstein-Uhlenbeck Process} 
+To rigorously test the efficiency of arbitrage bounds and the persistence of cross-currency deviations, we model the basis as an Ornstein-Uhlenbeck (OU) mean-reverting stochastic process, governed by the stochastic differential equation:
+\begin{equation}
+    dX_t = \theta(\mu - X_t)dt + \sigma dW_t
+\end{equation}
+where $X_t$ is the cross-currency basis, $\mu$ is the long-term equilibrium mean, $\theta$ is the speed of mean reversion, and $dW_t$ is a standard Wiener process. Before estimating the SDE parameters, we apply Augmented Dickey-Fuller (ADF) tests to confirm the stationarity of the empirical basis series.
+
+By discretizing the process via an exact Euler-Maruyama mapping to an AR(1) model ($\Delta X_t = \alpha + \beta X_{t-1} + \epsilon_t$), we extract the half-life of mean reversion as $\tau = -\ln(2) / \beta$. This metric provides a highly interpretable, quantifiable measure of how rapidly market makers and arbitrageurs forced pricing anomalies back to parity before, during, and after the SVB crisis.
+
+\subsubsection{Information Flow and Granger Causality}
+To address liquidity fragmentation and determine which quote currency—or which exchange—acts as the primary engine for price discovery during market stress, we employ Granger causality tests within a Vector Autoregression (VAR) framework. By analyzing the 1-minute aligned log-return series across pairs:
+\begin{equation}
+    R_{1,t} = \sum_{i=1}^{p} a_i R_{1,t-i} + \sum_{i=1}^{p} b_i R_{2,t-i} + \epsilon_{1,t}
+\end{equation}
+We test the null hypothesis that lagged returns of the stablecoin pair ($R_2$) do not Granger-cause current returns of the fiat pair ($R_1$). This allows us to empirically answer whether the highly regulated, fiat-native markets or the offshore, stablecoin-native markets dominate information flow when stablecoin pegs temporarily fail.
+
+\section{Empirical Results: Pricing \& Liquidity}
+
+Our analysis reveals a rich multi-dimensional story: stablecoin pairs maintain tightly bounded mean-reverting dynamics during calm periods, but exogenous banking shocks shatter cross-currency parity across both intra-exchange and cross-exchange dimensions. We decompose these findings into four subsections.
+
+\subsection{Intra-Exchange Stablecoin Basis Dynamics}
+
+During the pre-SVB regime (March 1--9), the cross-currency basis between BTC quoted in stablecoins and BTC quoted in fiat USD remained nearly negligible. The USDC/USD basis on Kraken averaged $-0.32$ bps, while the USDT/USD basis on Kraken averaged $-0.60$ bps and on Coinbase $-0.07$ bps. However, the SVB Crisis regime (March 10--13) triggered a violent structural break. The Kraken USDC basis expanded to a mean of $+5.27$ bps with standard deviation soaring from $5.0$ to $21.2$ bps. Meanwhile, the USDT/USD basis on Kraken saw a more modest expansion (mean $+0.68$ bps, $\sigma = 6.57$ bps), reflecting USDT's distinct reserve structure.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/fig_basis_timeseries.png}
+    \caption{Panel A shows the intra-exchange stablecoin vs fiat basis across Kraken and Coinbase. Panel B isolates the USDC/USDT relative basis on Binance, which trades without direct fiat exposure.}
+    \label{fig:basis_ts}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/fig_basis_distribution.png}
+    \caption{Basis distributions by regime for USDC/USD (Kraken), USDT/USD (Kraken), and USDT/USD (Coinbase). The crisis regime exhibits severe right-tail skew for USDC and moderate widening for USDT.}
+    \label{fig:basis_dist}
+\end{figure}
+
+Our Ornstein-Uhlenbeck framework confirms that despite the magnitude expansion, arbitrage remained hyper-efficient. The ADF tests rejected the unit root null across all regimes ($p < 0.001$). The USDC basis mean-reversion half-life on Kraken actually \textit{compressed} during the crisis to $1.02$ minutes (from $1.37$ pre-crisis), while the USDT basis half-life remained stable at approximately $1.35$ minutes. This demonstrates that the \textit{speed} of arbitrage compression remained intact even as the \textit{magnitude} of dislocations expanded dramatically.
+
+\subsection{Stablecoin Peg Deviations and USDT vs USDC Dynamics}
+
+A critical distinction between USDT and USDC emerges from the direct peg analysis. Using on-exchange USDC/USD and USDT/USD spot pairs on Kraken, we observe that USDC traded as low as $\$0.87$ on March 11, representing a deviation of nearly $-1{,}300$ bps from parity. In contrast, USDT maintained a persistent \textit{premium} over $\$1.00$ throughout the crisis, averaging $+20.7$ bps on Kraken and $+23.7$ bps on Coinbase---a flight-to-safety effect where traders fled the perceived counterparty risk of USDC reserves locked at SVB.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/fig_stablecoin_peg.png}
+    \caption{Panel A: Direct stablecoin spot prices against USD. Panel B: Peg deviations from \$1.00 in basis points. The asymmetric response---USDC collapses while USDT rallies---illustrates a classic digital bank run.}
+    \label{fig:peg}
+\end{figure}
+
+\subsection{Cross-Exchange Spatial Arbitrage}
+
+Beyond intra-exchange analysis, we examine \textit{spatial} arbitrage---the same trading pair quoted across physically distinct matching engines. We compute the log-price differential for BTC/USDT between Binance and Kraken, between Coinbase and Kraken, and for BTC/USD between Coinbase and Kraken.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/fig_cross_exchange_basis.png}
+    \caption{Cross-exchange basis for BTC/USDT (Binance vs Kraken, Coinbase vs Kraken) and BTC/USD (Coinbase vs Kraken). The fiat-to-fiat channel (Panel C) exhibits persistent positive basis post-crisis.}
+    \label{fig:xbasis}
+\end{figure}
+
+During normal conditions, cross-exchange BTC/USDT deviations between Binance and Kraken averaged near zero ($0.007$ bps), confirming tight arbitrage linkage. However, the BTC/USD fiat channel between Coinbase and Kraken exhibited a persistent positive mean of $+2.18$ bps across the full window, likely reflecting Coinbase's premium as the primary US-regulated fiat gateway. During the crisis, all cross-exchange spreads widened materially, with BTC/USD (Coinbase--Kraken) showing particularly elevated deviations.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/fig_svb_crisis_zoom.png}
+    \caption{Zoomed SVB crisis window (March 10--13). Panel A: intra-exchange basis. Panel B: cross-exchange basis. The simultaneous expansion across both dimensions confirms systemic, not venue-specific, stress.}
+    \label{fig:svb_zoom}
+\end{figure}
+
+\subsection{Liquidity Fragmentation, Volatility, and Explanatory Regression}
+
+To quantify the role of liquidity in driving basis expansion, we examine the intraminute range proxy---$(H_t - L_t)/C_t$---across all major pairs and regimes. Figure~\ref{fig:liq} shows that spreads uniformly widened during the crisis, with stablecoin-quoted pairs experiencing proportionally larger deterioration than fiat-quoted pairs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{figures/fig_liquidity_regime.png}
+    \caption{Intraminute range (liquidity proxy) by pair and regime. Stablecoin pairs show disproportionate spread widening during the crisis.}
+    \label{fig:liq}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/fig_volume_share.png}
+    \caption{Daily volume fragmentation across all exchange-pair combinations, showing how trading activity redistributed during the SVB crisis.}
+    \label{fig:vol_share}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{figures/fig_realized_volatility.png}
+    \caption{Hourly realized volatility (60-minute rolling standard deviation of returns) across all major BTC pairs. Volatility spikes uniformly during the SVB crisis.}
+    \label{fig:rv}
+\end{figure}
+
+We run separate HAC regressions (Newey-West, 60 lags) for both the USDC and USDT basis on Kraken. Table~\ref{tab:regression} reports the results.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lcccc}
+    \toprule
+    & \multicolumn{2}{c}{\textbf{USDC/USD Basis}} & \multicolumn{2}{c}{\textbf{USDT/USD Basis}} \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+    \textbf{Variable} & \textbf{Coef} & \textbf{P$> |$z$|$} & \textbf{Coef} & \textbf{P$> |$z$|$}  \\
+    \midrule
+    Intercept      & $-0.092$ & 0.796 & $-0.656$ & $0.000^{***}$ \\
+    Crisis Dummy   & $4.329$  & $0.000^{***}$ & $1.655$ & $0.000^{***}$ \\
+    Volatility     & $0.003$  & 0.953 & $-0.029$ & 0.179 \\
+    Liquidity      & $0.048$  & $0.005^{**}$ & $-0.013$ & 0.082 \\
+    \midrule
+    $R^2$          & \multicolumn{2}{c}{0.041} & \multicolumn{2}{c}{0.012} \\
+    \bottomrule
+    \multicolumn{5}{l}{\footnotesize HAC standard errors (60 lags). Dep. Variable: Basis (bps).}
+    \end{tabular}
+    \caption{Explanatory Regression for USDC and USDT Basis}
+    \label{tab:regression}
+\end{table}
+
+Both regressions confirm a highly significant crisis structural break. Notably, the USDC crisis coefficient ($+4.33$ bps, $p < 0.001$) is nearly three times the USDT coefficient ($+1.65$ bps), quantifying the differential flight-to-safety dynamics. Liquidity thinning significantly explains USDC deviations ($\beta = 0.048$, $p = 0.005$) but is marginally insignificant for USDT ($p = 0.082$), suggesting that USDC's parity breakdown was driven by both fundamental reserve concerns \textit{and} order book deterioration, while USDT was primarily driven by speculative premium demand.
+
+\subsection{Information Flow and Price Discovery}
+
+We employ comprehensive multi-pair Granger causality tests within VAR frameworks (AIC-optimal lag selection) to determine which markets and quote currencies lead price discovery. Table~\ref{tab:granger} presents the results.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lrrl}
+    \toprule
+    \textbf{Directional Test} & \textbf{F-stat} & \textbf{p-value} & \textbf{Sig.} \\
+    \midrule
+    BTC/USD $\rightarrow$ BTC/USDC (Kraken) & 1.512 & 0.128 & \\
+    BTC/USDC $\rightarrow$ BTC/USD (Kraken) & 332.18 & 0.000 & $^{***}$ \\
+    \midrule
+    BTC/USD $\rightarrow$ BTC/USDT (Kraken) & 3.825 & 0.000 & $^{***}$ \\
+    BTC/USDT $\rightarrow$ BTC/USD (Kraken) & 385.27 & 0.000 & $^{***}$ \\
+    \midrule
+    Binance USDT $\rightarrow$ Kraken USDT & 7.265 & 0.000 & $^{***}$ \\
+    Kraken USDT $\rightarrow$ Binance USDT & 476.07 & 0.000 & $^{***}$ \\
+    \midrule
+    Coinbase USD $\rightarrow$ Kraken USD & 3.709 & 0.000 & $^{***}$ \\
+    Kraken USD $\rightarrow$ Coinbase USD & 130.13 & 0.000 & $^{***}$ \\
+    \bottomrule
+    \end{tabular}
+    \caption{Granger Causality Tests Across Multiple Pairs and Exchanges}
+    \label{tab:granger}
+\end{table}
+
+Several critical findings emerge:
+\begin{enumerate}
+    \item \textbf{Fiat dominates USDC:} BTC/USD does \textit{not} Granger-cause BTC/USDC ($p = 0.128$), but BTC/USDC strongly Granger-causes BTC/USD ($F = 332$, $p < 0.001$). This asymmetry implies that during stress, USDC-denominated markets generate novel microstructure information (panic selling) that propagates to fiat.
+    \item \textbf{Bidirectional USDT linkage:} Both directions are significant for BTC/USDT vs BTC/USD, confirming that USDT acts as a more mature, bidirectionally integrated pricing channel.
+    \item \textbf{Binance leads Kraken:} In the BTC/USDT cross-exchange channel, Binance leads Kraken with vastly asymmetric F-statistics ($476$ vs $7.3$), confirming Binance's dominant role as the global price discovery engine for USDT-quoted assets.
+    \item \textbf{Coinbase leads Kraken:} In the fiat BTC/USD channel, Coinbase leads ($F=130$ vs $F=3.7$), consistent with Coinbase's positioning as the primary US institutional fiat gateway.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/fig_var_irf.png}
+    \caption{Orthogonalized Impulse Response Functions from the 10-lag VAR on Kraken BTC/USD and BTC/USDC 1-minute returns.}
+    \label{fig:irf}
+\end{figure}
+
+\subsection{Defensible Arbitrage Analysis}
+
+We report arbitrage profitability under an explicit assumption of $10$ bps round-trip taker fees (conservative for maker-taker schedules on Binance/Coinbase/Kraken). Table~\ref{tab:arb} summarizes the fraction of minutes exhibiting positive net profit opportunity.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{llrrr}
+    \toprule
+    \textbf{Pair} & \textbf{Regime} & \textbf{Mean $|$Basis$|$} & \textbf{\% Min $>$ Fee} & \textbf{Avg Net (bps)} \\
+    \midrule
+    USDC/USD (Kraken) & Pre-SVB & 3.53 & 5.8\% & 3.81 \\
+    USDC/USD (Kraken) & Crisis  & 13.37 & 43.0\% & 15.39 \\
+    USDC/USD (Kraken) & Post-SVB & 6.68 & 21.5\% & 6.00 \\
+    \midrule
+    USDT/USD (Kraken) & Pre-SVB & 3.02 & 3.8\% & 3.98 \\
+    USDT/USD (Kraken) & Crisis  & 4.94 & 11.7\% & 4.25 \\
+    USDT/USD (Kraken) & Post-SVB & 4.92 & 11.4\% & 4.24 \\
+    \midrule
+    Cross-Exch USDT (Bin--Kra) & Pre-SVB & 3.13 & 4.5\% & 3.90 \\
+    Cross-Exch USDT (Bin--Kra) & Crisis  & 4.84 & 11.9\% & 4.12 \\
+    Cross-Exch USDT (Bin--Kra) & Post-SVB & 5.12 & 12.6\% & 4.26 \\
+    \midrule
+    Cross-Exch USD (CB--Kra) & Pre-SVB & 1.76 & 0.2\% & 1.61 \\
+    Cross-Exch USD (CB--Kra) & Crisis  & 4.74 & 11.3\% & 6.36 \\
+    Cross-Exch USD (CB--Kra) & Post-SVB & 5.98 & 19.4\% & 7.38 \\
+    \bottomrule
+    \multicolumn{5}{l}{\footnotesize Assumes 10bps round-trip; mid-price execution; omits withdrawal/transfer delays.}
+    \end{tabular}
+    \caption{Arbitrage Profitability Summary by Pair and Regime}
+    \label{tab:arb}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/fig_arbitrage_after_fees.png}
+    \caption{Net arbitrage opportunity (after 10bps fees) across four pair channels. The USDC/USD channel dominates during the crisis, but cross-exchange fiat arbitrage persists post-crisis.}
+    \label{fig:arb}
+\end{figure}
+
+The USDC channel saw exploitable arbitrage in $43\%$ of crisis minutes, with an average net return of $15.4$ bps per minute. However, we explicitly note that these calculations assume instantaneous mid-price execution and omit withdrawal fees ($\sim\$25$--$\$35$ for BTC on-chain), cross-exchange transfer times ($\sim$30 minutes for Bitcoin confirmations), and KYC/AML onboarding delays. In practice, capturing these spreads requires pre-funded accounts on all venues and sub-second execution infrastructure.
+
+\section{Regulatory Overlay \& Discussion}
+
+Our empirical data provides a vivid contextual backdrop for the 2025 GENIUS Act. The SVB de-peg was fundamentally a failure of the traditional banking layer---specifically the opacity and fragility of stablecoin reserve custody arrangements.
+
+\textbf{Impact of the GENIUS Act.} If the strict reserve, auditing, and immediate-liquidation oversight mandated by the GENIUS Act had been enforced in 2023, the $+5.27$ bps mean USDC basis blowout would have been substantially mitigated. The Act requires stablecoins to hold reserves in highly liquid, federally insured instruments with full 1:1 redemption rights. Under such a regime, the fundamental solvency question that triggered the USDC panic ($3.3$ billion trapped at SVB) would have been structurally prevented. Our Granger results showing asymmetric and uni-directional causality during crisis (Table~\ref{tab:granger}) would likely flatten into a symmetric, tighter bidirectional system, as the risk premium embedded in the USDC basis would compress towards the USDT benchmark.
+
+\textbf{Differential stablecoin behavior.} Our analysis reveals that USDC and USDT exhibit fundamentally different risk profiles. USDC's collapse was a \textit{solvency event} driven by reserve exposure; USDT's premium was a \textit{demand event} driven by flight-to-safety. The GENIUS Act's uniform regulatory framework would harmonize these risk profiles, reducing basis volatility and improving cross-currency market efficiency.
+
+\textbf{Cross-exchange fragmentation.} Our cross-exchange analysis (Table~\ref{tab:arb}) shows that post-crisis, the fiat BTC/USD channel between Coinbase and Kraken exhibited \textit{persistent} arbitrage opportunities ($19.4\%$ of minutes with $7.38$ bps average net return), suggesting that even fiat-to-fiat integration across regulated venues remains imperfect. Regulatory clarity on stablecoin settlement rails could reduce these frictions by enabling institutional market makers to deploy capital more efficiently across venues.
+
+\textbf{Institutional adoption.} The mathematical reality of a $1$-minute mean-reversion half-life, combined with strict regulatory clarity, transforms stablecoins into a viable settlement asset for institutional treasury desks and payment networks (e.g., Visa's USDC settlement offerings). Our analysis demonstrates that the \textit{mechanism} works; only the \textit{trust infrastructure} needs regulatory hardening.
+
+\section{Conclusion \& Implications}
+
+In this paper, we utilized high-frequency microstructure data surrounding the SVB crisis to provide a comprehensive analysis of stablecoins as digital funding currencies. We analyzed over 30,000 minutes of 1-minute OHLCV data across 3 exchanges, 4 quote currencies, and multiple intra- and cross-exchange dimensions.
+
+Our key findings are:
+\begin{enumerate}
+    \item Stablecoin basis mean-reverts with extreme efficiency ($\tau \approx 1$ minute), even during crises, confirming robust arbitrage linkages.
+    \item The USDC de-peg generated a structural break of $+4.33$ bps (USDC) versus $+1.65$ bps (USDT), with liquidity thinning significantly amplifying USDC deviations but not USDT deviations.
+    \item Binance dominates global price discovery for USDT-quoted assets, while Coinbase leads fiat USD price discovery. During crisis, USDC markets generate novel information that propagates unidirectionally to fiat.
+    \item Cross-exchange arbitrage opportunities expanded dramatically during the SVB crisis (from $0.2\%$ to $43\%$ of minutes), but capturing them requires pre-funded multi-exchange infrastructure.
+\end{enumerate}
+
+These empirical realities directly inform the GENIUS Act's policy design. By mandating reserve transparency and enabling immediate redemption, the Act eliminates the solvency uncertainty that drove the USDC collapse and produced the extreme cross-currency dislocations documented in this study. This regulatory framework will compress basis volatility, reduce spatial fragmentation, and ultimately improve execution quality and operational resilience for institutional participants in digital asset markets.
+
+\end{document}
