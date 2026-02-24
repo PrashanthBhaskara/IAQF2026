@@ -6,7 +6,7 @@ Dep. Variable:                  Basis   R-squared:                       0.041
 Model:                            OLS   Adj. R-squared:                  0.040
 Method:                 Least Squares   F-statistic:                     13.63
 Date:                Mon, 23 Feb 2026   Prob (F-statistic):           7.04e-09
-Time:                        17:06:28   Log-Likelihood:            -1.0089e+05
+Time:                        17:54:15   Log-Likelihood:            -1.0089e+05
 No. Observations:               26489   AIC:                         2.018e+05
 Df Residuals:                   26485   BIC:                         2.018e+05
 Df Model:                           3                                         
