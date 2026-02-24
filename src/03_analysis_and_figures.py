@@ -395,15 +395,19 @@ with open(os.path.join(TABLES_DIR, 'regression_results.txt'), 'w') as f:
 # ============================================================
 # TABLE 4 & FIGURE 9: Multi-Pair Granger Causality
 # ============================================================
+# NOTE: statsmodels test_causality(caused, causing) tests whether
+# the SECOND argument Granger-causes the FIRST. Labels below name
+# the direction as: CAUSING → CAUSED.
 granger_pairs = [
-    ('kraken_btcusd', 'kraken_btcusdc', 'BTC/USD → BTC/USDC (Kraken)'),
-    ('kraken_btcusdc', 'kraken_btcusd', 'BTC/USDC → BTC/USD (Kraken)'),
-    ('kraken_btcusd', 'kraken_btcusdt', 'BTC/USD → BTC/USDT (Kraken)'),
-    ('kraken_btcusdt', 'kraken_btcusd', 'BTC/USDT → BTC/USD (Kraken)'),
-    ('binance_btcusdt', 'kraken_btcusdt', 'Binance USDT → Kraken USDT'),
-    ('kraken_btcusdt', 'binance_btcusdt', 'Kraken USDT → Binance USDT'),
-    ('coinbase_btcusd', 'kraken_btcusd', 'Coinbase USD → Kraken USD'),
-    ('kraken_btcusd', 'coinbase_btcusd', 'Kraken USD → Coinbase USD'),
+    # ('caused', 'causing', 'causing → caused')
+    ('kraken_btcusd',    'kraken_btcusdc',  'BTC/USDC → BTC/USD (Kraken)'),   # does USDC cause USD?
+    ('kraken_btcusdc',   'kraken_btcusd',   'BTC/USD → BTC/USDC (Kraken)'),   # does USD cause USDC?
+    ('kraken_btcusd',    'kraken_btcusdt',  'BTC/USDT → BTC/USD (Kraken)'),   # does USDT cause USD?
+    ('kraken_btcusdt',   'kraken_btcusd',   'BTC/USD → BTC/USDT (Kraken)'),   # does USD cause USDT?
+    ('binance_btcusdt',  'kraken_btcusdt',  'Kraken USDT → Binance USDT'),    # does Kraken cause Binance?
+    ('kraken_btcusdt',   'binance_btcusdt', 'Binance USDT → Kraken USDT'),    # does Binance cause Kraken?
+    ('coinbase_btcusd',  'kraken_btcusd',   'Kraken USD → Coinbase USD'),      # does Kraken cause Coinbase?
+    ('kraken_btcusd',    'coinbase_btcusd', 'Coinbase USD → Kraken USD'),      # does Coinbase cause Kraken?
 ]
 
 granger_results = []

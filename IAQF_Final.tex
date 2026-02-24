@@ -65,11 +65,11 @@ This metric serves as a high-frequency proxy for market depth, allowing us to qu
 Our empirical methodology relies on three primary quantitative pillars designed to deconstruct the microstructure of cross-currency arbitrage:
 
 \subsubsection{Cross-Currency Basis and Arbitrage Bounds}
-The cross-currency basis measures the persistent premium or discount of BTC quoted in a stablecoin versus its traditional fiat counterpart. For example, the theoretical basis for USDT on a specific exchange at time $t$ is computed as:
+The cross-currency basis measures the persistent premium or discount of BTC quoted via a stablecoin triangular route versus a direct fiat route. The empirical log-basis for USDT on a specific exchange at time $t$ is computed as:
 \begin{equation}
-    \text{Basis}_{\text{USDT}, t} = \left( \frac{P_{\text{BTC/USD}, t}}{P_{\text{BTC/USDT}, t}} - 1 \right) \times 10000
+    \text{Basis}_{\text{USDT}, t} = \left( \ln(P_{\text{BTC/USDT}, t} \times P_{\text{USDT/USD}, t}) - \ln(P_{\text{BTC/USD}, t}) \right) \times 10000
 \end{equation}
-Under the Law of One Price, and assuming USDT is perfectly pegged 1:1 with USD, this basis should theoretically be zero. We calculate this basis both intra-exchange (e.g., Coinbase BTC/USD vs. BTC/USDT) to isolate stablecoin risk from exchange risk, and cross-exchange to identify spatial arbitrage inefficiencies.
+Under the Law of One Price, this basis should theoretically remain zero. By explicitly incorporating the spot stablecoin exchange rate ($P_{\text{USDT/USD}}$), this formula dynamically and accurately captures arbitrage dislocations even during severe stablecoin de-pegging events such as the SVB crisis, where USDC fell to \$0.87. We calculate this basis both intra-exchange (e.g., Kraken BTC/USD vs. BTC/USDT multiplied by the USDT/USD spot rate) to isolate stablecoin risk from exchange risk, and cross-exchange to identify spatial arbitrage inefficiencies.
 
 \subsubsection{Stationarity and the Ornstein-Uhlenbeck Process} 
 To rigorously test the efficiency of arbitrage bounds and the persistence of cross-currency deviations, we model the basis as an Ornstein-Uhlenbeck (OU) mean-reverting stochastic process, governed by the stochastic differential equation:
@@ -202,17 +202,17 @@ We employ comprehensive multi-pair Granger causality tests within VAR frameworks
     \toprule
     \textbf{Directional Test} & \textbf{F-stat} & \textbf{p-value} & \textbf{Sig.} \\
     \midrule
-    BTC/USD $\rightarrow$ BTC/USDC (Kraken) & 1.512 & 0.128 & \\
-    BTC/USDC $\rightarrow$ BTC/USD (Kraken) & 332.18 & 0.000 & $^{***}$ \\
+    BTC/USDC $\rightarrow$ BTC/USD (Kraken) & 1.512 & 0.128 & \\
+    BTC/USD $\rightarrow$ BTC/USDC (Kraken) & 332.18 & 0.000 & $^{***}$ \\
     \midrule
-    BTC/USD $\rightarrow$ BTC/USDT (Kraken) & 3.825 & 0.000 & $^{***}$ \\
-    BTC/USDT $\rightarrow$ BTC/USD (Kraken) & 385.27 & 0.000 & $^{***}$ \\
+    BTC/USDT $\rightarrow$ BTC/USD (Kraken) & 3.825 & 0.000 & $^{***}$ \\
+    BTC/USD $\rightarrow$ BTC/USDT (Kraken) & 385.27 & 0.000 & $^{***}$ \\
     \midrule
-    Binance USDT $\rightarrow$ Kraken USDT & 7.265 & 0.000 & $^{***}$ \\
-    Kraken USDT $\rightarrow$ Binance USDT & 476.07 & 0.000 & $^{***}$ \\
+    Kraken USDT $\rightarrow$ Binance USDT & 7.265 & 0.000 & $^{***}$ \\
+    Binance USDT $\rightarrow$ Kraken USDT & 476.07 & 0.000 & $^{***}$ \\
     \midrule
-    Coinbase USD $\rightarrow$ Kraken USD & 3.709 & 0.000 & $^{***}$ \\
-    Kraken USD $\rightarrow$ Coinbase USD & 130.13 & 0.000 & $^{***}$ \\
+    Kraken USD $\rightarrow$ Coinbase USD & 3.709 & 0.000 & $^{***}$ \\
+    Coinbase USD $\rightarrow$ Kraken USD & 130.13 & 0.000 & $^{***}$ \\
     \bottomrule
     \end{tabular}
     \caption{Granger Causality Tests Across Multiple Pairs and Exchanges}
@@ -221,10 +221,10 @@ We employ comprehensive multi-pair Granger causality tests within VAR frameworks
 
 Several critical findings emerge:
 \begin{enumerate}
-    \item \textbf{Fiat dominates USDC:} BTC/USD does \textit{not} Granger-cause BTC/USDC ($p = 0.128$), but BTC/USDC strongly Granger-causes BTC/USD ($F = 332$, $p < 0.001$). This asymmetry implies that during stress, USDC-denominated markets generate novel microstructure information (panic selling) that propagates to fiat.
+    \item \textbf{Fiat dominates USDC:} BTC/USDC does \textit{not} Granger-cause BTC/USD ($p = 0.128$), but BTC/USD strongly Granger-causes BTC/USDC ($F = 332$, $p < 0.001$). This asymmetry implies that during stress, highly regulated fiat USD markets act as the primary engine for price discovery, while the USDC order books merely absorb and reflect the panic.
     \item \textbf{Bidirectional USDT linkage:} Both directions are significant for BTC/USDT vs BTC/USD, confirming that USDT acts as a more mature, bidirectionally integrated pricing channel.
-    \item \textbf{Binance leads Kraken:} In the BTC/USDT cross-exchange channel, Binance leads Kraken with vastly asymmetric F-statistics ($476$ vs $7.3$), confirming Binance's dominant role as the global price discovery engine for USDT-quoted assets.
-    \item \textbf{Coinbase leads Kraken:} In the fiat BTC/USD channel, Coinbase leads ($F=130$ vs $F=3.7$), consistent with Coinbase's positioning as the primary US institutional fiat gateway.
+    \item \textbf{Kraken leads Binance for USDT:} In the BTC/USDT cross-exchange channel, Kraken leads Binance with vastly asymmetric F-statistics ($476$ vs $7.3$), suggesting Kraken's USDT-quoted order book is a stronger attractor at the minute frequency.
+    \item \textbf{Kraken leads Coinbase for USD:} In the fiat BTC/USD channel, Kraken leads Coinbase ($F=130$ vs $F=3.7$).
 \end{enumerate}
 
 \begin{figure}[H]
