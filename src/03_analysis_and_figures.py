@@ -723,7 +723,7 @@ df_hl_robust_tex['Warning'] = df_hl_robust_tex['Warning'].replace({
 with open(os.path.join(TABLES_DIR, 'half_life_robustness.tex'), 'w') as f:
     f.write(df_hl_robust_tex.to_latex(
         index=False,
-        caption='Half-Life Robustness for Adjusted Residuals ($B_t$): 1m vs 5m and All vs No-Forward-Fill. Some no-FF cells have small n and may be unstable; NaN indicates the estimated rho is outside (0,1).',
+        caption='Half-Life Robustness for Adjusted Residuals ($B_t$): 1m vs 5m and All vs No-Forward-Fill. Some no-FF cells have small n and may be unstable; NaN indicates the estimated rho is outside (0,1). The no-FF sample can be small because stablecoin/USD legs are sparse at 1-minute frequency and many minutes are carried-forward closes.',
         label='tab:half_life_robustness',
         column_format='llllrrrl',
         float_format='%.4f',
@@ -1061,38 +1061,55 @@ df_discovery_csv = df_discovery.rename(columns={
     'gg_share_market_2': 'gg_component_metric_market_2',
 })
 df_discovery_csv.to_csv(os.path.join(TABLES_DIR, 'price_discovery_metrics.csv'), index=False)
-df_discovery_tex = df_discovery[[
+df_discovery_main_tex = df_discovery[[
     'channel',
-    'k_ar_diff_used',
     'rank_used',
+    'k_ar_diff_used',
     'alpha_market_1',
     'alpha_market_2',
     'leader_by_adjustment',
-    'leader_stable_lag_pm1',
-    'gg_share_market_1',
-    'gg_share_market_2',
-    'gg_warning',
 ]].rename(columns={
     'channel': 'Channel',
-    'k_ar_diff_used': 'VECM k_diff',
-    'rank_used': 'Rank Used',
-    'alpha_market_1': 'alpha_market_1',
-    'alpha_market_2': 'alpha_market_2',
+    'rank_used': 'Rank',
+    'k_ar_diff_used': 'k_delta',
+    'alpha_market_1': 'alpha_1',
+    'alpha_market_2': 'alpha_2',
     'leader_by_adjustment': 'Leader by |alpha|',
-    'leader_stable_lag_pm1': 'Leader Stable (k±1)',
-    'gg_share_market_1': 'GG diagnostic mkt1 (not a share; may be outside [0,1])',
-    'gg_share_market_2': 'GG diagnostic mkt2 (not a share; may be outside [0,1])',
-    'gg_warning': 'GG note',
 })
 with open(os.path.join(TABLES_DIR, 'price_discovery_metrics.tex'), 'w') as f:
-    latex_discovery = df_discovery_tex.to_latex(
+    latex_discovery = df_discovery_main_tex.to_latex(
         index=False,
-        caption='VECM Adjustment and GG Component Metrics (may be outside [0,1]) for Primary Kraken Channels (No-FF Sample)',
+        caption='VECM Adjustment Metrics for Primary Kraken Channels (No-FF Sample)',
         label='tab:price_discovery',
         float_format='%.4f',
         escape=True
     )
     f.write(make_width_safe_latex(latex_discovery, add_footnotesize=True))
+
+df_discovery_gg_tex = df_discovery[[
+    'channel',
+    'rank_used',
+    'k_ar_diff_used',
+    'gg_share_market_1',
+    'gg_share_market_2',
+    'gg_warning',
+]].rename(columns={
+    'channel': 'Channel',
+    'rank_used': 'Rank',
+    'k_ar_diff_used': 'k_delta',
+    'gg_share_market_1': 'GG diagnostic mkt1 (not a share; may be outside [0,1])',
+    'gg_share_market_2': 'GG diagnostic mkt2 (not a share; may be outside [0,1])',
+    'gg_warning': 'GG note',
+})
+with open(os.path.join(TABLES_DIR, 'price_discovery_gg_appendix.tex'), 'w') as f:
+    latex_discovery_gg = df_discovery_gg_tex.to_latex(
+        index=False,
+        caption='Appendix Table A1: Gonzalo--Granger Diagnostics (supplementary; may be outside [0,1])',
+        label='tab:price_discovery_gg',
+        float_format='%.4f',
+        escape=True
+    )
+    f.write(make_width_safe_latex(latex_discovery_gg, add_footnotesize=True))
 
 # ============================================================
 # TABLE 9 & FIGURE 10: Multi-Pair Granger Causality (Secondary)
@@ -1145,16 +1162,20 @@ else:
 
 if not df_granger_fdr.empty:
     df_granger_fdr = df_granger_fdr.rename(columns={'Test': 'Channel'})
-    for col in ['Significant (p<0.05)', 'Significant FDR']:
+    df_granger_fdr = df_granger_fdr.rename(columns={
+        'Significant (p<0.05)': 'Sig(p<0.05)',
+        'Significant FDR': 'Sig(q<0.05)',
+    })
+    for col in ['Sig(p<0.05)', 'Sig(q<0.05)']:
         if col in df_granger_fdr.columns:
             df_granger_fdr[col] = df_granger_fdr[col].fillna('No')
     df_granger_fdr = df_granger_fdr[[
         'Channel',
         'F-stat',
         'p-value',
-        'Significant (p<0.05)',
+        'Sig(p<0.05)',
         'q-value (BH/FDR)',
-        'Significant FDR',
+        'Sig(q<0.05)',
     ]]
 df_granger_fdr.to_csv(os.path.join(TABLES_DIR, 'granger_causality_fdr.csv'), index=False)
 
