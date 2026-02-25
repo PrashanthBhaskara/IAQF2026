@@ -1,0 +1,3 @@
+channel,market_1,market_2,n_obs_no_ff,deterministic,lag_rule,selected_p_aic,selected_p_bic,selected_p_used,k_ar_diff_used,trace_stat_r0,trace_crit95_r0,reject_r0_95,trace_stat_r1,trace_crit95_r1,reject_r1_95,rank_95,rank_used,rank_95_lag_minus1,rank_95_lag_plus1
+Kraken BTC/USD vs BTC/USDC,Kraken BTC/USD,Kraken BTC/USDC,15710,constant_in_cointegration,BIC (fallback AIC),9,3,3,2,7.7051621697098085,15.4943,False,0.02995913182171694,3.8415,False,0,0,0,0
+Kraken BTC/USD vs BTC/USDT,Kraken BTC/USD,Kraken BTC/USDT,20415,constant_in_cointegration,BIC (fallback AIC),10,9,9,8,27.025735927438888,15.4943,True,0.2193675839622044,3.8415,False,1,1,1,1

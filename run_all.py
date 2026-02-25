@@ -10,7 +10,8 @@ def main():
     scripts = [
         "src/01_fetch_data.py",
         "src/02_build_master_data.py",
-        "src/03_analysis_and_figures.py"
+        "src/03_analysis_and_figures.py",
+        "src/04_tex_integrity_check.py"
     ]
 
     for script in scripts:

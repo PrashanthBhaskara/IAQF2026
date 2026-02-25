@@ -1,12 +1,12 @@
 Comprehensive Granger Causality Results
 ============================================================
 
-                       Test  VAR Lags  F-stat  p-value Significant
-BTC/USDC → BTC/USD (Kraken)        10   1.512   0.1279            
-BTC/USD → BTC/USDC (Kraken)        10 332.178   0.0000         ***
-BTC/USDT → BTC/USD (Kraken)        10   3.825   0.0000         ***
-BTC/USD → BTC/USDT (Kraken)        10 385.271   0.0000         ***
- Kraken USDT → Binance USDT        10   7.265   0.0000         ***
- Binance USDT → Kraken USDT        10 476.065   0.0000         ***
-  Kraken USD → Coinbase USD        10   3.709   0.0001         ***
-  Coinbase USD → Kraken USD        10 130.133   0.0000         ***
+                       Test  VAR Lags  F-stat      p-value Significant
+BTC/USDC → BTC/USD (Kraken)        10   1.512     0.127898            
+BTC/USD → BTC/USDC (Kraken)        10 332.178            0         ***
+BTC/USDT → BTC/USD (Kraken)        10   3.825  3.44651e-05         ***
+BTC/USD → BTC/USDT (Kraken)        10 385.271            0         ***
+ Kraken USDT → Binance USDT        10   7.265   1.3895e-11         ***
+ Binance USDT → Kraken USDT        10 476.065            0         ***
+  Kraken USD → Coinbase USD        10   3.709   5.4774e-05         ***
+  Coinbase USD → Kraken USD        10 130.133 4.61744e-270         ***

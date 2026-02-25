@@ -1,0 +1,12 @@
+\begin{table}
+\caption{VECM Adjustment and Gonzalo--Granger Component Shares (Primary Kraken Channels, No-FF Sample)}
+\label{tab:price_discovery}
+\begin{tabular}{lrrrrllrrl}
+\toprule
+channel & k\_ar\_diff\_used & rank\_used & alpha\_market\_1 & alpha\_market\_2 & leader\_by\_adjustment & leader\_stable\_lag\_pm1 & gg\_share\_market\_1 & gg\_share\_market\_2 & gg\_warning \\
+\midrule
+Kraken BTC/USD vs BTC/USDC & 2 & 0 & NaN & NaN & undetermined\_no\_cointegration & NaN & NaN & NaN & no\_rank1\_cointegration \\
+Kraken BTC/USD vs BTC/USDT & 8 & 1 & 0.0079 & 0.0118 & Kraken BTC/USD & True & 2.9813 & -1.9813 & gg\_non\_convex\_share \\
+\bottomrule
+\end{tabular}
+\end{table}

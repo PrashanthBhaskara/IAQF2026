@@ -470,7 +470,7 @@ def extract_trades(df: pd.DataFrame, idx: pd.DatetimeIndex) -> pd.Series:
     return s
 
 def extract_spread_proxy(df: pd.DataFrame, idx: pd.DatetimeIndex) -> pd.Series:
-    """Use (high - low) as a proxy for the intra-candle spread."""
+    """Use (high - low) as an intra-candle range proxy."""
     if df.empty:
         return pd.Series(np.nan, index=idx, dtype=float)
     s = (df['high'] - df['low']).reindex(idx)
@@ -504,7 +504,7 @@ volumes = pd.DataFrame({
     'kraken_btceur': extract_volume(kraken_btceur, full_index),
 }, index=full_index)
 
-# Spread proxy panel
+# Range proxy panel
 spreads = pd.DataFrame({
     'binance_btcusdt': extract_spread_proxy(binance_btcusdt, full_index),
     'binance_btcusdc': extract_spread_proxy(binance_btcusdc, full_index),
@@ -961,15 +961,15 @@ plt.tight_layout()
 plt.savefig('fig_volume_comparison.png', dpi=150, bbox_inches='tight')
 plt.show()
 # ============================================================
-# Cell 16: Spread proxy analysis
+# Cell 16: Range proxy analysis
 # ============================================================
 
-# Relative spread = (high - low) / close  (in bps)
+# Intra-minute range proxy = (high - low) / close  (in bps)
 rel_spreads = pd.DataFrame()
 for col in btc_cols:
     rel_spreads[col] = (spreads[col] / closes[col]) * 1e4  # bps
 
-# Hourly mean relative spread
+# Hourly mean intra-minute range proxy
 hourly_spread = rel_spreads.resample('1h').mean()
 
 fig, axes = plt.subplots(2, 1, figsize=(16, 10), sharex=True)
@@ -983,8 +983,8 @@ for col, label, color in [
     ('coinbase_btcusdt', 'BTC/USDT', 'blue'),
 ]:
     ax.plot(hourly_spread[col], linewidth=0.8, label=label, color=color)
-ax.set_title('Hourly Mean Relative Spread (High-Low/Close) â€” Coinbase')
-ax.set_ylabel('Spread (bps)')
+ax.set_title('Hourly Mean Intra-minute Range (High-Low/Close) â€” Coinbase')
+ax.set_ylabel('Intra-minute Range (bps)')
 ax.legend()
 
 ax = axes[1]
@@ -993,8 +993,8 @@ for col, label, color in [
     ('binance_btcusdc', 'BTC/USDC', 'green'),
 ]:
     ax.plot(hourly_spread[col], linewidth=0.8, label=label, color=color)
-ax.set_title('Hourly Mean Relative Spread (High-Low/Close) â€” Binance')
-ax.set_ylabel('Spread (bps)')
+ax.set_title('Hourly Mean Intra-minute Range (High-Low/Close) â€” Binance')
+ax.set_ylabel('Intra-minute Range (bps)')
 ax.legend()
 
 for ax in axes:
@@ -1057,8 +1057,8 @@ for regime_name, (t0, t1) in regimes.items():
             'Pair': nice,
             'Mean Volume (BTC/min)': vol_sub.mean(),
             'Total Volume (BTC)': vol_sub.sum(),
-            'Mean Rel Spread (bps)': spread_sub.mean(),
-            'Median Rel Spread (bps)': spread_sub.median(),
+            'Mean Range Proxy (bps)': spread_sub.mean(),
+            'Median Range Proxy (bps)': spread_sub.median(),
             'Realized Vol (ann %)': ret_sub.std() * np.sqrt(525600) * 100,
         })
 
@@ -1231,7 +1231,7 @@ plt.savefig('fig_lead_lag.png', dpi=150, bbox_inches='tight')
 plt.show()
 
 # ============================================================
-# Cell 23: Intraday patterns â€” volume, spread, and basis by hour of day
+# Cell 23: Intraday patterns â€” volume, range proxy, and basis by hour of day
 # ============================================================
 
 # Add hour column
@@ -1254,7 +1254,7 @@ ax.set_xlabel('Hour (UTC)')
 ax.set_ylabel('BTC/minute')
 ax.legend(fontsize=8)
 
-# Spread by hour
+# Range proxy by hour
 ax = axes[0, 1]
 for col, label, color in [
     ('coinbase_btcusd', 'CB BTC/USD', 'black'),
@@ -1264,9 +1264,9 @@ for col, label, color in [
 ]:
     hourly_mean = rel_spreads[col].groupby(hour).mean()
     ax.plot(hourly_mean.index, hourly_mean.values, marker='o', markersize=3, label=label, color=color)
-ax.set_title('Mean Relative Spread by Hour (UTC)')
+ax.set_title('Mean Intra-minute Range Proxy by Hour (UTC)')
 ax.set_xlabel('Hour (UTC)')
-ax.set_ylabel('Spread (bps)')
+ax.set_ylabel('Intra-minute Range (bps)')
 ax.legend(fontsize=8)
 
 # USDT basis by hour
@@ -1595,7 +1595,7 @@ ax.set_ylabel('Vol (%)')
 ax.legend(fontsize=8)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d'))
 
-# Panel 6: Spread
+# Panel 6: Intra-minute range proxy
 ax = fig.add_subplot(gs[3, 0])
 ax.axvspan(svb_start, svb_end, alpha=0.15, color='red')
 for col, label, color in [
@@ -1606,8 +1606,8 @@ for col, label, color in [
 ]:
     hs = rel_spreads[col].resample('1h').mean()
     ax.plot(hs, linewidth=0.8, label=label, color=color)
-ax.set_title('F) Hourly Mean Relative Spread')
-ax.set_ylabel('Spread (bps)')
+ax.set_title('F) Hourly Mean Intra-minute Range Proxy')
+ax.set_ylabel('Intra-minute Range (bps)')
 ax.legend(fontsize=8)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d'))
 
@@ -1652,4 +1652,3 @@ for f in sorted(os.listdir(DATA_DIR)):
 print("\n" + "=" * 60)
 print("ANALYSIS COMPLETE")
 print("=" * 60)
-

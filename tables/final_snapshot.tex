@@ -1,0 +1,51 @@
+\begin{table}
+\caption{Final Snapshot: Batch-1 Core Numbers (Dispersion vs Adjusted, Half-Life Robustness, Discovery, and Arbitrage Crisis Bounds)}
+\label{tab:final_snapshot}
+\begin{tabular}{llllllrrrrrrrrrlrrrrrr}
+\toprule
+section & series\_or\_channel & regime & freq & ff\_filter & cost\_variant & mean\_bps & std\_bps & rho\_est & half\_life\_min & rank\_used & rank\_lag\_minus1 & rank\_lag\_plus1 & alpha\_market\_1 & alpha\_market\_2 & leader\_by\_adjustment & gg\_share\_market\_1 & gg\_share\_market\_2 & pct\_profitable & avg\_net\_cond\_bps & avg\_net\_uncond\_bps & n\_obs \\
+\midrule
+dispersion\_adjusted & USDC Kraken \$B\_t\$ (Adjusted) & Pre-SVB & 1m & all &  & -0.3200 & 5.0000 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 11197 \\
+dispersion\_adjusted & USDC Kraken \$B\_t\$ (Adjusted) & Crisis & 1m & all &  & 5.2700 & 21.2100 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 4283 \\
+dispersion\_adjusted & USDC Kraken \$B\_t\$ (Adjusted) & Post-SVB & 1m & all &  & 0.4500 & 9.0600 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 12419 \\
+dispersion\_adjusted & USDC Kraken \$D\_t\$ (Unadjusted) & Pre-SVB & 1m & all &  & 0.1200 & 4.9500 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 11615 \\
+dispersion\_adjusted & USDC Kraken \$D\_t\$ (Unadjusted) & Crisis & 1m & all &  & 319.9700 & 322.8700 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 4311 \\
+dispersion\_adjusted & USDC Kraken \$D\_t\$ (Unadjusted) & Post-SVB & 1m & all &  & 11.2200 & 21.9500 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 12514 \\
+dispersion\_adjusted & USDT Kraken \$B\_t\$ (Adjusted) & Pre-SVB & 1m & all &  & -0.6000 & 4.3300 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 12618 \\
+dispersion\_adjusted & USDT Kraken \$B\_t\$ (Adjusted) & Crisis & 1m & all &  & 0.6800 & 6.5700 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 4312 \\
+dispersion\_adjusted & USDT Kraken \$B\_t\$ (Adjusted) & Post-SVB & 1m & all &  & -1.2300 & 6.4700 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 12837 \\
+dispersion\_adjusted & USDT Kraken \$D\_t\$ (Unadjusted) & Pre-SVB & 1m & all &  & -0.5400 & 4.4900 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 12618 \\
+dispersion\_adjusted & USDT Kraken \$D\_t\$ (Unadjusted) & Crisis & 1m & all &  & -57.1800 & 45.1000 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 4312 \\
+dispersion\_adjusted & USDT Kraken \$D\_t\$ (Unadjusted) & Post-SVB & 1m & all &  & -30.2600 & 13.2900 & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 12837 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Pre-SVB & 1m & all &  & NaN & NaN & 0.4944 & 0.9841 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 11196 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Pre-SVB & 1m & no\_ff &  & NaN & NaN & 0.1397 & 0.3521 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 1166 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Pre-SVB & 5m & all &  & NaN & NaN & 0.0722 & 1.3189 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 2478 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Pre-SVB & 5m & no\_ff &  & NaN & NaN & -0.1311 & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 208 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Crisis & 1m & all &  & NaN & NaN & 0.3203 & 0.6088 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 4282 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Crisis & 1m & no\_ff &  & NaN & NaN & 0.2738 & 0.5351 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 2381 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Crisis & 5m & all &  & NaN & NaN & 0.0424 & 1.0968 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 861 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Crisis & 5m & no\_ff &  & NaN & NaN & 0.0123 & 0.7885 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 470 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Post-SVB & 1m & all &  & NaN & NaN & 0.4176 & 0.7937 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 12418 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Post-SVB & 1m & no\_ff &  & NaN & NaN & 0.2029 & 0.4345 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 3870 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Post-SVB & 5m & all &  & NaN & NaN & 0.0734 & 1.3270 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 2559 \\
+half\_life\_robustness & USDC/USD B\_t (Kraken) & Post-SVB & 5m & no\_ff &  & NaN & NaN & 0.1058 & 1.5427 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 720 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Pre-SVB & 1m & all &  & NaN & NaN & 0.4543 & 0.8785 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 12617 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Pre-SVB & 1m & no\_ff &  & NaN & NaN & 0.2360 & 0.4800 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 4619 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Pre-SVB & 5m & all &  & NaN & NaN & 0.0998 & 1.5037 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 2583 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Pre-SVB & 5m & no\_ff &  & NaN & NaN & 0.1433 & 1.7836 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 863 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Crisis & 1m & all &  & NaN & NaN & 0.4877 & 0.9654 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 4311 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Crisis & 1m & no\_ff &  & NaN & NaN & 0.4692 & 0.9160 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 2720 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Crisis & 5m & all &  & NaN & NaN & 0.2927 & 2.8209 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 863 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Crisis & 5m & no\_ff &  & NaN & NaN & 0.3224 & 3.0613 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 525 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Post-SVB & 1m & all &  & NaN & NaN & 0.2955 & 0.5686 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 12836 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Post-SVB & 1m & no\_ff &  & NaN & NaN & 0.1676 & 0.3881 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 7701 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Post-SVB & 5m & all &  & NaN & NaN & 0.1363 & 1.7392 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 2585 \\
+half\_life\_robustness & USDT/USD B\_t (Kraken) & Post-SVB & 5m & no\_ff &  & NaN & NaN & 0.1549 & 1.8583 & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & NaN & NaN & NaN & 1442 \\
+price\_discovery & Kraken BTC/USD vs BTC/USDT & full\_sample & 1m\_no\_ff & no\_ff &  & NaN & NaN & NaN & NaN & 1.0000 & 1.0000 & 1.0000 & 0.0079 & 0.0118 & Kraken BTC/USD & 2.9813 & -1.9813 & NaN & NaN & NaN & 20415 \\
+arbitrage\_crisis & Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded) & Crisis & 1m & all & fee\_only\_upper & 4.7410 & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & 11.3194 & 6.3586 & 0.7198 & 4320 \\
+arbitrage\_crisis & Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded) & Crisis & 1m & all & fee\_plus\_slippage\_conservative & 4.7410 & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & 2.2917 & 6.3705 & 0.1460 & 4320 \\
+arbitrage\_crisis & USDC/USD (Kraken, 3-leg triangular) & Crisis & 1m & all & fee\_only\_upper & 13.3740 & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & 29.1618 & 16.5765 & 4.8340 & 4283 \\
+arbitrage\_crisis & USDC/USD (Kraken, 3-leg triangular) & Crisis & 1m & all & fee\_plus\_slippage\_conservative & 13.3740 & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN &  & NaN & NaN & 6.7243 & 9.5571 & 0.6426 & 4283 \\
+\bottomrule
+\end{tabular}
+\end{table}
