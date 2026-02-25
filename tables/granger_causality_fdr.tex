@@ -1,18 +1,18 @@
 \begin{table}
 \caption{Granger Causality Tests with BH/FDR Correction (Secondary Evidence)}
 \label{tab:granger_fdr}
-\begin{tabular}{lrrrlrl}
+\begin{tabular}{lrrlrl}
 \toprule
-Test & VAR Lags & F-stat & p-value & Significant & q-value (BH/FDR) & Significant FDR \\
+Channel & F-stat & p-value & Significant (p<0.05) & q-value (BH/FDR) & Significant FDR \\
 \midrule
-BTC/USDC → BTC/USD (Kraken) & 10 & 1.512000 & 0.127898 &  & 0.127898 &  \\
-BTC/USD → BTC/USDC (Kraken) & 10 & 332.178000 & 0.000000 & *** & 0.000000 & *** \\
-BTC/USDT → BTC/USD (Kraken) & 10 & 3.825000 & 0.000034 & *** & 0.000046 & *** \\
-BTC/USD → BTC/USDT (Kraken) & 10 & 385.271000 & 0.000000 & *** & 0.000000 & *** \\
-Kraken USDT → Binance USDT & 10 & 7.265000 & 0.000000 & *** & 0.000000 & *** \\
-Binance USDT → Kraken USDT & 10 & 476.065000 & 0.000000 & *** & 0.000000 & *** \\
-Kraken USD → Coinbase USD & 10 & 3.709000 & 0.000055 & *** & 0.000063 & *** \\
-Coinbase USD → Kraken USD & 10 & 130.133000 & 0.000000 & *** & 0.000000 & *** \\
+BTC/USDC → BTC/USD (Kraken) & 1.512000 & 0.127898 & No & 0.127898 & No \\
+BTC/USD → BTC/USDC (Kraken) & 332.178000 & 0.000000 & Yes & 0.000000 & Yes \\
+BTC/USDT → BTC/USD (Kraken) & 3.825000 & 0.000034 & Yes & 0.000046 & Yes \\
+BTC/USD → BTC/USDT (Kraken) & 385.271000 & 0.000000 & Yes & 0.000000 & Yes \\
+Kraken USDT → Binance USDT & 7.265000 & 0.000000 & Yes & 0.000000 & Yes \\
+Binance USDT → Kraken USDT & 476.065000 & 0.000000 & Yes & 0.000000 & Yes \\
+Kraken USD → Coinbase USD & 3.709000 & 0.000055 & Yes & 0.000063 & Yes \\
+Coinbase USD → Kraken USD & 130.133000 & 0.000000 & Yes & 0.000000 & Yes \\
 \bottomrule
 \end{tabular}
 \end{table}

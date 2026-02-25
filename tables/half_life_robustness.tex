@@ -1,34 +1,34 @@
 \begin{table}
-\caption{Half-Life Robustness for Adjusted Residuals ($B_t$): 1m vs 5m and All vs No-Forward-Fill}
+\caption{Half-Life Robustness for Adjusted Residuals ($B_t$): 1m vs 5m and All vs No-Forward-Fill. Some no-FF cells have small n and may be unstable; NaN indicates the estimated rho is outside (0,1).}
 \label{tab:half_life_robustness}
 \begin{tabular}{llllrrrl}
 \toprule
-series & regime & freq & ff\_filter & rho\_est & half\_life\_min & n\_obs & warning \\
+Series & Regime & Freq & FF Filter & rho & Half-Life (min) & N & Warning \\
 \midrule
-USDC/USD B\_t (Kraken) & Pre-SVB & 1m & all & 0.4944 & 0.9841 & 11196 &  \\
-USDC/USD B\_t (Kraken) & Pre-SVB & 1m & no\_ff & 0.1397 & 0.3521 & 1166 &  \\
-USDC/USD B\_t (Kraken) & Pre-SVB & 5m & all & 0.0722 & 1.3189 & 2478 &  \\
-USDC/USD B\_t (Kraken) & Pre-SVB & 5m & no\_ff & -0.1311 & NaN & 208 & rho\_invalid \\
-USDT/USD B\_t (Kraken) & Pre-SVB & 1m & all & 0.4543 & 0.8785 & 12617 &  \\
-USDT/USD B\_t (Kraken) & Pre-SVB & 1m & no\_ff & 0.2360 & 0.4800 & 4619 &  \\
-USDT/USD B\_t (Kraken) & Pre-SVB & 5m & all & 0.0998 & 1.5037 & 2583 &  \\
-USDT/USD B\_t (Kraken) & Pre-SVB & 5m & no\_ff & 0.1433 & 1.7836 & 863 &  \\
-USDC/USD B\_t (Kraken) & Crisis & 1m & all & 0.3203 & 0.6088 & 4282 &  \\
-USDC/USD B\_t (Kraken) & Crisis & 1m & no\_ff & 0.2738 & 0.5351 & 2381 &  \\
-USDC/USD B\_t (Kraken) & Crisis & 5m & all & 0.0424 & 1.0968 & 861 &  \\
-USDC/USD B\_t (Kraken) & Crisis & 5m & no\_ff & 0.0123 & 0.7885 & 470 &  \\
-USDT/USD B\_t (Kraken) & Crisis & 1m & all & 0.4877 & 0.9654 & 4311 &  \\
-USDT/USD B\_t (Kraken) & Crisis & 1m & no\_ff & 0.4692 & 0.9160 & 2720 &  \\
-USDT/USD B\_t (Kraken) & Crisis & 5m & all & 0.2927 & 2.8209 & 863 &  \\
-USDT/USD B\_t (Kraken) & Crisis & 5m & no\_ff & 0.3224 & 3.0613 & 525 &  \\
-USDC/USD B\_t (Kraken) & Post-SVB & 1m & all & 0.4176 & 0.7937 & 12418 &  \\
-USDC/USD B\_t (Kraken) & Post-SVB & 1m & no\_ff & 0.2029 & 0.4345 & 3870 &  \\
-USDC/USD B\_t (Kraken) & Post-SVB & 5m & all & 0.0734 & 1.3270 & 2559 &  \\
-USDC/USD B\_t (Kraken) & Post-SVB & 5m & no\_ff & 0.1058 & 1.5427 & 720 &  \\
-USDT/USD B\_t (Kraken) & Post-SVB & 1m & all & 0.2955 & 0.5686 & 12836 &  \\
-USDT/USD B\_t (Kraken) & Post-SVB & 1m & no\_ff & 0.1676 & 0.3881 & 7701 &  \\
-USDT/USD B\_t (Kraken) & Post-SVB & 5m & all & 0.1363 & 1.7392 & 2585 &  \\
-USDT/USD B\_t (Kraken) & Post-SVB & 5m & no\_ff & 0.1549 & 1.8583 & 1442 &  \\
+USDC/USD $B_t$ (Kraken) & Pre-SVB & 1m & all & 0.4944 & 0.9841 & 11196 & — \\
+USDC/USD $B_t$ (Kraken) & Pre-SVB & 1m & no_ff & 0.1397 & 0.3521 & 1166 & — \\
+USDC/USD $B_t$ (Kraken) & Pre-SVB & 5m & all & 0.0722 & 1.3189 & 2478 & — \\
+USDC/USD $B_t$ (Kraken) & Pre-SVB & 5m & no_ff & -0.1311 & NaN & 208 & rho invalid \\
+USDT/USD $B_t$ (Kraken) & Pre-SVB & 1m & all & 0.4543 & 0.8785 & 12617 & — \\
+USDT/USD $B_t$ (Kraken) & Pre-SVB & 1m & no_ff & 0.2360 & 0.4800 & 4619 & — \\
+USDT/USD $B_t$ (Kraken) & Pre-SVB & 5m & all & 0.0998 & 1.5037 & 2583 & — \\
+USDT/USD $B_t$ (Kraken) & Pre-SVB & 5m & no_ff & 0.1433 & 1.7836 & 863 & — \\
+USDC/USD $B_t$ (Kraken) & Crisis & 1m & all & 0.3203 & 0.6088 & 4282 & — \\
+USDC/USD $B_t$ (Kraken) & Crisis & 1m & no_ff & 0.2738 & 0.5351 & 2381 & — \\
+USDC/USD $B_t$ (Kraken) & Crisis & 5m & all & 0.0424 & 1.0968 & 861 & — \\
+USDC/USD $B_t$ (Kraken) & Crisis & 5m & no_ff & 0.0123 & 0.7885 & 470 & — \\
+USDT/USD $B_t$ (Kraken) & Crisis & 1m & all & 0.4877 & 0.9654 & 4311 & — \\
+USDT/USD $B_t$ (Kraken) & Crisis & 1m & no_ff & 0.4692 & 0.9160 & 2720 & — \\
+USDT/USD $B_t$ (Kraken) & Crisis & 5m & all & 0.2927 & 2.8209 & 863 & — \\
+USDT/USD $B_t$ (Kraken) & Crisis & 5m & no_ff & 0.3224 & 3.0613 & 525 & — \\
+USDC/USD $B_t$ (Kraken) & Post-SVB & 1m & all & 0.4176 & 0.7937 & 12418 & — \\
+USDC/USD $B_t$ (Kraken) & Post-SVB & 1m & no_ff & 0.2029 & 0.4345 & 3870 & — \\
+USDC/USD $B_t$ (Kraken) & Post-SVB & 5m & all & 0.0734 & 1.3270 & 2559 & — \\
+USDC/USD $B_t$ (Kraken) & Post-SVB & 5m & no_ff & 0.1058 & 1.5427 & 720 & — \\
+USDT/USD $B_t$ (Kraken) & Post-SVB & 1m & all & 0.2955 & 0.5686 & 12836 & — \\
+USDT/USD $B_t$ (Kraken) & Post-SVB & 1m & no_ff & 0.1676 & 0.3881 & 7701 & — \\
+USDT/USD $B_t$ (Kraken) & Post-SVB & 5m & all & 0.1363 & 1.7392 & 2585 & — \\
+USDT/USD $B_t$ (Kraken) & Post-SVB & 5m & no_ff & 0.1549 & 1.8583 & 1442 & — \\
 \bottomrule
 \end{tabular}
 \end{table}
