@@ -1,9 +1,9 @@
 Test,VAR Lags,F-stat,p-value,Significant
-BTC/USDC → BTC/USD (Kraken),10,1.512,0.1279,
+BTC/USDC → BTC/USD (Kraken),10,1.512,0.12789750300468838,
 BTC/USD → BTC/USDC (Kraken),10,332.178,0.0,***
-BTC/USDT → BTC/USD (Kraken),10,3.825,0.0,***
+BTC/USDT → BTC/USD (Kraken),10,3.825,3.4465141762400195e-05,***
 BTC/USD → BTC/USDT (Kraken),10,385.271,0.0,***
-Kraken USDT → Binance USDT,10,7.265,0.0,***
+Kraken USDT → Binance USDT,10,7.265,1.3894952574029609e-11,***
 Binance USDT → Kraken USDT,10,476.065,0.0,***
-Kraken USD → Coinbase USD,10,3.709,0.0001,***
-Coinbase USD → Kraken USD,10,130.133,0.0,***
+Kraken USD → Coinbase USD,10,3.709,5.4773976877798e-05,***
+Coinbase USD → Kraken USD,10,130.133,4.617437320022828e-270,***

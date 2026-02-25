@@ -1,0 +1,42 @@
+section,series_or_channel,regime,freq,ff_filter,cost_variant,mean_bps,std_bps,rho_est,half_life_min,rank_used,rank_lag_minus1,rank_lag_plus1,alpha_market_1,alpha_market_2,leader_by_adjustment,gg_share_market_1,gg_share_market_2,pct_profitable,avg_net_cond_bps,avg_net_uncond_bps,n_obs
+dispersion_adjusted,USDC Kraken $B_t$ (Adjusted),Pre-SVB,1m,all,,-0.32,5.0,,,,,,,,,,,,,,11197
+dispersion_adjusted,USDC Kraken $B_t$ (Adjusted),Crisis,1m,all,,5.27,21.21,,,,,,,,,,,,,,4283
+dispersion_adjusted,USDC Kraken $B_t$ (Adjusted),Post-SVB,1m,all,,0.45,9.06,,,,,,,,,,,,,,12419
+dispersion_adjusted,USDC Kraken $D_t$ (Unadjusted),Pre-SVB,1m,all,,0.12,4.95,,,,,,,,,,,,,,11615
+dispersion_adjusted,USDC Kraken $D_t$ (Unadjusted),Crisis,1m,all,,319.97,322.87,,,,,,,,,,,,,,4311
+dispersion_adjusted,USDC Kraken $D_t$ (Unadjusted),Post-SVB,1m,all,,11.22,21.95,,,,,,,,,,,,,,12514
+dispersion_adjusted,USDT Kraken $B_t$ (Adjusted),Pre-SVB,1m,all,,-0.6,4.33,,,,,,,,,,,,,,12618
+dispersion_adjusted,USDT Kraken $B_t$ (Adjusted),Crisis,1m,all,,0.68,6.57,,,,,,,,,,,,,,4312
+dispersion_adjusted,USDT Kraken $B_t$ (Adjusted),Post-SVB,1m,all,,-1.23,6.47,,,,,,,,,,,,,,12837
+dispersion_adjusted,USDT Kraken $D_t$ (Unadjusted),Pre-SVB,1m,all,,-0.54,4.49,,,,,,,,,,,,,,12618
+dispersion_adjusted,USDT Kraken $D_t$ (Unadjusted),Crisis,1m,all,,-57.18,45.1,,,,,,,,,,,,,,4312
+dispersion_adjusted,USDT Kraken $D_t$ (Unadjusted),Post-SVB,1m,all,,-30.26,13.29,,,,,,,,,,,,,,12837
+half_life_robustness,USDC/USD B_t (Kraken),Pre-SVB,1m,all,,,,0.4944201056539072,0.9840672785610942,,,,,,,,,,,,11196
+half_life_robustness,USDC/USD B_t (Kraken),Pre-SVB,1m,no_ff,,,,0.139675980095196,0.3521319997605681,,,,,,,,,,,,1166
+half_life_robustness,USDC/USD B_t (Kraken),Pre-SVB,5m,all,,,,0.0722401611301426,1.318894053433436,,,,,,,,,,,,2478
+half_life_robustness,USDC/USD B_t (Kraken),Pre-SVB,5m,no_ff,,,,-0.1311164385997461,,,,,,,,,,,,,208
+half_life_robustness,USDC/USD B_t (Kraken),Crisis,1m,all,,,,0.3202599900541946,0.6087596171612494,,,,,,,,,,,,4282
+half_life_robustness,USDC/USD B_t (Kraken),Crisis,1m,no_ff,,,,0.2737744045132719,0.5350625066158393,,,,,,,,,,,,2381
+half_life_robustness,USDC/USD B_t (Kraken),Crisis,5m,all,,,,0.0424350663135764,1.096828152076761,,,,,,,,,,,,861
+half_life_robustness,USDC/USD B_t (Kraken),Crisis,5m,no_ff,,,,0.0123343534116495,0.7884975117478356,,,,,,,,,,,,470
+half_life_robustness,USDC/USD B_t (Kraken),Post-SVB,1m,all,,,,0.4175633200739151,0.7936929300727493,,,,,,,,,,,,12418
+half_life_robustness,USDC/USD B_t (Kraken),Post-SVB,1m,no_ff,,,,0.2028607122861223,0.4345108302548813,,,,,,,,,,,,3870
+half_life_robustness,USDC/USD B_t (Kraken),Post-SVB,5m,all,,,,0.0734131199457287,1.3270279075062048,,,,,,,,,,,,2559
+half_life_robustness,USDC/USD B_t (Kraken),Post-SVB,5m,no_ff,,,,0.1057607045468866,1.5426745103594612,,,,,,,,,,,,720
+half_life_robustness,USDT/USD B_t (Kraken),Pre-SVB,1m,all,,,,0.4543113946392985,0.8785442415843534,,,,,,,,,,,,12617
+half_life_robustness,USDT/USD B_t (Kraken),Pre-SVB,1m,no_ff,,,,0.2359607642288559,0.4799889929680022,,,,,,,,,,,,4619
+half_life_robustness,USDT/USD B_t (Kraken),Pre-SVB,5m,all,,,,0.099781497210021,1.5037214672733183,,,,,,,,,,,,2583
+half_life_robustness,USDT/USD B_t (Kraken),Pre-SVB,5m,no_ff,,,,0.1432557287051382,1.7835897358567985,,,,,,,,,,,,863
+half_life_robustness,USDT/USD B_t (Kraken),Crisis,1m,all,,,,0.4877249399013837,0.965381097728091,,,,,,,,,,,,4311
+half_life_robustness,USDT/USD B_t (Kraken),Crisis,1m,no_ff,,,,0.4692067095274523,0.915998829970726,,,,,,,,,,,,2720
+half_life_robustness,USDT/USD B_t (Kraken),Crisis,5m,all,,,,0.2927065429501163,2.820917282472668,,,,,,,,,,,,863
+half_life_robustness,USDT/USD B_t (Kraken),Crisis,5m,no_ff,,,,0.3223510837045327,3.061295846921889,,,,,,,,,,,,525
+half_life_robustness,USDT/USD B_t (Kraken),Post-SVB,1m,all,,,,0.2955423879410128,0.5686460943867486,,,,,,,,,,,,12836
+half_life_robustness,USDT/USD B_t (Kraken),Post-SVB,1m,no_ff,,,,0.1675946433329442,0.388055337483513,,,,,,,,,,,,7701
+half_life_robustness,USDT/USD B_t (Kraken),Post-SVB,5m,all,,,,0.1363195189671051,1.7391691834336918,,,,,,,,,,,,2585
+half_life_robustness,USDT/USD B_t (Kraken),Post-SVB,5m,no_ff,,,,0.1548937533499201,1.8582876308582676,,,,,,,,,,,,1442
+price_discovery,Kraken BTC/USD vs BTC/USDT,full_sample,1m_no_ff,no_ff,,,,,,1.0,1.0,1.0,0.0078585202142272,0.0118249098415603,Kraken BTC/USD,2.981277925918507,-1.981277925918507,,,,20415
+arbitrage_crisis,"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Crisis,1m,all,fee_only_upper,4.741030776102751,,,,,,,,,,,,11.319444444444445,6.358598268287982,0.7197579984242646,4320
+arbitrage_crisis,"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Crisis,1m,all,fee_plus_slippage_conservative,4.741030776102751,,,,,,,,,,,,2.2916666666666665,6.370549050593823,0.1459917490761084,4320
+arbitrage_crisis,"USDC/USD (Kraken, 3-leg triangular)",Crisis,1m,all,fee_only_upper,13.373970840680585,,,,,,,,,,,,29.16180247490077,16.576481702549625,4.834000851385591,4283
+arbitrage_crisis,"USDC/USD (Kraken, 3-leg triangular)",Crisis,1m,all,fee_plus_slippage_conservative,13.373970840680585,,,,,,,,,,,,6.724258697174877,9.55713279735491,0.6426463333266902,4283

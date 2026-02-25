@@ -1,40 +1,49 @@
 \begin{table}
-\caption{OU Mean Reversion and ADF Stationarity by Regime}
+\caption{OU/AR(1) Mean Reversion and ADF Stationarity by Regime (Exact Half-Life Mapping)}
 \label{tab:ou_stats}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{lllrrrrrrl}
 \toprule
-Regime & Basis & Mean (bps) & Std (bps) & Half-Life (min) & ADF Stat & ADF p-value & N \\
+Regime & Basis & Mean (bps) & Std (bps) & Estimation Form & rho\_est & Half-Life (min) & ADF Stat & ADF p-value & N & HL Warning \\
 \midrule
-Pre-SVB & basis_usdc_kraken & -0.320000 & 5.000000 & 1.370000 & -40.280000 & 0.0000 & 11197 \\
-Pre-SVB & basis_usdt_kraken & -0.600000 & 4.330000 & 1.270000 & -43.260000 & 0.0000 & 12618 \\
-Pre-SVB & basis_usdt_coinbase & -0.070000 & 2.670000 & 0.980000 & -39.960000 & 0.0000 & 12629 \\
-Pre-SVB & basis_usdc_usdt_binance & -4.140000 & 25.020000 & 5.270000 & -26.740000 & 0.0000 & 12960 \\
-Pre-SVB & xbasis_btcusdt_binance_kraken & -0.080000 & 4.560000 & 1.200000 & -44.870000 & 0.0000 & 12618 \\
-Pre-SVB & xbasis_btcusdt_coinbase_kraken & -0.080000 & 4.980000 & 1.250000 & -41.810000 & 0.0000 & 12308 \\
-Pre-SVB & xbasis_btcusd_coinbase_kraken & -0.330000 & 2.420000 & 1.000000 & -34.090000 & 0.0000 & 12688 \\
-Pre-SVB & usdt_peg_dev_kraken & -0.050000 & 1.340000 & 5.630000 & -8.150000 & 0.0000 & 12960 \\
-Pre-SVB & usdt_peg_dev_coinbase & 0.210000 & 1.230000 & 60.470000 & -5.750000 & 0.0000 & 12665 \\
-Pre-SVB & usdc_peg_dev_kraken & -0.450000 & 0.520000 & 1.450000 & -34.010000 & 0.0000 & 12445 \\
-Crisis & basis_usdc_kraken & 5.270000 & 21.210000 & 1.020000 & -20.270000 & 0.0000 & 4283 \\
-Crisis & basis_usdt_kraken & 0.680000 & 6.570000 & 1.350000 & -14.780000 & 0.0000 & 4312 \\
-Crisis & basis_usdt_coinbase & -0.950000 & 5.600000 & 1.540000 & -13.830000 & 0.0000 & 4318 \\
-Crisis & basis_usdc_usdt_binance & -0.490000 & 46.280000 & 1.590000 & -20.240000 & 0.0000 & 4320 \\
-Crisis & xbasis_btcusdt_binance_kraken & -0.880000 & 6.490000 & 1.160000 & -15.570000 & 0.0000 & 4312 \\
-Crisis & xbasis_btcusdt_coinbase_kraken & -0.830000 & 7.200000 & 1.150000 & -16.640000 & 0.0000 & 4310 \\
-Crisis & xbasis_btcusd_coinbase_kraken & 2.370000 & 6.890000 & 3.180000 & -9.420000 & 0.0000 & 4320 \\
-Crisis & usdt_peg_dev_kraken & 58.110000 & 46.610000 & 496.660000 & -1.850000 & 0.3541 & 4320 \\
-Crisis & usdt_peg_dev_coinbase & 59.680000 & 46.080000 & 542.490000 & -1.720000 & 0.4220 & 4320 \\
-Crisis & usdc_peg_dev_kraken & -306.600000 & 304.750000 & 571.960000 & -1.680000 & 0.4430 & 4292 \\
-Post-SVB & basis_usdc_kraken & 0.450000 & 9.060000 & 1.190000 & -40.610000 & 0.0000 & 12419 \\
-Post-SVB & basis_usdt_kraken & -1.230000 & 6.470000 & 0.980000 & -36.770000 & 0.0000 & 12837 \\
-Post-SVB & basis_usdt_coinbase & 0.280000 & 5.320000 & 1.140000 & -26.270000 & 0.0000 & 12956 \\
-Post-SVB & basis_usdc_usdt_binance & -2.580000 & 12.980000 & 2.320000 & -23.700000 & 0.0000 & 12959 \\
-Post-SVB & xbasis_btcusdt_binance_kraken & 0.390000 & 6.810000 & 0.900000 & -44.950000 & 0.0000 & 12837 \\
-Post-SVB & xbasis_btcusdt_coinbase_kraken & 0.380000 & 7.410000 & 0.930000 & -66.950000 & 0.0000 & 12834 \\
-Post-SVB & xbasis_btcusd_coinbase_kraken & 4.590000 & 7.450000 & 4.210000 & -10.040000 & 0.0000 & 12952 \\
-Post-SVB & usdt_peg_dev_kraken & 29.050000 & 12.060000 & 188.520000 & -4.560000 & 0.0002 & 12952 \\
-Post-SVB & usdt_peg_dev_coinbase & 34.780000 & 11.710000 & 154.830000 & -4.840000 & 0.0000 & 12959 \\
-Post-SVB & usdc_peg_dev_kraken & -10.680000 & 19.250000 & 360.820000 & -3.610000 & 0.0055 & 12837 \\
+Pre-SVB & dispersion\_usdc\_kraken & 0.1200 & 4.9500 & ECM (implied AR1) & 0.5024 & 1.0100 & -43.8000 & 0.0000 & 11615 &  \\
+Pre-SVB & dispersion\_usdt\_kraken & -0.5400 & 4.4900 & ECM (implied AR1) & 0.5013 & 1.0000 & -34.1200 & 0.0000 & 12618 &  \\
+Pre-SVB & basis\_usdc\_kraken & -0.3200 & 5.0000 & ECM (implied AR1) & 0.4944 & 0.9800 & -40.2800 & 0.0000 & 11197 &  \\
+Pre-SVB & basis\_usdt\_kraken & -0.6000 & 4.3300 & ECM (implied AR1) & 0.4543 & 0.8800 & -43.2600 & 0.0000 & 12618 &  \\
+Pre-SVB & dispersion\_usdt\_coinbase & -0.2800 & 2.9500 & ECM (implied AR1) & 0.4196 & 0.8000 & -29.6100 & 0.0000 & 12640 &  \\
+Pre-SVB & basis\_usdt\_coinbase & -0.0700 & 2.6700 & ECM (implied AR1) & 0.2952 & 0.5700 & -39.9600 & 0.0000 & 12629 &  \\
+Pre-SVB & basis\_usdc\_usdt\_binance & -4.1400 & 25.0200 & ECM (implied AR1) & 0.8685 & 4.9200 & -26.7400 & 0.0000 & 12960 &  \\
+Pre-SVB & xbasis\_btcusdt\_binance\_kraken & -0.0800 & 4.5600 & ECM (implied AR1) & 0.4219 & 0.8000 & -44.8700 & 0.0000 & 12618 &  \\
+Pre-SVB & xbasis\_btcusdt\_coinbase\_kraken & -0.0800 & 4.9800 & ECM (implied AR1) & 0.4472 & 0.8600 & -41.8100 & 0.0000 & 12308 &  \\
+Pre-SVB & xbasis\_btcusd\_coinbase\_kraken & -0.3300 & 2.4200 & ECM (implied AR1) & 0.3095 & 0.5900 & -34.0900 & 0.0000 & 12688 &  \\
+Pre-SVB & usdt\_peg\_dev\_kraken & -0.0500 & 1.3400 & ECM (implied AR1) & 0.8768 & 5.2700 & -8.1500 & 0.0000 & 12960 &  \\
+Pre-SVB & usdt\_peg\_dev\_coinbase & 0.2100 & 1.2300 & ECM (implied AR1) & 0.9885 & 60.1200 & -5.7500 & 0.0000 & 12665 &  \\
+Pre-SVB & usdc\_peg\_dev\_kraken & -0.4500 & 0.5200 & ECM (implied AR1) & 0.5213 & 1.0600 & -34.0100 & 0.0000 & 12445 &  \\
+Crisis & dispersion\_usdc\_kraken & 319.9700 & 322.8700 & ECM (implied AR1) & 0.9973 & 260.5500 & -1.6100 & 0.4768 & 4311 &  \\
+Crisis & dispersion\_usdt\_kraken & -57.1800 & 45.1000 & ECM (implied AR1) & 0.9894 & 64.7800 & -1.8800 & 0.3415 & 4312 &  \\
+Crisis & basis\_usdc\_kraken & 5.2700 & 21.2100 & ECM (implied AR1) & 0.3203 & 0.6100 & -20.2700 & 0.0000 & 4283 &  \\
+Crisis & basis\_usdt\_kraken & 0.6800 & 6.5700 & ECM (implied AR1) & 0.4877 & 0.9700 & -14.7800 & 0.0000 & 4312 &  \\
+Crisis & dispersion\_usdt\_coinbase & -60.3300 & 46.3200 & ECM (implied AR1) & 0.9936 & 108.4800 & -1.6000 & 0.4848 & 4318 &  \\
+Crisis & basis\_usdt\_coinbase & -0.9500 & 5.6000 & ECM (implied AR1) & 0.5492 & 1.1600 & -13.8300 & 0.0000 & 4318 &  \\
+Crisis & basis\_usdc\_usdt\_binance & -0.4900 & 46.2800 & ECM (implied AR1) & 0.5650 & 1.2100 & -20.2400 & 0.0000 & 4320 &  \\
+Crisis & xbasis\_btcusdt\_binance\_kraken & -0.8800 & 6.4900 & ECM (implied AR1) & 0.4037 & 0.7600 & -15.5700 & 0.0000 & 4312 &  \\
+Crisis & xbasis\_btcusdt\_coinbase\_kraken & -0.8300 & 7.2000 & ECM (implied AR1) & 0.3976 & 0.7500 & -16.6400 & 0.0000 & 4310 &  \\
+Crisis & xbasis\_btcusd\_coinbase\_kraken & 2.3700 & 6.8900 & ECM (implied AR1) & 0.7817 & 2.8100 & -9.4200 & 0.0000 & 4320 &  \\
+Crisis & usdt\_peg\_dev\_kraken & 58.1100 & 46.6100 & ECM (implied AR1) & 0.9986 & 496.3200 & -1.8500 & 0.3541 & 4320 &  \\
+Crisis & usdt\_peg\_dev\_coinbase & 59.6800 & 46.0800 & ECM (implied AR1) & 0.9987 & 542.1400 & -1.7200 & 0.4220 & 4320 &  \\
+Crisis & usdc\_peg\_dev\_kraken & -306.6000 & 304.7500 & ECM (implied AR1) & 0.9988 & 571.6200 & -1.6800 & 0.4430 & 4292 &  \\
+Post-SVB & dispersion\_usdc\_kraken & 11.2200 & 21.9500 & ECM (implied AR1) & 0.9015 & 6.6900 & -9.6200 & 0.0000 & 12514 &  \\
+Post-SVB & dispersion\_usdt\_kraken & -30.2600 & 13.2900 & ECM (implied AR1) & 0.8329 & 3.7900 & -10.8100 & 0.0000 & 12837 &  \\
+Post-SVB & basis\_usdc\_kraken & 0.4500 & 9.0600 & ECM (implied AR1) & 0.4176 & 0.7900 & -40.6100 & 0.0000 & 12419 &  \\
+Post-SVB & basis\_usdt\_kraken & -1.2300 & 6.4700 & ECM (implied AR1) & 0.2955 & 0.5700 & -36.7700 & 0.0000 & 12837 &  \\
+Post-SVB & dispersion\_usdt\_coinbase & -34.4300 & 12.3800 & ECM (implied AR1) & 0.8870 & 5.7800 & -8.5300 & 0.0000 & 12956 &  \\
+Post-SVB & basis\_usdt\_coinbase & 0.2800 & 5.3200 & ECM (implied AR1) & 0.3903 & 0.7400 & -26.2700 & 0.0000 & 12956 &  \\
+Post-SVB & basis\_usdc\_usdt\_binance & -2.5800 & 12.9800 & ECM (implied AR1) & 0.7007 & 1.9500 & -23.7000 & 0.0000 & 12959 &  \\
+Post-SVB & xbasis\_btcusdt\_binance\_kraken & 0.3900 & 6.8100 & ECM (implied AR1) & 0.2283 & 0.4700 & -44.9500 & 0.0000 & 12837 &  \\
+Post-SVB & xbasis\_btcusdt\_coinbase\_kraken & 0.3800 & 7.4100 & ECM (implied AR1) & 0.2534 & 0.5000 & -66.9500 & 0.0000 & 12834 &  \\
+Post-SVB & xbasis\_btcusd\_coinbase\_kraken & 4.5900 & 7.4500 & ECM (implied AR1) & 0.8355 & 3.8600 & -10.0400 & 0.0000 & 12952 &  \\
+Post-SVB & usdt\_peg\_dev\_kraken & 29.0500 & 12.0600 & ECM (implied AR1) & 0.9963 & 188.1800 & -4.5600 & 0.0002 & 12952 &  \\
+Post-SVB & usdt\_peg\_dev\_coinbase & 34.7800 & 11.7100 & ECM (implied AR1) & 0.9955 & 154.4800 & -4.8400 & 0.0000 & 12959 &  \\
+Post-SVB & usdc\_peg\_dev\_kraken & -10.6800 & 19.2500 & ECM (implied AR1) & 0.9981 & 360.4800 & -3.6100 & 0.0055 & 12837 &  \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,0 +1,12 @@
+\begin{table}
+\caption{Johansen Cointegration Tests on Log Price Levels (Primary Kraken Channels, No-FF Sample)}
+\label{tab:johansen}
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+channel & n\_obs\_no\_ff & selected\_p\_used & k\_ar\_diff\_used & trace\_stat\_r0 & trace\_crit95\_r0 & reject\_r0\_95 & rank\_used & rank\_95\_lag\_minus1 & rank\_95\_lag\_plus1 \\
+\midrule
+Kraken BTC/USD vs BTC/USDC & 15710 & 3 & 2 & 7.7052 & 15.4943 & False & 0 & 0 & 0 \\
+Kraken BTC/USD vs BTC/USDT & 20415 & 9 & 8 & 27.0257 & 15.4943 & True & 1 & 1 & 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
