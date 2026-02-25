@@ -79,10 +79,25 @@ def build_regime_stats(df, series_map, regimes_dict):
                 'Series': lbl,
                 'Mean (bps)': round(s.mean(), 2),
                 'Std (bps)': round(s.std(), 2),
-                'Mean |.| (bps)': round(s.abs().mean(), 2),
+                'Mean Abs (bps)': round(s.abs().mean(), 2),
                 'N': len(s),
             })
     return pd.DataFrame(out)
+
+
+def make_width_safe_latex(latex_text: str, add_footnotesize: bool = False) -> str:
+    """
+    Wrap the tabular in a text-width resizebox so wide tables do not clip in PDF.
+    """
+    if add_footnotesize:
+        latex_text = latex_text.replace('\\begin{tabular}', '\\footnotesize\n\\begin{tabular}', 1)
+    latex_text = latex_text.replace(
+        '\\begin{tabular}',
+        '\\resizebox{\\textwidth}{!}{%\n\\begin{tabular}',
+        1,
+    )
+    latex_text = latex_text.replace('\\end{tabular}', '\\end{tabular}%\n}', 1)
+    return latex_text
 
 
 def gg_component_share_from_alpha(alpha_vec):
@@ -1002,18 +1017,34 @@ df_johansen_tex = df_johansen[[
     'rank_used',
     'rank_95_lag_minus1',
     'rank_95_lag_plus1',
-]]
+]].rename(columns={
+    'channel': 'Channel',
+    'n_obs_no_ff': 'N (No-FF)',
+    'selected_p_used': 'VAR p',
+    'k_ar_diff_used': 'VECM k_diff',
+    'trace_stat_r0': 'Trace r=0',
+    'trace_crit95_r0': 'Crit95 r=0',
+    'reject_r0_95': 'Reject r=0',
+    'rank_used': 'Rank Used',
+    'rank_95_lag_minus1': 'Rank (k-1)',
+    'rank_95_lag_plus1': 'Rank (k+1)',
+})
 with open(os.path.join(TABLES_DIR, 'cointegration_johansen.tex'), 'w') as f:
-    f.write(df_johansen_tex.to_latex(
+    latex_johansen = df_johansen_tex.to_latex(
         index=False,
         caption='Johansen Cointegration Tests on Log Price Levels (Primary Kraken Channels, No-FF Sample)',
         label='tab:johansen',
         float_format='%.4f',
         escape=True
-    ))
+    )
+    f.write(make_width_safe_latex(latex_johansen, add_footnotesize=True))
 
 df_discovery = pd.DataFrame(discovery_rows)
-df_discovery.to_csv(os.path.join(TABLES_DIR, 'price_discovery_metrics.csv'), index=False)
+df_discovery_csv = df_discovery.rename(columns={
+    'gg_share_market_1': 'gg_component_metric_market_1',
+    'gg_share_market_2': 'gg_component_metric_market_2',
+})
+df_discovery_csv.to_csv(os.path.join(TABLES_DIR, 'price_discovery_metrics.csv'), index=False)
 df_discovery_tex = df_discovery[[
     'channel',
     'k_ar_diff_used',
@@ -1025,15 +1056,27 @@ df_discovery_tex = df_discovery[[
     'gg_share_market_1',
     'gg_share_market_2',
     'gg_warning',
-]]
+]].rename(columns={
+    'channel': 'Channel',
+    'k_ar_diff_used': 'VECM k_diff',
+    'rank_used': 'Rank Used',
+    'alpha_market_1': 'alpha_market_1',
+    'alpha_market_2': 'alpha_market_2',
+    'leader_by_adjustment': 'Leader by |alpha|',
+    'leader_stable_lag_pm1': 'Leader Stable (k±1)',
+    'gg_share_market_1': 'GG component metric mkt1',
+    'gg_share_market_2': 'GG component metric mkt2',
+    'gg_warning': 'GG note',
+})
 with open(os.path.join(TABLES_DIR, 'price_discovery_metrics.tex'), 'w') as f:
-    f.write(df_discovery_tex.to_latex(
+    latex_discovery = df_discovery_tex.to_latex(
         index=False,
-        caption='VECM Adjustment and Gonzalo--Granger Component Shares (Primary Kraken Channels, No-FF Sample)',
+        caption='VECM Adjustment and GG Component Metrics (may be outside [0,1]) for Primary Kraken Channels (No-FF Sample)',
         label='tab:price_discovery',
         float_format='%.4f',
         escape=True
-    ))
+    )
+    f.write(make_width_safe_latex(latex_discovery, add_footnotesize=True))
 
 # ============================================================
 # TABLE 9 & FIGURE 10: Multi-Pair Granger Causality (Secondary)
@@ -1199,28 +1242,40 @@ for channel_obj in arb_channel_data.values():
 
 df_arb.to_csv(os.path.join(TABLES_DIR, 'arbitrage_summary.csv'), index=False)
 
-df_arb_tex = df_arb[[
-    'channel', 'regime', 'cost_variant_label', 'n_legs',
-    'mean_abs_bps', 'pct_profitable', 'avg_net_cond_bps', 'avg_net_uncond_bps', 'n_minutes'
+channel_short_map = {
+    'USDC/USD (Kraken, 3-leg triangular)': 'USDC/USD (Kraken, intra)',
+    'USDT/USD (Kraken, 3-leg triangular)': 'USDT/USD (Kraken, intra)',
+    'Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)': 'Cross BTC/USDT (Binance-Kraken)',
+    'Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)': 'Cross BTC/USD (Coinbase-Kraken)',
+}
+cost_variant_short_map = {
+    'Fee-only upper bound': 'Fee-only',
+    'Fee + slippage conservative bound': 'Fee + slippage',
+}
+df_arb_tex = df_arb.copy()
+df_arb_tex['channel_short'] = df_arb_tex['channel'].map(channel_short_map).fillna(df_arb_tex['channel'])
+df_arb_tex['cost_variant_short'] = df_arb_tex['cost_variant_label'].map(cost_variant_short_map).fillna(df_arb_tex['cost_variant_label'])
+df_arb_tex = df_arb_tex[[
+    'channel_short', 'regime', 'cost_variant_short',
+    'mean_abs_bps', 'pct_profitable', 'avg_net_cond_bps', 'avg_net_uncond_bps'
 ]].rename(columns={
-    'channel': 'Channel',
+    'channel_short': 'Channel',
     'regime': 'Regime',
-    'cost_variant_label': 'Cost Variant',
-    'n_legs': 'Legs',
-    'mean_abs_bps': 'mean_abs (bps)',
-    'pct_profitable': 'pct_profitable',
-    'avg_net_cond_bps': 'avg_net_cond (bps)',
-    'avg_net_uncond_bps': 'avg_net_uncond (bps)',
-    'n_minutes': 'N Minutes',
+    'cost_variant_short': 'Cost Variant',
+    'mean_abs_bps': 'MeanAbs (bps)',
+    'pct_profitable': '%Profitable',
+    'avg_net_cond_bps': 'AvgNetCond (bps)',
+    'avg_net_uncond_bps': 'AvgNetUncond (bps)',
 })
 with open(os.path.join(TABLES_DIR, 'arbitrage_summary.tex'), 'w') as f:
-    f.write(df_arb_tex.to_latex(
+    latex_arb = df_arb_tex.to_latex(
         index=False,
-        caption='Arbitrage Profitability Bounds by Channel and Regime (5 bps per taker leg; 2-leg=10 bps, 3-leg=15 bps)',
+        caption='Arbitrage Profitability Bounds by Channel and Regime (5 bps per taker leg; 2-leg pre-funded cross-exchange and 3-leg intra-exchange stablecoin channels)',
         label='tab:arb',
         float_format='%.2f',
         escape=True
-    ))
+    )
+    f.write(make_width_safe_latex(latex_arb, add_footnotesize=True))
 
 # Required Stage 5 spot-checks: 3 crisis timestamps and 2 non-crisis timestamps.
 spot_rows = []
