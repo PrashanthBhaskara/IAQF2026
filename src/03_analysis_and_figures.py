@@ -635,8 +635,8 @@ with open(os.path.join(TABLES_DIR, 'ou_basis_stats.tex'), 'w') as f:
 # TABLE 3: Half-Life Robustness (1m vs 5m, all vs no-ff)
 # ============================================================
 robust_series = [
-    ('basis_usdc_kraken', 'USDC/USD B_t (Kraken)'),
-    ('basis_usdt_kraken', 'USDT/USD B_t (Kraken)'),
+    ('basis_usdc_kraken', 'USDC/USD $B_t$ (Kraken)'),
+    ('basis_usdt_kraken', 'USDT/USD $B_t$ (Kraken)'),
 ]
 robust_rows = []
 
@@ -704,14 +704,30 @@ if set(df_hl_robust['freq'].unique()) != {'1m', '5m'}:
 
 df_hl_robust = df_hl_robust[['series', 'regime', 'freq', 'ff_filter', 'rho_est', 'half_life_min', 'n_obs', 'warning']]
 df_hl_robust.to_csv(os.path.join(TABLES_DIR, 'half_life_robustness.csv'), index=False)
+df_hl_robust_tex = df_hl_robust.rename(columns={
+    'series': 'Series',
+    'regime': 'Regime',
+    'freq': 'Freq',
+    'ff_filter': 'FF Filter',
+    'rho_est': 'rho',
+    'half_life_min': 'Half-Life (min)',
+    'n_obs': 'N',
+    'warning': 'Warning',
+}).copy()
+df_hl_robust_tex['Warning'] = df_hl_robust_tex['Warning'].replace({
+    '': '—',
+    'rho_invalid': 'rho invalid',
+    'obs_too_few': 'obs too few',
+    'obs_too_few_no_ff': 'obs too few (no-FF)',
+})
 with open(os.path.join(TABLES_DIR, 'half_life_robustness.tex'), 'w') as f:
-    f.write(df_hl_robust.to_latex(
+    f.write(df_hl_robust_tex.to_latex(
         index=False,
-        caption='Half-Life Robustness for Adjusted Residuals ($B_t$): 1m vs 5m and All vs No-Forward-Fill',
+        caption='Half-Life Robustness for Adjusted Residuals ($B_t$): 1m vs 5m and All vs No-Forward-Fill. Some no-FF cells have small n and may be unstable; NaN indicates the estimated rho is outside (0,1).',
         label='tab:half_life_robustness',
         column_format='llllrrrl',
         float_format='%.4f',
-        escape=True
+        escape=False
     ))
 
 # ============================================================
@@ -1064,8 +1080,8 @@ df_discovery_tex = df_discovery[[
     'alpha_market_2': 'alpha_market_2',
     'leader_by_adjustment': 'Leader by |alpha|',
     'leader_stable_lag_pm1': 'Leader Stable (k±1)',
-    'gg_share_market_1': 'GG component metric mkt1',
-    'gg_share_market_2': 'GG component metric mkt2',
+    'gg_share_market_1': 'GG diagnostic mkt1 (not a share; may be outside [0,1])',
+    'gg_share_market_2': 'GG diagnostic mkt2 (not a share; may be outside [0,1])',
     'gg_warning': 'GG note',
 })
 with open(os.path.join(TABLES_DIR, 'price_discovery_metrics.tex'), 'w') as f:
@@ -1110,7 +1126,7 @@ for dep, indep, label in granger_pairs:
                 'VAR Lags': res.k_ar,
                 'F-stat': round(g_test.test_statistic, 3),
                 'p-value': float(g_test.pvalue),
-                'Significant': '***' if g_test.pvalue < 0.001 else ('**' if g_test.pvalue < 0.01 else ('*' if g_test.pvalue < 0.05 else ''))
+                'Significant': '***' if g_test.pvalue < 0.001 else ('**' if g_test.pvalue < 0.01 else ('*' if g_test.pvalue < 0.05 else '')),
             })
         except Exception as e:
             print(f"  Granger test failed for {label}: {e}")
@@ -1121,13 +1137,25 @@ df_granger.to_csv(os.path.join(TABLES_DIR, 'granger_causality.csv'), index=False
 if not df_granger.empty:
     _, qvals, _, _ = multipletests(df_granger['p-value'].values, method='fdr_bh')
     df_granger_fdr = df_granger.copy()
+    df_granger_fdr['Significant (p<0.05)'] = df_granger_fdr['p-value'].apply(lambda p: 'Yes' if p < 0.05 else 'No')
     df_granger_fdr['q-value (BH/FDR)'] = qvals
-    df_granger_fdr['Significant FDR'] = df_granger_fdr['q-value (BH/FDR)'].apply(
-        lambda q: '***' if q < 0.001 else ('**' if q < 0.01 else ('*' if q < 0.05 else ''))
-    )
+    df_granger_fdr['Significant FDR'] = df_granger_fdr['q-value (BH/FDR)'].apply(lambda q: 'Yes' if q < 0.05 else 'No')
 else:
     df_granger_fdr = df_granger.copy()
 
+if not df_granger_fdr.empty:
+    df_granger_fdr = df_granger_fdr.rename(columns={'Test': 'Channel'})
+    for col in ['Significant (p<0.05)', 'Significant FDR']:
+        if col in df_granger_fdr.columns:
+            df_granger_fdr[col] = df_granger_fdr[col].fillna('No')
+    df_granger_fdr = df_granger_fdr[[
+        'Channel',
+        'F-stat',
+        'p-value',
+        'Significant (p<0.05)',
+        'q-value (BH/FDR)',
+        'Significant FDR',
+    ]]
 df_granger_fdr.to_csv(os.path.join(TABLES_DIR, 'granger_causality_fdr.csv'), index=False)
 
 with open(os.path.join(TABLES_DIR, 'granger_causality.txt'), 'w') as f:
@@ -1153,6 +1181,7 @@ with open(os.path.join(TABLES_DIR, 'granger_causality_fdr.tex'), 'w') as f:
         index=False,
         caption='Granger Causality Tests with BH/FDR Correction (Secondary Evidence)',
         label='tab:granger_fdr',
+        column_format='lrrlrl',
         float_format='%.6f',
         escape=True
     ))
