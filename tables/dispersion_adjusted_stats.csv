@@ -1,4 +1,4 @@
-Regime,Series,Mean (bps),Std (bps),Mean |.| (bps),N
+Regime,Series,Mean (bps),Std (bps),Mean Abs (bps),N
 Pre-SVB,USDC Kraken $D_t$ (Unadjusted),0.12,4.95,3.49,11615
 Pre-SVB,USDC Kraken $B_t$ (Adjusted),-0.32,5.0,3.53,11197
 Pre-SVB,USDT Kraken $D_t$ (Unadjusted),-0.54,4.49,3.17,12618

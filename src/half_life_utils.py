@@ -42,7 +42,7 @@ def estimate_half_life_from_ecm(
             'rho_est': np.nan,
             'half_life_min': np.nan,
             'n_obs': len(s),
-            'warning': 'insufficient_observations',
+            'warning': 'obs_too_few',
         }
 
     reg = pd.DataFrame({'x_t': s})
@@ -68,7 +68,7 @@ def estimate_half_life_from_ecm(
             'rho_est': np.nan,
             'half_life_min': np.nan,
             'n_obs': len(reg),
-            'warning': 'insufficient_observations_after_ff_filter',
+            'warning': 'obs_too_few_no_ff',
         }
 
     X = sm.add_constant(reg['x_lag'])
@@ -80,7 +80,7 @@ def estimate_half_life_from_ecm(
 
     warning = ''
     if not (0.0 < rho < 1.0):
-        warning = 'rho_outside_(0,1)_half_life_undefined'
+        warning = 'rho_invalid'
 
     return {
         'estimation_form': 'ECM (implied AR1)',
