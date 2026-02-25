@@ -18,7 +18,7 @@
 \maketitle
 
 \section*{Abstract}
-Stablecoins are the main quote currency on many crypto exchanges, so their funding and redemption risk can distort the price of the same asset across quote currencies and venues. We study Bitcoin (BTC) quoted in USD, USDT, USDC, and EUR using 1-minute OHLCV data from March 1--21, 2023, spanning the Silicon Valley Bank (SVB) shock and the USDC de-peg. We separate (i) \emph{unadjusted dispersion} $D_t$ and (ii) \emph{adjusted parity residual} $B_t$ that marks stablecoins back to USD, estimate mean reversion via an Ornstein--Uhlenbeck (OU) model, and evaluate price discovery on log-price levels using Johansen cointegration and VECM adjustment coefficients (with BH/FDR-adjusted Granger tests as secondary evidence). We find (i) the USDC de-peg produces very large unadjusted dispersion (Kraken crisis mean $D_t\approx +319.97$ bps), while the adjusted residual is much smaller ($B_t\approx +5.27$ bps) and remains fast mean-reverting (USDC crisis half-life $0.61$ minutes at 1-minute sampling; robustness $0.54$--$1.10$ minutes), (ii) USDC stress is far larger than USDT, and (iii) the Kraken BTC/USD--BTC/USDT channel is cointegrated with BTC/USD adjusting less to disequilibrium, while the BTC/USD--BTC/USDC channel does not reject no-cointegration under our conservative no-forward-fill BIC specification, so USDC ``follows fiat'' is treated as supportive rather than primary evidence. We discuss how stablecoin regulation (e.g., the 2025 GENIUS Act) targets the banking-layer fragility that drives these dislocations.
+Stablecoins are the main quote currency on many crypto exchanges, so their funding and redemption risk can distort the price of the same asset across quote currencies and venues. We study Bitcoin (BTC) quoted in USD, USDT, and USDC using 1-minute OHLCV data from March 1--21, 2023, spanning the Silicon Valley Bank (SVB) shock and the USDC de-peg. We separate (i) \emph{unadjusted dispersion} $D_t$ and (ii) \emph{adjusted parity residual} $B_t$ that marks stablecoins back to USD, estimate mean reversion via an Ornstein--Uhlenbeck (OU) model, and evaluate price discovery on log-price levels using Johansen cointegration and VECM adjustment coefficients (with BH/FDR-adjusted Granger tests as secondary evidence). We find (i) the USDC de-peg produces very large unadjusted dispersion (Kraken crisis mean $D_t\approx +319.97$ bps), while the adjusted residual is much smaller ($B_t\approx +5.27$ bps) and remains fast mean-reverting (USDC crisis half-life $0.61$ minutes at 1-minute sampling; robustness $0.54$--$1.10$ minutes), (ii) USDC stress is far larger than USDT, and (iii) the Kraken BTC/USD--BTC/USDT channel is cointegrated with BTC/USD adjusting less to disequilibrium, while the BTC/USD--BTC/USDC channel does not reject no-cointegration under our conservative no-forward-fill BIC specification, so USDC ``follows fiat'' is treated as supportive rather than primary evidence. We discuss how stablecoin regulation (e.g., the 2025 GENIUS Act) targets the banking-layer fragility that drives these dislocations.
 
 \section{Context and Motivation}
 
@@ -34,13 +34,13 @@ To understand how stablecoin stress affects cross-currency pricing, we analyze M
 \section{Data and Methodology}
 
 \subsection{Data sources}
-We collect 1-minute OHLCV candles for BTC quoted in USD, EUR, USDT, and USDC from March 1, 2023, 00:00:00 UTC to March 21, 2023, 23:59:00 UTC (30,240 minutes per pair expected). We use three centralized exchanges with different market structure and regulatory exposure:
+We collect 1-minute OHLCV candles for BTC quoted in USD, USDT, and USDC from March 1, 2023, 00:00:00 UTC to March 21, 2023, 23:59:00 UTC (30,240 minutes per pair expected). We also download BTC/EUR pairs for completeness, but EUR is not used in the main empirical results. We use three centralized exchanges with different market structure and regulatory exposure:
 \begin{itemize}
-    \item \textbf{Binance:} BTC/USDT, BTC/USDC, BTC/EUR.
-    \item \textbf{Coinbase:} BTC/USD, BTC/USDT, BTC/EUR.
-    \item \textbf{Kraken:} BTC/USD, BTC/USDT, BTC/USDC, BTC/EUR.
+    \item \textbf{Binance:} BTC/USDT, BTC/USDC.
+    \item \textbf{Coinbase:} BTC/USD, BTC/USDT, USDT/USD.
+    \item \textbf{Kraken:} BTC/USD, BTC/USDT, BTC/USDC, USDT/USD, USDC/USD.
 \end{itemize}
-We also use CryptoCompare to obtain 1-minute benchmark series for USDT/USD and USDC/USD to track stablecoin peg deviations. Because of historical constraints, Kraken candles are reconstructed by aggregating paginated trade data into 1-minute OHLCV bars.
+For $P_{Q/\text{USD},t}$ in $B_{Q,t}$, we use venue-specific stablecoin/USD legs (Kraken USDC/USD and USDT/USD for Kraken channels, and Coinbase USDT/USD for Coinbase channels). Because of historical constraints, Kraken candles are reconstructed by aggregating paginated trade data into 1-minute OHLCV bars.
 
 \subsection{Preprocessing and alignment}
 All series are mapped to a unified 1-minute UTC grid. Missing observations are limited (Binance near 100\%, Coinbase/Kraken $>98\%$). For short micro-gaps (up to 5 minutes), we forward-fill close prices to maintain continuity; larger gaps are flagged to avoid artificial volatility.
@@ -67,6 +67,7 @@ Second, the \emph{adjusted parity residual} (the paper's original ``basis'' obje
     B_{Q,t}
     = \left(\ln(P_{\text{BTC}/Q,t}\times P_{Q/\text{USD},t})-\ln(P_{\text{BTC/USD},t})\right)\times 10000.
 \end{equation}
+In implementation, $P_{Q/\text{USD},t}$ is venue-specific for each channel (e.g., Kraken $B_{Q,t}$ uses Kraken stablecoin/USD).
 
 These satisfy the accounting identity
 \begin{equation}
@@ -74,14 +75,14 @@ These satisfy the accounting identity
 \end{equation}
 So large stablecoin de-pegs mechanically move $D_{Q,t}$, while $B_{Q,t}$ captures the residual after marking the stablecoin leg back to USD.
 
-We compute these objects (i) \emph{intra-exchange} (same venue) to isolate stablecoin effects from venue differences, and (ii) \emph{cross-exchange} adjusted residuals to study spatial arbitrage across matching engines.
+We compute these objects \emph{intra-exchange} (same venue) to isolate stablecoin effects from venue differences; for spatial arbitrage we separately study cross-exchange log-price differentials.
 
 \subsubsection{Mean reversion via Ornstein--Uhlenbeck}
 We model the adjusted residual $B_t$ (denoted $X_t$ below) as an OU process:
 \begin{equation}
     dX_t = \theta(\mu - X_t)dt + \sigma dW_t,
 \end{equation}
-and test stationarity with Augmented Dickey--Fuller (ADF) tests. In discrete time, we estimate the error-correction form
+and test stationarity with Augmented Dickey--Fuller (ADF) tests. With very large 1-minute samples, ADF rejection is expected and is used here as a basic stationarity check rather than a tradability guarantee. In discrete time, we estimate the error-correction form
 \begin{equation}
     \Delta X_t = a + \beta X_{t-1} + \varepsilon_t,
 \end{equation}
@@ -104,12 +105,12 @@ When rank $=1$, we estimate:
 \end{equation}
 The market with smaller $|\alpha|$ adjusts less to disequilibrium and is interpreted as the relative leader in the common efficient price.
 
-For two markets, we also report Gonzalo--Granger component shares from $\alpha=(\alpha_1,\alpha_2)^\top$:
+For two markets, we also report Gonzalo--Granger component metrics from $\alpha=(\alpha_1,\alpha_2)^\top$:
 \begin{equation}
     \text{CS}_1=\frac{\alpha_2}{\alpha_2-\alpha_1}, \qquad
     \text{CS}_2=\frac{-\alpha_1}{\alpha_2-\alpha_1}.
 \end{equation}
-We check robustness by re-estimating at $k_{\Delta}\pm 1$.
+These metrics can be outside $[0,1]$ in finite samples, so we treat them as supplementary diagnostics. We check robustness by re-estimating at $k_{\Delta}\pm 1$.
 
 \subsubsection{Granger causality (secondary/supportive)}
 We retain Granger tests on returns as supportive evidence only, not as the primary discovery metric. Across the full Granger test family, we apply Benjamini--Hochberg false discovery rate (BH/FDR) adjustment. Because 1-minute bars can be asynchronous across venues and the sample is very large, statistically significant Granger p-values may overstate economic lead--lag strength; we therefore do not interpret them as structural causality.
@@ -142,7 +143,7 @@ Before SVB (March 1--9), both objects are near zero on Kraken. During the crisis
 
 \input{tables/dispersion_adjusted_stats.tex}
 
-Despite large \emph{unadjusted} dislocations, arbitrage in the adjusted residual remains fast: for $B_t$ series, ADF rejects a unit root across regimes ($p<0.001$ in the main adjusted-residual channels). Using the corrected exact mapping, the USDC adjusted residual on Kraken has half-life $0.98$ minutes pre-SVB, $0.61$ minutes in crisis, and $0.79$ minutes post-SVB (1-minute, all observations). Robustness checks (Table~\ref{tab:half_life_robustness}) show crisis USDC half-life between $0.54$ and $1.10$ minutes depending on sampling and forward-fill filtering; thus fast mean reversion is robust, while the claim that crisis half-life strictly falls is specification-sensitive.
+Despite large \emph{unadjusted} dislocations, arbitrage in the adjusted residual remains fast: for $B_t$ series, ADF rejects a unit root across regimes ($p<0.001$ in the main adjusted-residual channels; with large $N$, we treat this as a baseline stationarity screen rather than a tradability guarantee). Using the corrected exact mapping, the USDC adjusted residual on Kraken has half-life $0.98$ minutes pre-SVB, $0.61$ minutes in crisis, and $0.79$ minutes post-SVB (1-minute, all observations). Robustness checks (Table~\ref{tab:half_life_robustness}) show crisis USDC half-life between $0.54$ and $1.10$ minutes depending on sampling and forward-fill filtering; thus fast mean reversion is robust, while the claim that crisis half-life strictly falls is specification-sensitive.
 
 \input{tables/half_life_robustness.tex}
 
@@ -158,6 +159,7 @@ The peg dynamics explain the asymmetry between $D_t$ and $B_t$. On Kraken, USDC 
 
 \subsection{Cross-exchange spatial arbitrage}
 We also examine the same pair across exchanges by computing log-price differentials for BTC/USDT (Binance vs.\ Kraken; Coinbase vs.\ Kraken) and BTC/USD (Coinbase vs.\ Kraken).
+The BTC/USDT cross-exchange channel is dispersion in the USDT numeraire; a USD-based arbitrage would require an additional conversion leg unless USDT/USD is identical across venues.
 
 \begin{figure}[H]
     \centering
@@ -237,7 +239,7 @@ Table~\ref{tab:johansen} shows that Kraken BTC/USD vs.\ BTC/USDT rejects no coin
 
 \input{tables/price_discovery_metrics.tex}
 
-For the cointegrated USDT channel, the VECM adjustment coefficients satisfy $|\alpha_{\text{BTC/USD}}| < |\alpha_{\text{BTC/USDT}}|$ (0.0079 vs.\ 0.0118), so BTC/USD adjusts less and BTC/USDT adjusts more to restore equilibrium. The inferred leader direction is stable at $k_{\Delta}\pm1$. We report Gonzalo--Granger component shares as a standard summary metric; because these can be non-convex in finite samples, we use them as supporting diagnostics rather than a stand-alone claim.
+For the cointegrated USDT channel, the VECM adjustment coefficients satisfy $|\alpha_{\text{BTC/USD}}| < |\alpha_{\text{BTC/USDT}}|$ (0.0079 vs.\ 0.0118), so BTC/USD adjusts less and BTC/USDT adjusts more to restore equilibrium. The inferred leader direction is stable at $k_{\Delta}\pm1$. We report Gonzalo--Granger component metrics as supplementary diagnostics only.
 
 We keep Granger causality as secondary evidence and apply BH/FDR correction across the full test family:
 
@@ -255,6 +257,7 @@ We report two bounds for each channel/regime:
     \text{net}_t &= (|b_t|-\text{cost}_t)_+,
 \end{align}
 with $f=5$ bps per taker trade (2-leg $=10$ bps, 3-leg $=15$ bps). The per-leg range term is a \emph{range-based slippage proxy}, not a quoted spread; it is conservative and noisy.
+Here $b_t$ denotes the relevant mispricing series ($B_t$ for intra-exchange stablecoin channels; cross-exchange log-price differential for venue channels).
 
 \input{tables/arbitrage_summary.tex}
 
