@@ -1084,6 +1084,8 @@ with open(os.path.join(TABLES_DIR, 'price_discovery_metrics.tex'), 'w') as f:
         float_format='%.4f',
         escape=True
     )
+    # Keep table escaping, then inject math-safe alpha header.
+    latex_discovery = latex_discovery.replace('Leader by |alpha|', r'Leader by $|\alpha|$')
     f.write(make_width_safe_latex(latex_discovery, add_footnotesize=True))
 
 df_discovery_gg_tex = df_discovery[[
@@ -1104,7 +1106,7 @@ df_discovery_gg_tex = df_discovery[[
 with open(os.path.join(TABLES_DIR, 'price_discovery_gg_appendix.tex'), 'w') as f:
     latex_discovery_gg = df_discovery_gg_tex.to_latex(
         index=False,
-        caption='Appendix Table A1: Gonzalo--Granger Diagnostics (supplementary; may be outside [0,1])',
+        caption='Gonzalo--Granger Diagnostics (Appendix; supplementary; not shares and may be outside [0,1])',
         label='tab:price_discovery_gg',
         float_format='%.4f',
         escape=True
@@ -1198,14 +1200,18 @@ with open(os.path.join(TABLES_DIR, 'granger_causality.tex'), 'w') as f:
                                  float_format='%.6f'))
 
 with open(os.path.join(TABLES_DIR, 'granger_causality_fdr.tex'), 'w') as f:
-    f.write(df_granger_fdr.to_latex(
+    latex_granger_fdr = df_granger_fdr.to_latex(
         index=False,
         caption='Granger Causality Tests with BH/FDR Correction (Secondary Evidence)',
         label='tab:granger_fdr',
         column_format='lrrlrl',
         float_format='%.6f',
         escape=True
-    ))
+    )
+    # Use math-mode comparison symbols to avoid text-encoding artifacts in PDF extraction.
+    latex_granger_fdr = latex_granger_fdr.replace('Sig(p<0.05)', r'Sig($p<0.05$)')
+    latex_granger_fdr = latex_granger_fdr.replace('Sig(q<0.05)', r'Sig($q<0.05$)')
+    f.write(latex_granger_fdr)
 
 # IRF Plot for the core pair
 var_data_core = returns[['kraken_btcusd', 'kraken_btcusdc']].dropna() * 10000
