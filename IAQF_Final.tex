@@ -239,7 +239,7 @@ Table~\ref{tab:johansen} shows that Kraken BTC/USD vs.\ BTC/USDT rejects no coin
 
 \input{tables/price_discovery_metrics.tex}
 
-For the cointegrated USDT channel, the VECM adjustment coefficients satisfy $|\alpha_{\text{BTC/USD}}| < |\alpha_{\text{BTC/USDT}}|$ (0.0079 vs.\ 0.0118), so BTC/USD adjusts less and BTC/USDT adjusts more to restore equilibrium. The inferred leader direction is stable at $k_{\Delta}\pm1$. We report Gonzalo--Granger component metrics as supplementary diagnostics only.
+For the cointegrated USDT channel, the VECM adjustment coefficients satisfy $|\alpha_{\text{BTC/USD}}| < |\alpha_{\text{BTC/USDT}}|$ (0.0079 vs.\ 0.0118), so BTC/USD adjusts less and BTC/USDT adjusts more to restore equilibrium. The inferred leader direction is stable at $k_{\Delta}\pm1$. We report GG diagnostics in Appendix Table~\ref{tab:price_discovery_gg}; leader direction is inferred from $|\alpha|$.
 
 We keep Granger causality as secondary evidence and apply BH/FDR correction across the full test family:
 
@@ -287,5 +287,8 @@ Using 1-minute data around the SVB crisis (March 1--21, 2023), we quantify how s
 \end{enumerate}
 
 These patterns connect directly to stablecoin regulation: when redemption and reserves are credible, stablecoin-specific risk premia shrink, cross-currency basis tightens, and market fragmentation becomes easier to arbitrage away.
+
+\section*{Appendix}
+\input{tables/price_discovery_gg_appendix.tex}
 
 \end{document}

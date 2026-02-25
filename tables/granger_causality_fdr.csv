@@ -1,4 +1,4 @@
-Channel,F-stat,p-value,Significant (p<0.05),q-value (BH/FDR),Significant FDR
+Channel,F-stat,p-value,Sig(p<0.05),q-value (BH/FDR),Sig(q<0.05)
 BTC/USDC → BTC/USD (Kraken),1.512,0.12789750300468838,No,0.12789750300468838,No
 BTC/USD → BTC/USDC (Kraken),332.178,0.0,Yes,0.0,Yes
 BTC/USDT → BTC/USD (Kraken),3.825,3.4465141762400195e-05,Yes,4.5953522349866925e-05,Yes
