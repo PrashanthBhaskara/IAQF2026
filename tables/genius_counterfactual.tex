@@ -1,0 +1,17 @@
+\begin{table}[H]
+\caption{GENIUS Act quantitative counterfactual. Under reserve composition rules (T-bills, central bank reserves, Treasury-backed repos), Circle's \$3.3B held at SVB would have been in instruments immune to bank failure, eliminating the reserve lock-up that caused the USDC de-peg. Counterfactual $D_t$ is bounded by the pre-crisis level.}
+\label{tab:genius_cf}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{p{3.5cm}p{3.2cm}p{3.4cm}p{4.6cm}}
+\toprule
+Metric & Observed (No GENIUS Act) & Counterfactual (GENIUS Act) & Relevant Provision \\
+\midrule
+Circle reserves at SVB & \$3.3B locked (8.3\%) & \$0 locked (0\%) & Reserve composition: T-bills/CB reserves only \\
+$D_t$ crisis mean (USDC) & $+319.97$ bps & $\approx +0.12$ bps (pre-crisis level) & Reserve composition $\Rightarrow$ no de-peg \\
+$D_t$ crisis std (USDC) & $322.87$ bps & $\approx 4.95$ bps & Transparency (no information-driven panic) \\
+$B_t$ P99 crisis (USDC) & $+81.4$ bps & $\approx +13.6$ bps (pre-crisis P99) & Bankruptcy super-priority + redemption guarantee \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

@@ -1,15 +1,15 @@
 \begin{table}[H]
-\caption{Johansen Cointegration and VECM Adjustment (Primary Kraken Channels, No-FF Sample)}
+\caption{Johansen Cointegration and VECM Price Discovery (Primary Kraken Channels, No-FF Sample)}
 \label{tab:coint_vecm}
 \footnotesize
 \centering
-\begin{tabular}{lcccccl}
+\begin{tabular}{lccccccl}
 \toprule
-Channel & Rank & $k_\Delta$ & Trace$_{r=0}$ & $\alpha_{\text{USD}}$ & $\alpha_{\text{other}}$ & Leader by $|\alpha|$ \\
+Channel & Rank & $k_\Delta$ & Trace$_{r=0}$ & $\alpha_{\text{USD}}$ & $\alpha_{\text{other}}$ & IS$_{\text{USD}}$ [0.69, 0.77] & Leader \\
 \midrule
-BTC/USD vs BTC/USDC & 0 & 2 & 7.71 & --- & --- & undetermined \\
-BTC/USD vs BTC/USDT & 1 & 8 & 27.03 & 0.0079 & 0.0118 & BTC/USD \\
+BTC/USD vs BTC/USDC & 0 & 2 & 7.71 & --- & --- & --- & undetermined \\
+BTC/USD vs BTC/USDT & 1 & 8 & 27.03 & 0.0079 & 0.0118 & 0.73 & BTC/USD \\
 \bottomrule
-\multicolumn{7}{l}{\footnotesize 95\% critical value for trace $r=0$: 15.49. Rank stable at $k_\Delta\pm1$ for both channels.}
+\multicolumn{8}{l}{\footnotesize 95\% critical value for trace $r=0$: 15.49. IS = Hasbrouck (1995) midpoint; bounds [0.69, 0.77].}
 \end{tabular}
 \end{table}
