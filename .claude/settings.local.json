@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python src/04_tex_integrity_check.py)",
+      "Bash(python src/05_half_life_figure.py)",
+      "Bash(python -c \":*)"
+    ]
+  }
+}
