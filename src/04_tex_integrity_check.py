@@ -15,7 +15,7 @@ REF_PATTERN = re.compile(r'\\(?:ref|eqref|autoref|cref|Cref)\{([^}]+)\}')
 TABLE_ARTIFACT_MAP = {
     'tab:ou_stats': ['tables/ou_basis_stats.csv', 'tables/ou_basis_stats.tex'],
     'tab:granger': ['tables/granger_causality.csv', 'tables/granger_causality.tex'],
-    'tab:arb': ['tables/arbitrage_summary.csv', 'tables/arbitrage_summary.tex'],
+    'tab:arb': ['tables/arbitrage_compact.tex'],
     'tab:dispersion_vs_adjusted': [
         'tables/dispersion_adjusted_stats.csv',
         'tables/dispersion_adjusted_stats.tex',
@@ -28,13 +28,8 @@ TABLE_ARTIFACT_MAP = {
         'tables/range_vol_corr.csv',
         'tables/range_vol_corr.tex',
     ],
-    'tab:johansen': [
-        'tables/cointegration_johansen.csv',
-        'tables/cointegration_johansen.tex',
-    ],
-    'tab:price_discovery': [
-        'tables/price_discovery_metrics.csv',
-        'tables/price_discovery_metrics.tex',
+    'tab:coint_vecm': [
+        'tables/cointegration_vecm_merged.tex',
     ],
     'tab:granger_fdr': [
         'tables/granger_causality_fdr.csv',
