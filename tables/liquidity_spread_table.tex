@@ -1,0 +1,18 @@
+\begin{table}
+\caption{Roll (1984) effective spread (bps) and Amihud (2002) illiquidity ratio ($\times10^{-6}$) by pair and regime. Roll spread estimated from daily serial covariance of 1-minute log returns; NaN days (non-negative covariance) excluded from means. ILLIQ$_t = |r_t|/\text{DollarVol}_t$, daily average.}
+\label{tab:liquidity_spread}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Pair & Roll\textsubscript{Pre} & Roll\textsubscript{Crisis} & Roll\textsubscript{Post} & ILLIQ\textsubscript{Pre} & ILLIQ\textsubscript{Crisis} & ILLIQ\textsubscript{Post} \\
+\midrule
+Kraken BTC/USD & 1.260 & --- & --- & 0.232 & 0.050 & 0.068 \\
+Kraken BTC/USDT & 3.390 & 2.850 & 2.670 & 8.299 & 7.266 & 9.074 \\
+Kraken BTC/USDC & 1.100 & 25.640 & 2.070 & 31.970 & 13.282 & 23.530 \\
+Binance BTC/USDT & 1.560 & 0.670 & 3.630 & 0.163 & 0.461 & 0.591 \\
+Coinbase BTC/USD & 1.880 & 2.490 & 3.490 & 0.005 & 0.003 & 0.003 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

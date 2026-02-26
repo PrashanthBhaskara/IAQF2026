@@ -3,7 +3,11 @@
     "allow": [
       "Bash(python src/04_tex_integrity_check.py)",
       "Bash(python src/05_half_life_figure.py)",
-      "Bash(python -c \":*)"
+      "Bash(python -c \":*)",
+      "Bash(pdflatex --version)",
+      "Bash(pdflatex -interaction=nonstopmode IAQF_Final.tex)",
+      "Bash(/Library/TeX/texbin/pdflatex -interaction=nonstopmode -output-directory=\"/Users/dhruvkohli/Desktop/Github Repos/IAQF2026\" \"/Users/dhruvkohli/Desktop/Github Repos/IAQF2026/IAQF_Final.tex\")",
+      "Bash(python src/06_three_fixes.py)"
     ]
   }
 }

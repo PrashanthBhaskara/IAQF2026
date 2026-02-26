@@ -1,0 +1,2 @@
+Channel,Rank,k_diff,IS_USD_lower,IS_USD_upper,IS_USD_mid,IS_other_lower,IS_other_upper,IS_other_mid,alpha_USD,alpha_USDT,note
+Kraken BTC/USD vs BTC/USDT,1,8,0.686,0.772,0.729,0.228,0.314,0.271,0.00786,0.01182,
