@@ -1,9 +1,9 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
-\providecommand\HyField@AuxAddToFields[1]{}
-\providecommand\HyField@AuxAddToCoFields[2]{}
+\providecommand*\HyPL@Entry[1]{}
 \citation{genius2025}
 \citation{circle2023}
+\HyPL@Entry{0<</S/D>>}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Context and Motivation}{1}{section.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Data and Methodology}{1}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Data sources and preprocessing}{1}{subsection.3}\protected@file@percent }
@@ -24,47 +24,51 @@
 \newlabel{tab:dispersion_vs_adjusted}{{3}{4}{Regime Statistics for Unadjusted Dispersion ($D_t$) and Adjusted Residual ($B_t$), Kraken}{table.19}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces HAC uncertainty for headline mean estimates (Newey--West, 60-lag cap). Values are in basis points with 95\% confidence intervals.}}{4}{table.21}\protected@file@percent }
 \newlabel{tab:hac_headline}{{4}{4}{HAC uncertainty for headline mean estimates (Newey--West, 60-lag cap). Values are in basis points with 95\% confidence intervals}{table.21}{}}
-\citation{roll1984}
-\citation{amihud2002}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Panel A: stablecoin spot prices vs.\ USD. Panel B: peg deviations from \$1.00 (bps). USDC falls sharply while USDT trades at a premium, consistent with stress-time stablecoin substitution.}}{5}{figure.23}\protected@file@percent }
 \newlabel{fig:peg}{{1}{5}{Panel A: stablecoin spot prices vs.\ USD. Panel B: peg deviations from \$1.00 (bps). USDC falls sharply while USDT trades at a premium, consistent with stress-time stablecoin substitution}{figure.23}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Cross-exchange spatial arbitrage}{5}{subsection.24}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Liquidity, volatility, and volume dynamics}{5}{subsection.27}\protected@file@percent }
+\citation{roll1984}
+\citation{amihud2002}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Cross-exchange basis: BTC/USDT (Binance vs.\ Kraken, Coinbase vs.\ Kraken) and BTC/USD (Coinbase vs.\ Kraken). The fiat channel (Panel C) shows a persistent positive basis that remains elevated post-crisis.}}{6}{figure.26}\protected@file@percent }
 \newlabel{fig:xbasis}{{2}{6}{Cross-exchange basis: BTC/USDT (Binance vs.\ Kraken, Coinbase vs.\ Kraken) and BTC/USD (Coinbase vs.\ Kraken). The fiat channel (Panel C) shows a persistent positive basis that remains elevated post-crisis}{figure.26}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Liquidity, volatility, and volume dynamics}{6}{subsection.27}\protected@file@percent }
+\newlabel{sec:liq_vol}{{3.3}{6}{Liquidity, volatility, and volume dynamics}{subsection.27}{}}
 \citation{neweywest1987}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Panel A: Roll (1984) effective spread by pair and regime (bps). Panel B: Amihud (2002) ILLIQ ratio ($\times 10^{-6}$). Kraken BTC/USDC shows a $23\times $ Roll spread increase during the crisis; Roll is undefined for Kraken BTC/USD in stress periods (positive serial covariance, momentum regime).}}{7}{figure.29}\protected@file@percent }
-\newlabel{fig:liq}{{3}{7}{Panel A: Roll (1984) effective spread by pair and regime (bps). Panel B: Amihud (2002) ILLIQ ratio ($\times 10^{-6}$). Kraken BTC/USDC shows a $23\times $ Roll spread increase during the crisis; Roll is undefined for Kraken BTC/USD in stress periods (positive serial covariance, momentum regime)}{figure.29}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Roll (1984) effective spread (bps) and Amihud (2002) illiquidity ratio ($\times 10^{-6}$) by pair and regime. Roll spread estimated from daily serial covariance of 1-minute log returns; NaN days (non-negative covariance) excluded from means. ILLIQ$_t = |r_t|/\text  {DollarVol}_t$, daily average.}}{7}{table.31}\protected@file@percent }
-\newlabel{tab:liquidity_spread}{{5}{7}{Roll (1984) effective spread (bps) and Amihud (2002) illiquidity ratio ($\times 10^{-6}$) by pair and regime. Roll spread estimated from daily serial covariance of 1-minute log returns; NaN days (non-negative covariance) excluded from means. ILLIQ$_t = |r_t|/\text {DollarVol}_t$, daily average}{table.31}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces HAC Regressions of Adjusted Residual $B_t$ on Crisis Dummy, Realized Volatility, and Range Proxy (Kraken, Newey--West 60 lags)}}{7}{table.33}\protected@file@percent }
-\newlabel{tab:regression_hac}{{6}{7}{HAC Regressions of Adjusted Residual $B_t$ on Crisis Dummy, Realized Volatility, and Range Proxy (Kraken, Newey--West 60 lags)}{table.33}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Panel A: Roll (1984) effective spread by pair and regime (bps). Panel B: Amihud (2002) ILLIQ ratio ($\times 10^{-6}$). Roll spread is undefined for days with non-negative serial covariance; regime means for thin pairs rest on few valid days (as few as 1--2 in the 3-day crisis window) and are therefore indicative. Roll is undefined for Kraken BTC/USD in stress periods (momentum regime).}}{7}{figure.29}\protected@file@percent }
+\newlabel{fig:liq}{{3}{7}{Panel A: Roll (1984) effective spread by pair and regime (bps). Panel B: Amihud (2002) ILLIQ ratio ($\times 10^{-6}$). Roll spread is undefined for days with non-negative serial covariance; regime means for thin pairs rest on few valid days (as few as 1--2 in the 3-day crisis window) and are therefore indicative. Roll is undefined for Kraken BTC/USD in stress periods (momentum regime)}{figure.29}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Roll (1984) effective spread (bps) and Amihud (2002) illiquidity ratio ($\times 10^{-6}$) by pair and regime. Roll spread estimated from daily serial covariance of 1-minute log returns; NaN days (non-negative covariance) excluded from means. $N$ is the number of valid Roll days per regime; some regime means rest on few days and are indicative. ILLIQ$_t = |r_t|/\text  {DollarVol}_t$, daily average.}}{7}{table.31}\protected@file@percent }
+\newlabel{tab:liquidity_spread}{{5}{7}{Roll (1984) effective spread (bps) and Amihud (2002) illiquidity ratio ($\times 10^{-6}$) by pair and regime. Roll spread estimated from daily serial covariance of 1-minute log returns; NaN days (non-negative covariance) excluded from means. $N$ is the number of valid Roll days per regime; some regime means rest on few days and are indicative. ILLIQ$_t = |r_t|/\text {DollarVol}_t$, daily average}{table.31}{}}
+\citation{chow1960}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces HAC Regressions of Adjusted Residual $B_t$ on Crisis Dummy, Realized Volatility, and Range Proxy (Kraken, Newey--West 60 lags)}}{8}{table.33}\protected@file@percent }
+\newlabel{tab:regression_hac}{{6}{8}{HAC Regressions of Adjusted Residual $B_t$ on Crisis Dummy, Realized Volatility, and Range Proxy (Kraken, Newey--West 60 lags)}{table.33}{}}
+\@writefile{toc}{\contentsline {paragraph}{Distributional robustness.}{8}{table.33}\protected@file@percent }
 \citation{hasbrouck1995}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Price discovery}{8}{subsection.34}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Johansen Cointegration and VECM Price Discovery (Primary Kraken Channels, No-FF Sample)}}{8}{table.36}\protected@file@percent }
-\newlabel{tab:coint_vecm}{{7}{8}{Johansen Cointegration and VECM Price Discovery (Primary Kraken Channels, No-FF Sample)}{table.36}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Granger Causality Tests with BH/FDR Correction (Secondary Evidence)}}{8}{table.38}\protected@file@percent }
-\newlabel{tab:granger_fdr}{{8}{8}{Granger Causality Tests with BH/FDR Correction (Secondary Evidence)}{table.38}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Higher-moment diagnostics for adjusted residual $B_t$ by regime. Excess kurtosis (Fisher) measures tail heaviness beyond Gaussian ($=0$). Min/Max are in basis points.}}{9}{table.35}\protected@file@percent }
+\newlabel{tab:dist_robust}{{7}{9}{Higher-moment diagnostics for adjusted residual $B_t$ by regime. Excess kurtosis (Fisher) measures tail heaviness beyond Gaussian ($=0$). Min/Max are in basis points}{table.35}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Price discovery}{9}{subsection.36}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Johansen Cointegration and VECM Price Discovery (Primary Kraken Channels, No-FF Sample)}}{9}{table.38}\protected@file@percent }
+\newlabel{tab:coint_vecm}{{8}{9}{Johansen Cointegration and VECM Price Discovery (Primary Kraken Channels, No-FF Sample)}{table.38}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Granger Causality Tests with BH/FDR Correction (Secondary Evidence)}}{9}{table.40}\protected@file@percent }
+\newlabel{tab:granger_fdr}{{9}{9}{Granger Causality Tests with BH/FDR Correction (Secondary Evidence)}{table.40}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Arbitrage after fees}{9}{subsection.41}\protected@file@percent }
 \citation{circle2023}
 \citation{jointstatement2023}
 \citation{genius2025}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Arbitrage after fees}{9}{subsection.39}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Arbitrage Profitability by Channel and Regime (5 bps/leg; 3-leg intra-exchange, 2-leg cross-exchange)}}{9}{table.43}\protected@file@percent }
-\newlabel{tab:arb}{{9}{9}{Arbitrage Profitability by Channel and Regime (5 bps/leg; 3-leg intra-exchange, 2-leg cross-exchange)}{table.43}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Regulatory Interpretation}{9}{section.44}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Arbitrage Profitability by Channel and Regime (5 bps/leg; 3-leg intra-exchange, 2-leg cross-exchange)}}{10}{table.45}\protected@file@percent }
+\newlabel{tab:arb}{{10}{10}{Arbitrage Profitability by Channel and Regime (5 bps/leg; 3-leg intra-exchange, 2-leg cross-exchange)}{table.45}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Regulatory Interpretation}{10}{section.46}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{10}{section.47}\protected@file@percent }
 \citation{genius2025}
-\citation{genius2025}
-\citation{genius2025}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{10}{section.45}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Interpretation Boundaries.}{10}{section.45}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Interpretation Boundaries.}{11}{section.47}\protected@file@percent }
 \bibcite{amihud2002}{1}
-\bibcite{circle2023}{2}
-\bibcite{englegranger1987}{3}
-\bibcite{jointstatement2023}{4}
-\bibcite{granger1969}{5}
-\bibcite{hasbrouck1995}{6}
-\bibcite{johansen1988}{7}
-\bibcite{neweywest1987}{8}
-\bibcite{roll1984}{9}
-\bibcite{genius2025}{10}
-\gdef \@abspage@last{11}
+\bibcite{chow1960}{2}
+\bibcite{circle2023}{3}
+\bibcite{englegranger1987}{4}
+\bibcite{jointstatement2023}{5}
+\bibcite{granger1969}{6}
+\bibcite{hasbrouck1995}{7}
+\bibcite{johansen1988}{8}
+\bibcite{neweywest1987}{9}
+\bibcite{roll1984}{10}
+\bibcite{genius2025}{11}
+\gdef \@abspage@last{12}
