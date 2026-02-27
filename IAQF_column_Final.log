@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2026.2.26)  27 FEB 2026 15:50
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2026.2.26)  27 FEB 2026 17:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -585,17 +585,19 @@ Underfull \hbox (badness 1565) in paragraph at lines 73--74
 File: figures_col/fig_stablecoin_peg.png Graphic file (type bmp)
 <figures_col/fig_stablecoin_peg.png>
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-
-
-Underfull \hbox (badness 1142) in paragraph at lines 84--85
-\TU/TimesNewRoman(0)/m/n/12 compose stablecoin-driven fragmentation into a
+Underfull \hbox (badness 1205) in paragraph at lines 84--85
+\TU/TimesNewRoman(0)/m/n/12 izes persistent dislocation to the reserve-access
  []
 
 
-Underfull \vbox (badness 5832) has occurred while \output is active []
+Underfull \hbox (badness 1221) in paragraph at lines 84--85
+\TU/TimesNewRoman(0)/m/n/12 inconsistent with a common-shock explanation.
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
@@ -633,12 +635,15 @@ Underfull \hbox (badness 1635) in paragraph at lines 94--95
  []
 
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+
 Overfull \hbox (9.50157pt too wide) detected at line 123
 [][][][] \OT1/cmr/m/n/12 = [] \OMS/cmsy/m/n/12 ^^B \OT1/cmr/m/n/12 10000\OML/cm
 m/m/it/12 :
  []
-
-
 
 
 Overfull \hbox (19.52463pt too wide) detected at line 136
@@ -649,21 +654,40 @@ Overfull \hbox (19.52463pt too wide) detected at line 136
 
 
 [2]
+Underfull \hbox (badness 2401) in paragraph at lines 150--152
+\TU/TimesNewRoman(0)/m/n/12 where the \TU/TimesNewRoman(0)/m/it/12 contagion in
+tensity $\OML/cmm/m/it/12 ^^U$ \TU/TimesNewRoman(0)/m/n/12 measures the
+ []
+
+
+Underfull \hbox (badness 1546) in paragraph at lines 150--152
+\TU/TimesNewRoman(0)/m/n/12 transmission—via liquidity withdrawal, adverse
+ []
+
 File: figures_col/fig_dispersion_vs_adjusted_kraken.png Graphic file (type bmp)
 
 <figures_col/fig_dispersion_vs_adjusted_kraken.png>
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
+
+
+
+Underfull \vbox (badness 2285) has occurred while \output is active []
+
+
+
+[3]
 File: figures_col/fig_stablecoin_substitution_scatter.png Graphic file (type bm
 p)
 <figures_col/fig_stablecoin_substitution_scatter.png>
 
-Underfull \hbox (badness 3503) in paragraph at lines 204--205
+Underfull \hbox (badness 3503) in paragraph at lines 211--212
 \TU/TimesNewRoman(0)/m/n/12 firm directional robustness [[]]: USDC crisis
  []
 
 
-Underfull \hbox (badness 3646) in paragraph at lines 204--205
+Underfull \hbox (badness 3646) in paragraph at lines 211--212
 \OML/cmm/m/it/12 D[]$ \TU/TimesNewRoman(0)/m/n/12 95% CI $\OT1/cmr/m/n/12 [245\
 OML/cmm/m/it/12 :\OT1/cmr/m/n/12 7\OML/cmm/m/it/12 ;  \OT1/cmr/m/n/12 394\OML/c
 mm/m/it/12 :\OT1/cmr/m/n/12 3]$ \TU/TimesNewRoman(0)/m/n/12 bps; crisis $\OML/c
@@ -672,13 +696,30 @@ mm/m/it/12 B[]$ \TU/TimesNewRoman(0)/m/n/12 CI
 
 
 
-[3]
 File: figures_col/fig_half_life_robustness.png Graphic file (type bmp)
 <figures_col/fig_half_life_robustness.png>
 File: figures_col/fig_two_layer_persistence.png Graphic file (type bmp)
 <figures_col/fig_two_layer_persistence.png>
 
+Underfull \hbox (badness 1394) in paragraph at lines 230--231
+\TU/TimesNewRoman(0)/m/n/12 ADF $\OML/cmm/m/it/12 p[]\OT1/cmr/m/n/12 0\OML/cmm/
+m/it/12 :\OT1/cmr/m/n/12 44$\TU/TimesNewRoman(0)/m/n/12 ); USDT peg deviations 
+similarly
+ []
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+[4]
+Underfull \hbox (badness 1527) in paragraph at lines 236--236
+[]\TU/TimesNewRoman(0)/m/n/12 Table 3: []Contagion intensity $[]$ from Eq. ([]5
+[]):
+ []
+
+
+Underfull \vbox (badness 2922) has occurred while \output is active []
 
 
 
@@ -691,20 +732,20 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[4]
-Underfull \hbox (badness 4416) in paragraph at lines 243--244
+[5]
+Underfull \hbox (badness 4416) in paragraph at lines 277--278
 \TU/TimesNewRoman(0)/m/n/12 a USD-based arbitrage requires an additional
  []
 
 
-Underfull \hbox (badness 1655) in paragraph at lines 243--244
+Underfull \hbox (badness 1655) in paragraph at lines 277--278
 \TU/TimesNewRoman(0)/m/n/12 tight integration. Coinbase–Kraken BTC/USD
  []
 
 
 
 
-Underfull \hbox (badness 1490) in paragraph at lines 248--249
+Underfull \hbox (badness 1490) in paragraph at lines 282--283
 \TU/TimesNewRoman(0)/m/n/12 raises the question of whether liquidity condi-
  []
 
@@ -715,18 +756,18 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[5]
-Underfull \hbox (badness 1603) in paragraph at lines 277--278
-[]\TU/TimesNewRoman(0)/m/n/12 Daily dollar-volume depth proxies (Table []4[])
+[6]
+Underfull \hbox (badness 1603) in paragraph at lines 311--312
+[]\TU/TimesNewRoman(0)/m/n/12 Daily dollar-volume depth proxies (Table []5[])
  []
 
 
-Underfull \hbox (badness 1097) in paragraph at lines 301--301
-[]\TU/TimesNewRoman(0)/m/n/12 Table 5: []HAC regressions of Kraken adjusted
+Underfull \hbox (badness 1097) in paragraph at lines 335--335
+[]\TU/TimesNewRoman(0)/m/n/12 Table 6: []HAC regressions of Kraken adjusted
  []
 
 
-Underfull \hbox (badness 1337) in paragraph at lines 325--326
+Underfull \hbox (badness 1337) in paragraph at lines 359--360
 []\TU/TimesNewRoman(0)/m/n/12 Figure []9[] shows daily volume fragmentation:
  []
 
@@ -738,14 +779,14 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-Underfull \hbox (badness 3780) in paragraph at lines 335--336
+Underfull \hbox (badness 3780) in paragraph at lines 369--370
 []\TU/TimesNewRoman(0)/m/n/12 Realized volatility (Figure []10[]) reveals pro-
  []
 
 File: figures_col/fig_realized_volatility.png Graphic file (type bmp)
 <figures_col/fig_realized_volatility.png>
 
-Underfull \hbox (badness 2452) in paragraph at lines 341--341
+Underfull \hbox (badness 2452) in paragraph at lines 375--375
 []\TU/TimesNewRoman(0)/m/n/12 Figure 10: []Hourly realized volatility (60-min
  []
 
@@ -756,145 +797,135 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[6]
+[7]
 File: figures_col/fig_correlation_regime_heatmap.png Graphic file (type bmp)
 <figures_col/fig_correlation_regime_heatmap.png>
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-
-Underfull \hbox (badness 1005) in paragraph at lines 366--367
+Underfull \hbox (badness 1005) in paragraph at lines 400--401
 \OML/cmm/m/it/12 B[]$ \TU/TimesNewRoman(0)/m/n/12 ($\OML/cmm/m/it/12 F[]\OT1/cm
 r/m/n/12 230$\TU/TimesNewRoman(0)/m/n/12 ), and AR(1) dynamics ($\OML/cmm/m/it/
 12 F[]\OT1/cmr/m/n/12 71$\TU/TimesNewRoman(0)/m/n/12 ; all
  []
 
 
-Overfull \hbox (20.30956pt too wide) in paragraph at lines 373--385
+
+
+Overfull \hbox (20.30956pt too wide) in paragraph at lines 407--419
 [][] 
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-[7]
-Underfull \hbox (badness 1199) in paragraph at lines 387--388
+Underfull \hbox (badness 1199) in paragraph at lines 421--422
 []\TU/TimesNewRoman(0)/m/n/12 Figure []12[] visualizes the decorrelation across
 
  []
 
 
-Underfull \hbox (badness 1052) in paragraph at lines 387--388
+Underfull \hbox (badness 1052) in paragraph at lines 421--422
 \TU/TimesNewRoman(0)/m/n/12 partially recover post-SVB ($\OT1/cmr/m/n/12 0\OML/
 cmm/m/it/12 :\OT1/cmr/m/n/12 38$\TU/TimesNewRoman(0)/m/n/12 ), while cross-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 390--391
+Underfull \hbox (badness 10000) in paragraph at lines 424--425
 \TU/TimesNewRoman(0)/m/n/12 Given the liquidity asymmetry documented
  []
 
 
-Underfull \hbox (badness 1072) in paragraph at lines 390--391
+Underfull \hbox (badness 1072) in paragraph at lines 424--425
 \TU/TimesNewRoman(0)/m/n/12 price discovery occurs across these fragmented
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--411
-[]\TU/TimesNewRoman(0)/m/n/12 Table []7[] shows Kraken BTC/USD vs.
+Underfull \hbox (badness 10000) in paragraph at lines 444--445
+[]\TU/TimesNewRoman(0)/m/n/12 Table []8[] shows Kraken BTC/USD vs.
  []
 
 
-Underfull \hbox (badness 2057) in paragraph at lines 410--411
+Underfull \hbox (badness 2057) in paragraph at lines 444--445
 \TU/TimesNewRoman(0)/m/n/12 midpoint $[]$—BTC/USD accounts for $[]\OT1/cmr/m/n/
 12 73[]$
  []
 
 
-Underfull \hbox (badness 5050) in paragraph at lines 410--411
+Underfull \hbox (badness 5050) in paragraph at lines 444--445
 \TU/TimesNewRoman(0)/m/n/12 Residual correlation $\OT1/cmr/m/n/12 0\OML/cmm/m/i
 t/12 :\OT1/cmr/m/n/12 889$ \TU/TimesNewRoman(0)/m/n/12 confirms high co-
  []
 
 
-Underfull \hbox (badness 3815) in paragraph at lines 412--413
+Underfull \hbox (badness 3815) in paragraph at lines 446--447
 \TU/TimesNewRoman(0)/m/n/12 tions from a bivariate VAR on 1-minute re-
  []
 
+
+
+[8]
 File: figures_col/fig_var_irf.png Graphic file (type bmp)
 <figures_col/fig_var_irf.png>
 
-Underfull \hbox (badness 1043) in paragraph at lines 417--417
+Underfull \hbox (badness 1043) in paragraph at lines 451--451
 []\TU/TimesNewRoman(0)/m/n/12 Figure 13: []Orthogonalized IRF from VAR(10)
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 417--417
+Underfull \hbox (badness 10000) in paragraph at lines 451--451
 \TU/TimesNewRoman(0)/m/n/12 on Kraken BTC/USD and BTC/USDC re-
  []
 
 
-Underfull \hbox (badness 2932) in paragraph at lines 417--417
+Underfull \hbox (badness 2932) in paragraph at lines 451--451
 \TU/TimesNewRoman(0)/m/n/12 turns (bps). (B) USDC$\OMS/cmsy/m/n/12 !$\TU/TimesN
 ewRoman(0)/m/n/12 USD: insignificant.
  []
 
 
-
-
-Underfull \hbox (badness 4181) in paragraph at lines 421--422
+Underfull \hbox (badness 4181) in paragraph at lines 455--456
 []\TU/TimesNewRoman(0)/m/n/12 BH/FDR-corrected Granger tests on returns
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 421--422
+Underfull \hbox (badness 10000) in paragraph at lines 455--456
 \TU/TimesNewRoman(0)/m/n/12 provide secondary evidence: BTC/USD $\OMS/cmsy/m/n/
 12 !$
  []
 
 
-Underfull \hbox (badness 5504) in paragraph at lines 421--422
+Underfull \hbox (badness 5504) in paragraph at lines 455--456
 \TU/TimesNewRoman(0)/m/n/12 consistent with fiat-to-stablecoin price adjust-
  []
 
 
-Underfull \hbox (badness 1199) in paragraph at lines 424--425
+Underfull \hbox (badness 1199) in paragraph at lines 458--459
 \TU/TimesNewRoman(0)/m/n/12 Having established that price discovery resides
  []
 
 
-Underfull \hbox (badness 1917) in paragraph at lines 424--425
+Underfull \hbox (badness 1917) in paragraph at lines 458--459
 \TU/TimesNewRoman(0)/m/n/12 whether the documented dislocations offer ex-
  []
 
 
-Underfull \hbox (badness 1314) in paragraph at lines 424--425
+Underfull \hbox (badness 1314) in paragraph at lines 458--459
 \TU/TimesNewRoman(0)/m/n/12 funded buy/sell for cross-exchange—under two
  []
+
+
 
 File: figures_col/fig_arbitrage_after_fees.png Graphic file (type bmp)
 <figures_col/fig_arbitrage_after_fees.png>
 
-Underfull \vbox (badness 7851) has occurred while \output is active []
-
-
-
-[8]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-
-Underfull \hbox (badness 1205) in paragraph at lines 472--473
+[9]
+Underfull \hbox (badness 1205) in paragraph at lines 506--507
 \TU/TimesNewRoman(0)/m/n/12 mensions of this chain; we map provisions to
  []
 
 
-Underfull \hbox (badness 2799) in paragraph at lines 472--473
+Underfull \hbox (badness 2799) in paragraph at lines 506--507
 \TU/TimesNewRoman(0)/m/n/12 risk ($\OT1/cmr/m/n/12 81\OML/cmm/m/it/12 :\OT1/cmr
 /m/n/12 4$ \TU/TimesNewRoman(0)/m/n/12 vs. $\OT1/cmr/m/n/12 13\OML/cmm/m/it/12 
 :\OT1/cmr/m/n/12 6$ \TU/TimesNewRoman(0)/m/n/12 bps). (iv) \TU/TimesNewRoman(0)
@@ -902,85 +933,97 @@ Underfull \hbox (badness 2799) in paragraph at lines 472--473
  []
 
 
-Underfull \hbox (badness 1147) in paragraph at lines 490--490
+Underfull \hbox (badness 1147) in paragraph at lines 524--524
 []|\TU/TimesNewRoman(0)/m/n/10 Reserve composition + redemp-
  []
 
 
-Underfull \hbox (badness 1147) in paragraph at lines 490--490
+Underfull \hbox (badness 1147) in paragraph at lines 524--524
 []|\TU/TimesNewRoman(0)/m/n/10 Reserve composition + redemp-
  []
 
 
-Underfull \hbox (badness 1147) in paragraph at lines 490--490
+Underfull \hbox (badness 1147) in paragraph at lines 524--524
 []|\TU/TimesNewRoman(0)/m/n/10 Reserve composition + redemp-
  []
 
 
-Underfull \hbox (badness 1147) in paragraph at lines 490--490
+Underfull \hbox (badness 1147) in paragraph at lines 524--524
 []|\TU/TimesNewRoman(0)/m/n/10 Reserve composition + redemp-
  []
 
 
-Underfull \hbox (badness 6188) in paragraph at lines 493--494
+Underfull \hbox (badness 6188) in paragraph at lines 527--528
 []\TU/TimesNewRoman(0)/m/n/12 Persistent cross-exchange deviations ($\OT1/cmr/m
 /n/12 +2\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 18$
  []
 
 
-Underfull \hbox (badness 3312) in paragraph at lines 499--500
-\OML/cmm/m/it/12 D[]$ \TU/TimesNewRoman(0)/m/n/12 reaches $\OT1/cmr/m/n/12 +320
-$ \TU/TimesNewRoman(0)/m/n/12 bps but $\OML/cmm/m/it/12 B[]$ \TU/TimesNewRoman(
-0)/m/n/12 stays near $\OT1/cmr/m/n/12 +5$
+
+
+Underfull \hbox (badness 2197) in paragraph at lines 533--534
+\OT1/cmr/m/n/12 0\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 16$\TU/TimesNewRoman(0)/m/n/
+12 ). Fourth, post-friction arbitrage narrows
  []
 
 
-Underfull \hbox (badness 2469) in paragraph at lines 499--500
-\TU/TimesNewRoman(0)/m/n/12 half-life gap localizes persistent dislocation to
+Underfull \hbox (badness 1072) in paragraph at lines 535--536
+\TU/TimesNewRoman(0)/m/n/12 this failure chain. Because dislocation resides
  []
 
 
-
-[9]
-Underfull \hbox (badness 2486) in paragraph at lines 501--502
-\TU/TimesNewRoman(0)/m/n/12 persistent cross-exchange deviations and depth
+Underfull \hbox (badness 1348) in paragraph at lines 535--536
+\TU/TimesNewRoman(0)/m/n/12 basis through the $\OML/cmm/m/it/12 ^^U$ \TU/TimesN
+ewRoman(0)/m/n/12 channel, reforms reducing
  []
 
 
-Underfull \hbox (badness 5548) in paragraph at lines 501--502
-\TU/TimesNewRoman(0)/m/n/12 asymmetry suggest additional market-structure
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 503--505
+Underfull \hbox (badness 10000) in paragraph at lines 537--539
 [] \TU/TimesNewRoman(0)/b/n/12 Interpretation boundaries. \TU/TimesNewRoman(0)/
 m/n/12 This evidence is
  []
 
 
-Underfull \hbox (badness 1675) in paragraph at lines 503--505
-\TU/TimesNewRoman(0)/m/n/12 policy passages are consistency mappings, not
+Underfull \hbox (badness 10000) in paragraph at lines 537--539
+[]$ \TU/TimesNewRoman(0)/m/n/12 measures Granger-predictive transmission,
  []
 
 
+Underfull \hbox (badness 2443) in paragraph at lines 537--539
+\TU/TimesNewRoman(0)/m/n/12 not structural causation. Policy passages are
+ []
+
+
+Underfull \hbox (badness 2617) in paragraph at lines 537--539
+\TU/TimesNewRoman(0)/m/n/12 sampling; (iv) cointegration is rank-stable for
+ []
+
+
+Underfull \vbox (badness 6842) has occurred while \output is active []
 
 
 
-[10] (./IAQF_column_Final.aux)
+[10]
+
+
+
+[11
+
+] (./IAQF_column_Final.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `IAQF_column_Final.out' has not changed.
-(rerunfilecheck)             Checksum: AAC9CE56833B671AD54256F7F5153FF3;2462.
+(rerunfilecheck)             Checksum: 3D7D7A38BC00D9A78F64912B3B51F93E;2650.
  ) 
 Here is how much of TeX's memory you used:
- 13134 strings out of 473832
- 255913 string characters out of 5729481
- 711959 words of memory out of 5000000
- 36000 multiletter control sequences out of 15000+600000
+ 13137 strings out of 473832
+ 255963 string characters out of 5729481
+ 714447 words of memory out of 5000000
+ 36003 multiletter control sequences out of 15000+600000
  568906 words of font info for 109 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 79i,14n,93p,1335b,330s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 79i,14n,93p,1500b,442s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on IAQF_column_Final.pdf (10 pages).
+Output written on IAQF_column_Final.pdf (11 pages).
