@@ -7,9 +7,6 @@
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Stablecoin prices (A) and peg deviations (bps, B), March 2023. USDC falls to \$0.874; USDT trades at a premium. Shaded: SVB crisis (March 10--13, UTC).}}{1}{figure.3}\protected@file@percent }
 \newlabel{fig:peg}{{1}{1}{Stablecoin prices (A) and peg deviations (bps, B), March 2023. USDC falls to \$0.874; USDT trades at a premium. Shaded: SVB crisis (March 10--13, UTC)}{figure.3}{}}
-\citation{johansen1988}
-\citation{englegranger1987}
-\citation{granger1969}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Data and Methodology}{2}{section.4}\protected@file@percent }
 \newlabel{sec:data}{{2}{2}{Data and Methodology}{section.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Data sources and preprocessing}{2}{subsection.5}\protected@file@percent }
@@ -17,73 +14,84 @@
 \newlabel{tab:data_coverage}{{1}{2}{1-minute data coverage and forward-fill exposure on the unified UTC grid. Coverage = non-missing share; FF share = carry-forward share (max 5 minutes)}{table.7}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Core quantitative objects}{2}{subsection.9}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Mean-reversion dynamics}{2}{subsection.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Price discovery framework}{2}{subsection.14}\protected@file@percent }
 \citation{neweywest1987}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Empirical Results}{3}{section.16}\protected@file@percent }
-\newlabel{sec:results}{{3}{3}{Empirical Results}{section.16}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Dispersion, adjusted residual, and mean reversion}{3}{subsection.17}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Kraken crisis decomposition: unadjusted dispersion $D_t$ vs.\ adjusted residual $B_t$. USDC $D_t$ exceeds $+1{,}200$ bps while $B_t$ stays within $\pm 150$ bps; for USDT, $D_t$ reflects the premium and $B_t\approx 0$.}}{3}{figure.19}\protected@file@percent }
-\newlabel{fig:decomp}{{2}{3}{Kraken crisis decomposition: unadjusted dispersion $D_t$ vs.\ adjusted residual $B_t$. USDC $D_t$ exceeds $+1{,}200$ bps while $B_t$ stays within $\pm 150$ bps; for USDT, $D_t$ reflects the premium and $B_t\approx 0$}{figure.19}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Kraken stablecoin substitution: $D_{\text  {USDC},t}$ vs.\ $D_{\text  {USDT},t}$. Crisis points shift to the lower-right quadrant; unadjusted correlation flips ($+0.44\to -0.42$) and adjusted $B_t$ correlation falls ($0.44\to 0.16$).}}{3}{figure.21}\protected@file@percent }
-\newlabel{fig:substitution}{{3}{3}{Kraken stablecoin substitution: $D_{\text {USDC},t}$ vs.\ $D_{\text {USDT},t}$. Crisis points shift to the lower-right quadrant; unadjusted correlation flips ($+0.44\to -0.42$) and adjusted $B_t$ correlation falls ($0.44\to 0.16$)}{figure.21}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Kraken regime statistics for unadjusted dispersion ($D_t$) and adjusted residual ($B_t$), in bps.}}{3}{table.23}\protected@file@percent }
-\newlabel{tab:dispersion_vs_adjusted}{{2}{3}{Kraken regime statistics for unadjusted dispersion ($D_t$) and adjusted residual ($B_t$), in bps}{table.23}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Adjusted-residual $B_t$ half-life robustness by regime/specification (1m/5m $\times $ all/no-FF). USDC crisis half-life stays below 1.1 min; USDT reaches 3.1 min (5m no-FF).}}{4}{figure.25}\protected@file@percent }
-\newlabel{fig:halflife_robust}{{4}{4}{Adjusted-residual $B_t$ half-life robustness by regime/specification (1m/5m $\times $ all/no-FF). USDC crisis half-life stays below 1.1 min; USDT reaches 3.1 min (5m no-FF)}{figure.25}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Two-layer persistence (March 10--13): $B_{\text  {USDC},t}$ mean-reverts in ${\approx }0.6$ min, while the USDC peg deviation persists for ${\approx }572$ min. The ${\sim }940\times $ gap localizes persistent dislocation to the peg layer.}}{4}{figure.27}\protected@file@percent }
-\newlabel{fig:twolayer}{{5}{4}{Two-layer persistence (March 10--13): $B_{\text {USDC},t}$ mean-reverts in ${\approx }0.6$ min, while the USDC peg deviation persists for ${\approx }572$ min. The ${\sim }940\times $ gap localizes persistent dislocation to the peg layer}{figure.27}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Crisis zoom (March 10--13). (A)~$B_{\text  {USDC},t}$ spikes past $\pm 150$ bps while USDT stays within $\pm 30$ bps. (B)~Cross-exchange basis widens simultaneously, indicating stress propagation across venues.}}{4}{figure.29}\protected@file@percent }
-\newlabel{fig:crisiszoom}{{6}{4}{Crisis zoom (March 10--13). (A)~$B_{\text {USDC},t}$ spikes past $\pm 150$ bps while USDT stays within $\pm 30$ bps. (B)~Cross-exchange basis widens simultaneously, indicating stress propagation across venues}{figure.29}{}}
+\citation{johansen1988}
+\citation{englegranger1987}
+\citation{granger1969}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Contagion intensity model}{3}{subsection.14}\protected@file@percent }
+\newlabel{sec:contagion_model}{{2.4}{3}{Contagion intensity model}{subsection.14}{}}
+\newlabel{eq:contagion}{{5}{3}{Contagion intensity model}{equation.15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Price discovery framework}{3}{subsection.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Empirical Results}{3}{section.18}\protected@file@percent }
+\newlabel{sec:results}{{3}{3}{Empirical Results}{section.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Dispersion, adjusted residual, and mean reversion}{3}{subsection.19}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Kraken crisis decomposition: unadjusted dispersion $D_t$ vs.\ adjusted residual $B_t$. USDC $D_t$ exceeds $+1{,}200$ bps while $B_t$ stays within $\pm 150$ bps; for USDT, $D_t$ reflects the premium and $B_t\approx 0$.}}{3}{figure.21}\protected@file@percent }
+\newlabel{fig:decomp}{{2}{3}{Kraken crisis decomposition: unadjusted dispersion $D_t$ vs.\ adjusted residual $B_t$. USDC $D_t$ exceeds $+1{,}200$ bps while $B_t$ stays within $\pm 150$ bps; for USDT, $D_t$ reflects the premium and $B_t\approx 0$}{figure.21}{}}
+\citation{neweywest1987}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Kraken stablecoin substitution: $D_{\text  {USDC},t}$ vs.\ $D_{\text  {USDT},t}$. Crisis points shift to the lower-right quadrant; unadjusted correlation flips ($+0.44\to -0.42$) and adjusted $B_t$ correlation falls ($0.44\to 0.16$).}}{4}{figure.23}\protected@file@percent }
+\newlabel{fig:substitution}{{3}{4}{Kraken stablecoin substitution: $D_{\text {USDC},t}$ vs.\ $D_{\text {USDT},t}$. Crisis points shift to the lower-right quadrant; unadjusted correlation flips ($+0.44\to -0.42$) and adjusted $B_t$ correlation falls ($0.44\to 0.16$)}{figure.23}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Kraken regime statistics for unadjusted dispersion ($D_t$) and adjusted residual ($B_t$), in bps.}}{4}{table.25}\protected@file@percent }
+\newlabel{tab:dispersion_vs_adjusted}{{2}{4}{Kraken regime statistics for unadjusted dispersion ($D_t$) and adjusted residual ($B_t$), in bps}{table.25}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Adjusted-residual $B_t$ half-life robustness by regime/specification (1m/5m $\times $ all/no-FF). USDC crisis half-life stays below 1.1 min; USDT reaches 3.1 min (5m no-FF).}}{4}{figure.27}\protected@file@percent }
+\newlabel{fig:halflife_robust}{{4}{4}{Adjusted-residual $B_t$ half-life robustness by regime/specification (1m/5m $\times $ all/no-FF). USDC crisis half-life stays below 1.1 min; USDT reaches 3.1 min (5m no-FF)}{figure.27}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Two-layer persistence (March 10--13): $B_{\text  {USDC},t}$ mean-reverts in ${\approx }0.6$ min, while the USDC peg deviation persists for ${\approx }572$ min. The ${\sim }940\times $ gap localizes persistent dislocation to the peg layer.}}{4}{figure.29}\protected@file@percent }
+\newlabel{fig:twolayer}{{5}{4}{Two-layer persistence (March 10--13): $B_{\text {USDC},t}$ mean-reverts in ${\approx }0.6$ min, while the USDC peg deviation persists for ${\approx }572$ min. The ${\sim }940\times $ gap localizes persistent dislocation to the peg layer}{figure.29}{}}
+\@writefile{toc}{\contentsline {paragraph}{Contagion intensity.}{5}{figure.29}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Contagion intensity $\hat  \lambda $ from Eq.~(\ref {eq:contagion}): regime-specific OLS with Newey--West HAC (60 lags). $S_t$ is the peg deviation (bps; negative = discount).}}{5}{table.31}\protected@file@percent }
+\newlabel{tab:contagion}{{3}{5}{Contagion intensity $\hat \lambda $ from Eq.~(\ref {eq:contagion}): regime-specific OLS with Newey--West HAC (60 lags). $S_t$ is the peg deviation (bps; negative = discount)}{table.31}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Crisis zoom (March 10--13). (A)~$B_{\text  {USDC},t}$ spikes past $\pm 150$ bps while USDT stays within $\pm 30$ bps. (B)~Cross-exchange basis widens simultaneously, indicating stress propagation across venues.}}{5}{figure.33}\protected@file@percent }
+\newlabel{fig:crisiszoom}{{6}{5}{Crisis zoom (March 10--13). (A)~$B_{\text {USDC},t}$ spikes past $\pm 150$ bps while USDT stays within $\pm 30$ bps. (B)~Cross-exchange basis widens simultaneously, indicating stress propagation across venues}{figure.33}{}}
 \citation{roll1984}
 \citation{amihud2002}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Cross-exchange price dispersion}{5}{subsection.30}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Cross-exchange basis (bps): BTC/USDT Binance--Kraken (A), Coinbase--Kraken (B), and BTC/USD Coinbase--Kraken (C). The fiat channel stays persistently positive and elevated post-crisis.}}{5}{figure.32}\protected@file@percent }
-\newlabel{fig:xbasis}{{7}{5}{Cross-exchange basis (bps): BTC/USDT Binance--Kraken (A), Coinbase--Kraken (B), and BTC/USD Coinbase--Kraken (C). The fiat channel stays persistently positive and elevated post-crisis}{figure.32}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Market microstructure dynamics}{5}{subsection.33}\protected@file@percent }
-\newlabel{sec:liq_vol}{{3.3}{5}{Market microstructure dynamics}{subsection.33}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Roll effective spread (A) and Amihud ILLIQ (B) by pair/regime. Kraken BTC/USDC shows a $23\times $ Roll spread blowout in crisis. Roll is undefined when serial covariance is non-negative; thin-pair means are indicative.}}{5}{figure.35}\protected@file@percent }
-\newlabel{fig:liq}{{8}{5}{Roll effective spread (A) and Amihud ILLIQ (B) by pair/regime. Kraken BTC/USDC shows a $23\times $ Roll spread blowout in crisis. Roll is undefined when serial covariance is non-negative; thin-pair means are indicative}{figure.35}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Cross-exchange price dispersion}{6}{subsection.34}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Cross-exchange basis (bps): BTC/USDT Binance--Kraken (A), Coinbase--Kraken (B), and BTC/USD Coinbase--Kraken (C). The fiat channel stays persistently positive and elevated post-crisis.}}{6}{figure.36}\protected@file@percent }
+\newlabel{fig:xbasis}{{7}{6}{Cross-exchange basis (bps): BTC/USDT Binance--Kraken (A), Coinbase--Kraken (B), and BTC/USD Coinbase--Kraken (C). The fiat channel stays persistently positive and elevated post-crisis}{figure.36}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Market microstructure dynamics}{6}{subsection.37}\protected@file@percent }
+\newlabel{sec:liq_vol}{{3.3}{6}{Market microstructure dynamics}{subsection.37}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Roll effective spread (A) and Amihud ILLIQ (B) by pair/regime. Kraken BTC/USDC shows a $23\times $ Roll spread blowout in crisis. Roll is undefined when serial covariance is non-negative; thin-pair means are indicative.}}{6}{figure.39}\protected@file@percent }
+\newlabel{fig:liq}{{8}{6}{Roll effective spread (A) and Amihud ILLIQ (B) by pair/regime. Kraken BTC/USDC shows a $23\times $ Roll spread blowout in crisis. Roll is undefined when serial covariance is non-negative; thin-pair means are indicative}{figure.39}{}}
 \citation{neweywest1987}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Roll effective spread (bps) and Amihud illiquidity ($\times 10^{-6}$) by pair/regime. Roll uses daily serial covariance of 1-minute log returns (NaN days excluded; $N$ = valid Roll days). ILLIQ$_t = |r_t|/\text  {DollarVol}_t$ (daily average).}}{6}{table.37}\protected@file@percent }
-\newlabel{tab:liquidity_spread}{{3}{6}{Roll effective spread (bps) and Amihud illiquidity ($\times 10^{-6}$) by pair/regime. Roll uses daily serial covariance of 1-minute log returns (NaN days excluded; $N$ = valid Roll days). ILLIQ$_t = |r_t|/\text {DollarVol}_t$ (daily average)}{table.37}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Daily traded dollar volume by pair/regime (median, \$MM/day). Dollar volume serves as a depth proxy where L2 order-book data is unavailable.}}{6}{table.39}\protected@file@percent }
-\newlabel{tab:depth_proxy}{{4}{6}{Daily traded dollar volume by pair/regime (median, \$MM/day). Dollar volume serves as a depth proxy where L2 order-book data is unavailable}{table.39}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces HAC regressions of Kraken adjusted residual $B_t$ on crisis, realized volatility, and range proxy (Newey--West, 60 lags).}}{6}{table.41}\protected@file@percent }
-\newlabel{tab:regression_hac}{{5}{6}{HAC regressions of Kraken adjusted residual $B_t$ on crisis, realized volatility, and range proxy (Newey--West, 60 lags)}{table.41}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Daily volume shares across pairs. USDC share spikes during the crisis (Kraken BTC/USDC surge) and rotates back to USD post-crisis.}}{6}{figure.43}\protected@file@percent }
-\newlabel{fig:volshare}{{9}{6}{Daily volume shares across pairs. USDC share spikes during the crisis (Kraken BTC/USDC surge) and rotates back to USD post-crisis}{figure.43}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Hourly realized volatility (60-min rolling $\sigma $, $\times \sqrt  {60}$) by pair. Kraken BTC/USDC peaks near ${\approx }650$ bps/hr in crisis, about $2.1\times $ the USD and USDT channels.}}{6}{figure.45}\protected@file@percent }
-\newlabel{fig:realvol}{{10}{6}{Hourly realized volatility (60-min rolling $\sigma $, $\times \sqrt {60}$) by pair. Kraken BTC/USDC peaks near ${\approx }650$ bps/hr in crisis, about $2.1\times $ the USD and USDT channels}{figure.45}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Roll effective spread (bps) and Amihud illiquidity ($\times 10^{-6}$) by pair/regime. Roll uses daily serial covariance of 1-minute log returns (NaN days excluded; $N$ = valid Roll days). ILLIQ$_t = |r_t|/\text  {DollarVol}_t$ (daily average).}}{7}{table.41}\protected@file@percent }
+\newlabel{tab:liquidity_spread}{{4}{7}{Roll effective spread (bps) and Amihud illiquidity ($\times 10^{-6}$) by pair/regime. Roll uses daily serial covariance of 1-minute log returns (NaN days excluded; $N$ = valid Roll days). ILLIQ$_t = |r_t|/\text {DollarVol}_t$ (daily average)}{table.41}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Daily traded dollar volume by pair/regime (median, \$MM/day). Dollar volume serves as a depth proxy where L2 order-book data is unavailable.}}{7}{table.43}\protected@file@percent }
+\newlabel{tab:depth_proxy}{{5}{7}{Daily traded dollar volume by pair/regime (median, \$MM/day). Dollar volume serves as a depth proxy where L2 order-book data is unavailable}{table.43}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces HAC regressions of Kraken adjusted residual $B_t$ on crisis, realized volatility, and range proxy (Newey--West, 60 lags).}}{7}{table.45}\protected@file@percent }
+\newlabel{tab:regression_hac}{{6}{7}{HAC regressions of Kraken adjusted residual $B_t$ on crisis, realized volatility, and range proxy (Newey--West, 60 lags)}{table.45}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Daily volume shares across pairs. USDC share spikes during the crisis (Kraken BTC/USDC surge) and rotates back to USD post-crisis.}}{7}{figure.47}\protected@file@percent }
+\newlabel{fig:volshare}{{9}{7}{Daily volume shares across pairs. USDC share spikes during the crisis (Kraken BTC/USDC surge) and rotates back to USD post-crisis}{figure.47}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Hourly realized volatility (60-min rolling $\sigma $, $\times \sqrt  {60}$) by pair. Kraken BTC/USDC peaks near ${\approx }650$ bps/hr in crisis, about $2.1\times $ the USD and USDT channels.}}{7}{figure.49}\protected@file@percent }
+\newlabel{fig:realvol}{{10}{7}{Hourly realized volatility (60-min rolling $\sigma $, $\times \sqrt {60}$) by pair. Kraken BTC/USDC peaks near ${\approx }650$ bps/hr in crisis, about $2.1\times $ the USD and USDT channels}{figure.49}{}}
 \citation{chow1960}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Kraken distribution of USDC adjusted residual $B_{\text  {USDC},t}$: pre-SVB vs.\ crisis. Crisis shows a right shift, excess kurtosis 12.9 (vs.\ 3.8), and a $6\times $ increase in the 99th percentile (13.6 to 81.4 bps).}}{7}{figure.47}\protected@file@percent }
-\newlabel{fig:tailblowout}{{11}{7}{Kraken distribution of USDC adjusted residual $B_{\text {USDC},t}$: pre-SVB vs.\ crisis. Crisis shows a right shift, excess kurtosis 12.9 (vs.\ 3.8), and a $6\times $ increase in the 99th percentile (13.6 to 81.4 bps)}{figure.47}{}}
-\@writefile{toc}{\contentsline {paragraph}{Distributional robustness.}{7}{figure.47}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Regime correlation heatmap for adjusted residuals and cross-exchange basis. $B_{\text  {USDC}}$--$B_{\text  {USDT}}$ correlation drops from $0.44$ to $0.16$ in crisis, indicating divergent stablecoin dynamics.}}{7}{figure.49}\protected@file@percent }
-\newlabel{fig:corrheat}{{12}{7}{Regime correlation heatmap for adjusted residuals and cross-exchange basis. $B_{\text {USDC}}$--$B_{\text {USDT}}$ correlation drops from $0.44$ to $0.16$ in crisis, indicating divergent stablecoin dynamics}{figure.49}{}}
 \citation{hasbrouck1995}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Higher-moment diagnostics for adjusted residual $B_t$ by regime. Excess kurtosis is Fisher ($0$ under Gaussian); Min/Max in bps.}}{8}{table.51}\protected@file@percent }
-\newlabel{tab:dist_robust}{{6}{8}{Higher-moment diagnostics for adjusted residual $B_t$ by regime. Excess kurtosis is Fisher ($0$ under Gaussian); Min/Max in bps}{table.51}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Price discovery}{8}{subsection.52}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Johansen cointegration and VECM price-discovery results for primary Kraken channels (no-FF sample).}}{8}{table.54}\protected@file@percent }
-\newlabel{tab:coint_vecm}{{7}{8}{Johansen cointegration and VECM price-discovery results for primary Kraken channels (no-FF sample)}{table.54}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Orthogonalized IRF from VAR(10) on Kraken BTC/USD and BTC/USDC returns (bps). (B)~USDC$\to $USD: insignificant. (C)~USD$\to $USDC: significant (${\approx }6$ bps, decays in 3--4 min). Shaded: 95\% asymptotic CI.}}{8}{figure.56}\protected@file@percent }
-\newlabel{fig:irf}{{13}{8}{Orthogonalized IRF from VAR(10) on Kraken BTC/USD and BTC/USDC returns (bps). (B)~USDC$\to $USD: insignificant. (C)~USD$\to $USDC: significant (${\approx }6$ bps, decays in 3--4 min). Shaded: 95\% asymptotic CI}{figure.56}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Arbitrage after fees}{8}{subsection.57}\protected@file@percent }
-\newlabel{sec:arb}{{3.5}{8}{Arbitrage after fees}{subsection.57}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Kraken distribution of USDC adjusted residual $B_{\text  {USDC},t}$: pre-SVB vs.\ crisis. Crisis shows a right shift, excess kurtosis 12.9 (vs.\ 3.8), and a $6\times $ increase in the 99th percentile (13.6 to 81.4 bps).}}{8}{figure.51}\protected@file@percent }
+\newlabel{fig:tailblowout}{{11}{8}{Kraken distribution of USDC adjusted residual $B_{\text {USDC},t}$: pre-SVB vs.\ crisis. Crisis shows a right shift, excess kurtosis 12.9 (vs.\ 3.8), and a $6\times $ increase in the 99th percentile (13.6 to 81.4 bps)}{figure.51}{}}
+\@writefile{toc}{\contentsline {paragraph}{Distributional robustness.}{8}{figure.51}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Regime correlation heatmap for adjusted residuals and cross-exchange basis. $B_{\text  {USDC}}$--$B_{\text  {USDT}}$ correlation drops from $0.44$ to $0.16$ in crisis, indicating divergent stablecoin dynamics.}}{8}{figure.53}\protected@file@percent }
+\newlabel{fig:corrheat}{{12}{8}{Regime correlation heatmap for adjusted residuals and cross-exchange basis. $B_{\text {USDC}}$--$B_{\text {USDT}}$ correlation drops from $0.44$ to $0.16$ in crisis, indicating divergent stablecoin dynamics}{figure.53}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Higher-moment diagnostics for adjusted residual $B_t$ by regime. Excess kurtosis is Fisher ($0$ under Gaussian); Min/Max in bps.}}{8}{table.55}\protected@file@percent }
+\newlabel{tab:dist_robust}{{7}{8}{Higher-moment diagnostics for adjusted residual $B_t$ by regime. Excess kurtosis is Fisher ($0$ under Gaussian); Min/Max in bps}{table.55}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Price discovery}{8}{subsection.56}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Johansen cointegration and VECM price-discovery results for primary Kraken channels (no-FF sample).}}{8}{table.58}\protected@file@percent }
+\newlabel{tab:coint_vecm}{{8}{8}{Johansen cointegration and VECM price-discovery results for primary Kraken channels (no-FF sample)}{table.58}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Orthogonalized IRF from VAR(10) on Kraken BTC/USD and BTC/USDC returns (bps). (B)~USDC$\to $USD: insignificant. (C)~USD$\to $USDC: significant (${\approx }6$ bps, decays in 3--4 min). Shaded: 95\% asymptotic CI.}}{9}{figure.60}\protected@file@percent }
+\newlabel{fig:irf}{{13}{9}{Orthogonalized IRF from VAR(10) on Kraken BTC/USD and BTC/USDC returns (bps). (B)~USDC$\to $USD: insignificant. (C)~USD$\to $USDC: significant (${\approx }6$ bps, decays in 3--4 min). Shaded: 95\% asymptotic CI}{figure.60}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Arbitrage after fees}{9}{subsection.61}\protected@file@percent }
+\newlabel{sec:arb}{{3.5}{9}{Arbitrage after fees}{subsection.61}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Net arbitrage profit (bps) under (A) fee-only costs (5 bps/leg) and (B) fee + range-based slippage. Crisis USDC profits compress sharply with slippage; cross-exchange profits are also attenuated.}}{9}{figure.65}\protected@file@percent }
+\newlabel{fig:arbfees}{{14}{9}{Net arbitrage profit (bps) under (A) fee-only costs (5 bps/leg) and (B) fee + range-based slippage. Crisis USDC profits compress sharply with slippage; cross-exchange profits are also attenuated}{figure.65}{}}
 \citation{circle2023}
 \citation{jointstatement2023}
 \citation{genius2025}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Net arbitrage profit (bps) under (A) fee-only costs (5 bps/leg) and (B) fee + range-based slippage. Crisis USDC profits compress sharply with slippage; cross-exchange profits are also attenuated.}}{9}{figure.61}\protected@file@percent }
-\newlabel{fig:arbfees}{{14}{9}{Net arbitrage profit (bps) under (A) fee-only costs (5 bps/leg) and (B) fee + range-based slippage. Crisis USDC profits compress sharply with slippage; cross-exchange profits are also attenuated}{figure.61}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Arbitrage profitability by channel/regime with 5 bps taker fees per leg (3-leg intra-exchange; 2-leg cross-exchange).}}{9}{table.63}\protected@file@percent }
-\newlabel{tab:arb}{{8}{9}{Arbitrage profitability by channel/regime with 5 bps taker fees per leg (3-leg intra-exchange; 2-leg cross-exchange)}{table.63}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Regulatory Interpretation}{9}{section.64}\protected@file@percent }
-\newlabel{sec:regulation}{{4}{9}{Regulatory Interpretation}{section.64}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Illustrative GENIUS Act scenario range (not causal): assumed mitigation of the reserve lock-up shock mapped to implied crisis $D_t$ means from observed moments. Tail benchmark: USDC crisis $B_t$ P99 = 81.4 bps vs.\ pre-crisis 13.6 bps.}}{9}{table.66}\protected@file@percent }
-\newlabel{tab:genius_cf}{{9}{9}{Illustrative GENIUS Act scenario range (not causal): assumed mitigation of the reserve lock-up shock mapped to implied crisis $D_t$ means from observed moments. Tail benchmark: USDC crisis $B_t$ P99 = 81.4 bps vs.\ pre-crisis 13.6 bps}{table.66}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{9}{section.67}\protected@file@percent }
-\newlabel{sec:conclusion}{{5}{9}{Conclusion}{section.67}{}}
 \bibcite{amihud2002}{1}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Arbitrage profitability by channel/regime with 5 bps taker fees per leg (3-leg intra-exchange; 2-leg cross-exchange).}}{10}{table.67}\protected@file@percent }
+\newlabel{tab:arb}{{9}{10}{Arbitrage profitability by channel/regime with 5 bps taker fees per leg (3-leg intra-exchange; 2-leg cross-exchange)}{table.67}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Regulatory Interpretation}{10}{section.68}\protected@file@percent }
+\newlabel{sec:regulation}{{4}{10}{Regulatory Interpretation}{section.68}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Illustrative GENIUS Act scenario range (not causal): assumed mitigation of the reserve lock-up shock mapped to implied crisis $D_t$ means from observed moments. Tail benchmark: USDC crisis $B_t$ P99 = 81.4 bps vs.\ pre-crisis 13.6 bps.}}{10}{table.70}\protected@file@percent }
+\newlabel{tab:genius_cf}{{10}{10}{Illustrative GENIUS Act scenario range (not causal): assumed mitigation of the reserve lock-up shock mapped to implied crisis $D_t$ means from observed moments. Tail benchmark: USDC crisis $B_t$ P99 = 81.4 bps vs.\ pre-crisis 13.6 bps}{table.70}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{10}{section.71}\protected@file@percent }
+\newlabel{sec:conclusion}{{5}{10}{Conclusion}{section.71}{}}
+\@writefile{toc}{\contentsline {paragraph}{Interpretation boundaries.}{10}{section.71}\protected@file@percent }
 \bibcite{chow1960}{2}
 \bibcite{circle2023}{3}
 \bibcite{englegranger1987}{4}
@@ -94,5 +102,4 @@
 \bibcite{neweywest1987}{9}
 \bibcite{roll1984}{10}
 \bibcite{genius2025}{11}
-\@writefile{toc}{\contentsline {paragraph}{Interpretation boundaries.}{10}{section.67}\protected@file@percent }
-\gdef \@abspage@last{10}
+\gdef \@abspage@last{11}

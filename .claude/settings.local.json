@@ -35,7 +35,8 @@
       "Bash(/opt/anaconda3/bin/python3 -c \"import pandas, numpy, statsmodels, scipy; print\\(''All imports OK''\\)\")",
       "Bash(/opt/anaconda3/bin/python3 -c \":*)",
       "Bash(/opt/anaconda3/bin/python3 10_novel_contributions.py)",
-      "Bash(/opt/anaconda3/bin/python3 src/10_novel_contributions.py)"
+      "Bash(/opt/anaconda3/bin/python3 src/10_novel_contributions.py)",
+      "Bash(open IAQF_column_Final.pdf)"
     ]
   }
 }
