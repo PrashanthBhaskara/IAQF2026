@@ -7,7 +7,10 @@
       "Bash(pdflatex --version)",
       "Bash(pdflatex -interaction=nonstopmode IAQF_Final.tex)",
       "Bash(/Library/TeX/texbin/pdflatex -interaction=nonstopmode -output-directory=\"/Users/dhruvkohli/Desktop/Github Repos/IAQF2026\" \"/Users/dhruvkohli/Desktop/Github Repos/IAQF2026/IAQF_Final.tex\")",
-      "Bash(python src/06_three_fixes.py)"
+      "Bash(python src/06_three_fixes.py)",
+      "Bash(python src/03_analysis_and_figures.py)",
+      "Bash(ls -lh \"/Users/dhruvkohli/Desktop/Github Repos/IAQF2026/tables/\"*csv)",
+      "Bash(xargs -I {} basename {} .tex)"
     ]
   }
 }

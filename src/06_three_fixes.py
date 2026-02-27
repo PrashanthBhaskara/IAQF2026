@@ -1,5 +1,5 @@
 """
-Five targeted improvements to bring the IAQF 2026 paper to 90+ quality.
+Six targeted improvements to bring the IAQF 2026 paper to 90+ quality.
 
 Fix 1: Roll (1984) effective spread + Amihud (2002) ILLIQ
   - Directly answers competition Q3: "How do order book depth, spread, and
@@ -25,6 +25,12 @@ Fix 4: Data quality transparency table
 Fix 5: HAC uncertainty intervals for headline means
   - Newey-West 95% CIs for key paper claims
   - tables/hac_headline_metrics.tex
+
+Fix 6: Distributional robustness
+  - Chow structural break test at SVB onset
+  - Higher moments (skewness, excess kurtosis) of B_t by regime
+  - Cross-stablecoin correlation (USDC vs USDT B_t) by regime
+  - tables/distributional_robustness.tex
 """
 
 import os
@@ -290,11 +296,14 @@ print("Saved fig_liquidity_roll_amihud.png")
 
 # ── Table: compact Roll + Amihud summary ───────────────────────────────────
 roll_pivot   = df_roll.pivot(index='Pair', columns='Regime', values='mean')[REGIME_ORDER].reindex(PAIR_ORDER)
+roll_n_pivot = df_roll.pivot(index='Pair', columns='Regime', values='N')[REGIME_ORDER].reindex(PAIR_ORDER)
 amihud_pivot = df_amihud.pivot(index='Pair', columns='Regime', values='mean')[REGIME_ORDER].reindex(PAIR_ORDER)
 
 tbl = pd.DataFrame(index=PAIR_ORDER)
 for reg in REGIME_ORDER:
     tbl[f'Roll {reg}'] = roll_pivot[reg].round(2)
+for reg in REGIME_ORDER:
+    tbl[f'N {reg}'] = roll_n_pivot[reg].astype('Int64')
 for reg in REGIME_ORDER:
     tbl[f'ILLIQ {reg}'] = amihud_pivot[reg].round(3)
 tbl.index.name = 'Pair'
@@ -305,9 +314,10 @@ tbl_latex = tbl.reset_index().to_latex(
              r'($\times10^{-6}$) by pair and regime. '
              r'Roll spread estimated from daily serial covariance of 1-minute log returns; '
              r'NaN days (non-negative covariance) excluded from means. '
+             r'$N$ is the number of valid Roll days per regime; some regime means rest on few days and are indicative. '
              r'ILLIQ$_t = |r_t|/\text{DollarVol}_t$, daily average.'),
     label='tab:liquidity_spread',
-    column_format='l' + 'r' * 6,
+    column_format='l' + 'r' * 9,
     float_format='%.3f',
     na_rep='---',
     escape=False,
@@ -322,6 +332,9 @@ tbl_latex = tbl_latex.replace(r'\end{tabular}', r'\end{tabular}' + '%\n}', 1)
 tbl_latex = tbl_latex.replace('Roll Pre-SVB', r'Roll\textsubscript{Pre}')
 tbl_latex = tbl_latex.replace('Roll Crisis',  r'Roll\textsubscript{Crisis}')
 tbl_latex = tbl_latex.replace('Roll Post-SVB',r'Roll\textsubscript{Post}')
+tbl_latex = tbl_latex.replace('N Pre-SVB', r'$N$\textsubscript{Pre}')
+tbl_latex = tbl_latex.replace('N Crisis',  r'$N$\textsubscript{Crisis}')
+tbl_latex = tbl_latex.replace('N Post-SVB',r'$N$\textsubscript{Post}')
 tbl_latex = tbl_latex.replace('ILLIQ Pre-SVB', r'ILLIQ\textsubscript{Pre}')
 tbl_latex = tbl_latex.replace('ILLIQ Crisis',  r'ILLIQ\textsubscript{Crisis}')
 tbl_latex = tbl_latex.replace('ILLIQ Post-SVB',r'ILLIQ\textsubscript{Post}')
@@ -1117,6 +1130,178 @@ hac_latex = convert_to_tabularx(
 with open(os.path.join(TABLES_DIR, 'hac_headline_metrics.tex'), 'w') as f:
     f.write(hac_latex)
 print("Saved tables/hac_headline_metrics.tex")
+
+# ═══════════════════════════════════════════════════════════════════════════
+# FIX 6 – Distributional robustness: Chow break test, higher moments,
+#          cross-stablecoin correlation
+# ═══════════════════════════════════════════════════════════════════════════
+from scipy import stats as sp_stats
+
+# --- 6a. Chow structural-break test at SVB_START for USDC dispersion ---
+# H0: same linear model (const-only) before and after the break.
+disp_usdc = basis['dispersion_usdc_kraken'].dropna()
+n_total = len(disp_usdc)
+pre_break = disp_usdc[disp_usdc.index < svb_start]
+post_break = disp_usdc[disp_usdc.index >= svb_start]
+n1, n2 = len(pre_break), len(post_break)
+
+# Pooled RSS
+X_full = np.ones((n_total, 1))
+rss_full = float(sm.OLS(disp_usdc.values, X_full).fit().ssr)
+
+# Sub-sample RSS
+rss1 = float(sm.OLS(pre_break.values, np.ones((n1, 1))).fit().ssr)
+rss2 = float(sm.OLS(post_break.values, np.ones((n2, 1))).fit().ssr)
+
+k = 1  # number of parameters (intercept only)
+chow_F = ((rss_full - rss1 - rss2) / k) / ((rss1 + rss2) / (n_total - 2 * k))
+chow_p = 1.0 - sp_stats.f.cdf(chow_F, k, n_total - 2 * k)
+print(f"\nChow break test at SVB_START for USDC D_t: F={chow_F:.1f}, p={chow_p:.2e}")
+
+# Also test on adjusted residual B_t
+basis_usdc = basis['basis_usdc_kraken'].dropna()
+pre_b = basis_usdc[basis_usdc.index < svb_start]
+post_b = basis_usdc[basis_usdc.index >= svb_start]
+n_b, n1b, n2b = len(basis_usdc), len(pre_b), len(post_b)
+rss_full_b = float(sm.OLS(basis_usdc.values, np.ones((n_b, 1))).fit().ssr)
+rss1_b = float(sm.OLS(pre_b.values, np.ones((n1b, 1))).fit().ssr)
+rss2_b = float(sm.OLS(post_b.values, np.ones((n2b, 1))).fit().ssr)
+chow_F_b = ((rss_full_b - rss1_b - rss2_b) / k) / ((rss1_b + rss2_b) / (n_b - 2 * k))
+chow_p_b = 1.0 - sp_stats.f.cdf(chow_F_b, k, n_b - 2 * k)
+print(f"Chow break test at SVB_START for USDC B_t: F={chow_F_b:.1f}, p={chow_p_b:.2e}")
+
+# --- 6a-ext. AR(1) dynamics Chow test: does ρ shift at the break? ---
+# Fit X_t = c + ρ X_{t-1} + ε_t pooled vs split at svb_start.
+basis_usdc_clean = basis['basis_usdc_kraken'].dropna()
+y_ar = basis_usdc_clean.iloc[1:].values
+x_ar = sm.add_constant(basis_usdc_clean.iloc[:-1].values)
+n_ar = len(y_ar)
+rss_ar_full = float(sm.OLS(y_ar, x_ar).fit().ssr)
+
+# Find the split index in the lagged series
+split_idx = (basis_usdc_clean.index[1:] >= svb_start).argmax()
+y1, x1 = y_ar[:split_idx], x_ar[:split_idx]
+y2, x2 = y_ar[split_idx:], x_ar[split_idx:]
+rss_ar1 = float(sm.OLS(y1, x1).fit().ssr)
+rss_ar2 = float(sm.OLS(y2, x2).fit().ssr)
+
+k_ar = 2  # intercept + slope
+chow_F_ar = ((rss_ar_full - rss_ar1 - rss_ar2) / k_ar) / (
+    (rss_ar1 + rss_ar2) / (n_ar - 2 * k_ar)
+)
+chow_p_ar = 1.0 - sp_stats.f.cdf(chow_F_ar, k_ar, n_ar - 2 * k_ar)
+
+# Also report regime-specific ρ for interpretation
+rho_pre = float(sm.OLS(y1, x1).fit().params[1])
+rho_post = float(sm.OLS(y2, x2).fit().params[1])
+print(f"AR(1) Chow test for USDC B_t dynamics: F={chow_F_ar:.1f}, p={chow_p_ar:.2e}")
+print(f"  rho_pre={rho_pre:.4f}, rho_post={rho_post:.4f}")
+
+# --- 6a-ext2. Fee sensitivity for arbitrage (f=3 and f=10 bps) ---
+# Re-compute USDC/USD Kraken crisis profitability at alternative fee levels
+fee_sens_rows = []
+for f_bps in [3.0, 5.0, 10.0]:
+    for spec_key, n_legs, label in [
+        ('basis_usdc_kraken', 3, 'USDC/USD (Kraken)'),
+        ('xbasis_btcusd_coinbase_kraken', 2, 'Cross BTC/USD (CB-KR)'),
+    ]:
+        abs_basis = basis.loc[m_cri, spec_key].abs().dropna()
+        # Get slippage from ranges
+        if spec_key == 'basis_usdc_kraken':
+            leg_cols = ['kraken_btcusdc', 'kraken_usdcusd', 'kraken_btcusd']
+        else:
+            leg_cols = ['coinbase_btcusd', 'kraken_btcusd']
+        slip = sum(0.5 * ranges.loc[m_cri, c] * 10000.0 for c in leg_cols if c in ranges.columns)
+        cost_fee = n_legs * f_bps
+        cost_full = cost_fee + slip
+        # Align
+        common_idx = abs_basis.index.intersection(cost_full.dropna().index)
+        ab = abs_basis.loc[common_idx]
+        cf = cost_full.loc[common_idx]
+        pct_profitable = float((ab > cf).mean() * 100)
+        fee_sens_rows.append({
+            'Channel': label,
+            'f (bps)': f_bps,
+            'Crisis %Profitable (fee+slip)': round(pct_profitable, 2),
+        })
+
+df_fee_sens = pd.DataFrame(fee_sens_rows)
+print(f"\nFee sensitivity (crisis, fee+slippage):")
+for _, row in df_fee_sens.iterrows():
+    print(f"  {row['Channel']}, f={row['f (bps)']:.0f}: {row['Crisis %Profitable (fee+slip)']:.2f}%")
+
+# --- 6b. Higher moments (skewness, excess kurtosis) of B_t by regime ---
+moment_rows = []
+for label, col in [('USDC', 'basis_usdc_kraken'), ('USDT', 'basis_usdt_kraken')]:
+    for regime, mask in [('Pre-SVB', m_pre), ('Crisis', m_cri), ('Post-SVB', m_post)]:
+        s = basis.loc[mask, col].dropna()
+        moment_rows.append({
+            'Channel': label,
+            'Regime': regime,
+            'N': len(s),
+            'Mean': float(s.mean()),
+            'Std': float(s.std()),
+            'Skewness': float(sp_stats.skew(s)),
+            'Excess Kurtosis': float(sp_stats.kurtosis(s)),  # Fisher=True by default
+            'Min': float(s.min()),
+            'Max': float(s.max()),
+        })
+
+df_moments = pd.DataFrame(moment_rows)
+df_moments.to_csv(os.path.join(TABLES_DIR, 'distributional_robustness.csv'), index=False)
+
+# --- 6b-ext. Jarque-Bera normality test on B_t by regime ---
+print("\nJarque-Bera normality tests on B_t:")
+for label, col in [('USDC', 'basis_usdc_kraken'), ('USDT', 'basis_usdt_kraken')]:
+    for regime, mask in [('Pre-SVB', m_pre), ('Crisis', m_cri), ('Post-SVB', m_post)]:
+        s = basis.loc[mask, col].dropna().values
+        jb_stat, jb_p = sp_stats.jarque_bera(s)
+        print(f"  {label} {regime}: JB={jb_stat:.0f}, p={jb_p:.2e}")
+
+# --- 6c. Cross-stablecoin correlation by regime ---
+corr_rows = []
+for regime, mask in [('Pre-SVB', m_pre), ('Crisis', m_cri), ('Post-SVB', m_post)]:
+    usdc_s = basis.loc[mask, 'basis_usdc_kraken'].dropna()
+    usdt_s = basis.loc[mask, 'basis_usdt_kraken'].dropna()
+    common = usdc_s.index.intersection(usdt_s.index)
+    rho = float(usdc_s.loc[common].corr(usdt_s.loc[common]))
+    corr_rows.append({'Regime': regime, 'Corr(B_USDC, B_USDT)': rho, 'N': len(common)})
+
+df_corr = pd.DataFrame(corr_rows)
+print(f"\nCross-stablecoin B_t correlation by regime:")
+for _, row in df_corr.iterrows():
+    print(f"  {row['Regime']}: rho={row['Corr(B_USDC, B_USDT)']:.3f}  (N={row['N']})")
+
+# --- Generate compact LaTeX table ---
+# Combine moments + correlation into a single table for the paper
+tex_rows = []
+for _, r in df_moments.iterrows():
+    tex_rows.append({
+        'Channel': r['Channel'],
+        'Regime': r['Regime'],
+        'Skewness': f"{r['Skewness']:.2f}",
+        'Ex.~Kurt.': f"{r['Excess Kurtosis']:.1f}",
+        'Min': f"{r['Min']:.1f}",
+        'Max': f"{r['Max']:.1f}",
+    })
+
+df_tex = pd.DataFrame(tex_rows)
+tex_str = df_tex.to_latex(
+    index=False,
+    caption=(
+        r'Higher-moment diagnostics for adjusted residual $B_t$ by regime. '
+        r'Excess kurtosis (Fisher) measures tail heaviness beyond Gaussian ($=0$). '
+        r'Min/Max are in basis points.'
+    ),
+    label='tab:dist_robust',
+    column_format='llrrrr',
+    escape=False,
+)
+tex_str = tex_str.replace(r'\begin{table}', r'\begin{table}[H]', 1)
+tex_str = tex_str.replace(r'\begin{tabular}', r'\footnotesize' + '\n' + r'\begin{tabular}', 1)
+with open(os.path.join(TABLES_DIR, 'distributional_robustness.tex'), 'w') as f:
+    f.write(tex_str)
+print("Saved tables/distributional_robustness.tex")
 
 # Print key numbers for inline text use
 print(f"\n=== KEY NUMBERS FOR INLINE TEXT ===")
