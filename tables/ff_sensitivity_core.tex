@@ -1,0 +1,21 @@
+\begin{table}[H]
+\caption{Forward-fill sensitivity for selected headline metrics. All-sample uses the baseline aligned 1-minute series; No-FF sample removes observations with forward-filled inputs for each metric. Signs are largely stable, but magnitudes can move in thinner channels and rolling-volatility windows can become sparse.}
+\label{tab:ff_sensitivity}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{1.90cm}rrrrrr}
+\toprule
+Metric & Statistic & All & No-FF & $\Delta$ (No-FF-All) & N & N (No-FF) & Retention (\%) \\
+\midrule
+USDC $D_t$ (Kraken, crisis) & Mean bps & 319.974 & 360.511 & 40.537 & 4311 & 3324 & 77.100 \\
+USDC $B_t$ (Kraken, crisis) & Mean bps & 5.271 & 6.370 & 1.099 & 4283 & 3002 & 70.100 \\
+USDT premium (Kraken, crisis) & Mean bps & 58.114 & 58.128 & 0.014 & 4320 & 4319 & 100.000 \\
+USDT premium (Coinbase, crisis) & Mean bps & 59.680 & 59.721 & 0.041 & 4320 & 4317 & 99.900 \\
+BTC/USDT basis (BN-KR, calm) & Mean bps & 0.157 & 0.061 & -0.096 & 25456 & 17098 & 67.200 \\
+USDC arb (Kraken, 3-leg, crisis) & Fee-only \% & 29.162 & 35.143 & 5.981 & 4283 & 3002 & 70.100 \\
+USDC arb (Kraken, 3-leg, crisis) & Fee+slip \% & 6.724 & 7.295 & 0.571 & 4283 & 3002 & 70.100 \\
+RV 60m (KR BTC/USDC, crisis) & Mean bps/hr & 136.991 & 412.777 & 275.786 & 4105 & 431 & 10.500 \\
+RV 60m (KR BTC/USDT, crisis) & Mean bps/hr & 66.623 & 99.348 & 32.725 & 4009 & 142 & 3.500 \\
+\bottomrule
+\end{tabularx}
+\end{table}

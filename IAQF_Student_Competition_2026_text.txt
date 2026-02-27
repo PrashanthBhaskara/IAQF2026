@@ -1,0 +1,105 @@
+IAQF Student Competition 2026
+Cross-Currency Dynamics in Cryptocurrencies under
+Stablecoin Regulation
+In 2025, the United States enacted what many observers have called a watershed moment in
+digital asset policy, the Guiding and Establishing National Innovation for U.S. Stablecoins Act,
+widely known as the GENIUS Act. For the first time, dollar-pegged stablecoins such as USDC
+and USDT were brought into a clear federal regulatory framework, requiring strict reserve
+backing, transparency, and oversight by banking regulators. This legislation aims to transform
+stablecoins from experimental tokens into trusted infrastructure for payments, liquidity, and
+settlement in financial markets.
+Alongside this legislative shift, industry momentum is building around institutional adoption of
+stablecoin rails, with major payment networks such as Visa launching USDC settlement
+offerings that integrate stablecoins into traditional treasury and settlement systems. Meanwhile, a
+wave of new crypto bills in 2026 promises further regulatory clarity around market structure and
+digital asset use.
+This real-world regulatory shift is relevant not only for payments and institutional infrastructure,
+but also for market microstructure and cross-currency trading in cryptocurrency spot markets.
+Unlike traditional foreign exchange (FX) markets, cryptocurrency markets embed multiple fiat
+and quasi-fiat quote currencies, USD, USDT, USDC, EUR, JPY, KRW and others, in a
+fragmented network of exchanges that operate 24/7. Stablecoins in particular play a central role
+as intermediate liquidity conduits between assets, functioning as a kind of digital short-term
+funding currency. But because these instruments are not yet universally regulated or redeemable
+in the same way as traditional currency, cross-currency price relationships can deviate from
+classic parity conditions and create economic phenomena that are both persistent and exploitable.
+In this context, understanding cross-currency dynamics – how the same base asset (e.g., BTC)
+trades against different quote currencies and how stablecoin funding risks and liquidity
+conditions affect those relationships – is of both academic and practical importance. For
+institutional market participants, asset custodians, and treasury desks considering using regulated
+stablecoins, the mechanics of cross-currency basis, liquidity fragmentation, and funding cost will
+determine execution quality, hedging effectiveness, and operational risk. For regulators and
+policymakers, these dynamics inform questions about systemic risk, arbitrage efficiency, and the
+resilience of stablecoin-anchored markets under stress.
+
+Project Framework
+Your team will investigate the cross-currency structure of spot cryptocurrency markets, focusing
+on how stablecoins and regulatory developments shape the pricing and liquidity relationships
+between markets quoting the same underlying asset in different currencies.
+Specifically, you will:
+1. Choose a base asset:
+• Bitcoin (BTC) or Ethereum (ETH)
+2. Choose at least two quote currencies:
+e.g., USD vs USDT, USDT vs USDC, USD vs EUR
+3. Collect high-frequency market data for each chosen trading pair across at least two
+centralized exchanges (one of which must be Binance or Coinbase) over the same time
+period.
+4. Analyze the cross-currency price relationships and liquidity conditions, and interpret your
+findings in light of the new stablecoin regulatory environment in the U.S. and its
+implications for market participants.
+5. You will analyze a 21-day window of high-frequency data, the period March 1, 2023
+through March 21, 2023 (UTC). This window includes a major stablecoin stress event
+associated with the temporary de-pegging of USDC following the Silicon Valley Bank
+failure, and provides a natural laboratory for studying cross-currency dynamics, liquidity
+fragmentation, and stablecoin funding risk.
+
+Questions to Consider
+1. Cross-Currency Basis
+How does the price of BTC/USDT compare to BTC/USD over time? Do we observe
+persistent differences once transaction costs are considered, and what drives those
+differences?
+2. Stablecoin Dynamics
+How do premium/discount patterns in stablecoin quoted markets (e.g., USDT vs USDC)
+vary across exchanges and regimes? How might forthcoming U.S. regulation affect
+confidence in these instruments?
+3. Liquidity & Fragmentation
+Does liquidity differ systematically across quote currencies? How do order book depth,
+spread, and volatility vary between BTC quoted in USD versus stablecoins?
+4. Regulatory Overlay
+Tie your empirical findings to the broader policy context:
+• Why might regulated stablecoins alter cross-currency trading patterns?
+• What implications does the GENIUS Act (and stablecoin settlement adoption by
+payment systems) have for the structure and efficiency of these markets?
+
+Data Sources
+To support your analysis, you will need to collect candle data for each trading pair and exchange
+in your study window.
+Recommended public APIs / platforms:
+•
+•
+•
+
+Exchange APIs: Binance, Coinbase, Kraken, Bybit
+Data aggregators: CryptoCompare, Coin Metrics
+On-chain explorers for stablecoin metrics
+
+(You may also use academic/licensed data sources such as Kaiko or Amberdata if available
+through your institution.)
+
+Deliverables
+You will produce a 10-page paper that includes:
+•
+•
+•
+•
+•
+
+Financial context and motivation (including regulatory background)
+Data description and methodology
+Empirical results on cross-currency pricing and liquidity
+Discussion of how stablecoin regulation and market structure affect observed patterns
+Conclusions and implications for trading, risk management, and policy
+
+You must also provide reproducible code for data processing and analysis, with clear
+instructions.
+
+

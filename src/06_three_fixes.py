@@ -1,11 +1,12 @@
 """
-Three targeted improvements to bring the IAQF 2026 paper to 90+ quality.
+Five targeted improvements to bring the IAQF 2026 paper to 90+ quality.
 
 Fix 1: Roll (1984) effective spread + Amihud (2002) ILLIQ
   - Directly answers competition Q3: "How do order book depth, spread, and
     volatility vary between BTC quoted in USD versus stablecoins?"
   - fig_liquidity_roll_amihud.png
   - tables/liquidity_spread_table.tex
+  - tables/depth_proxy_table.tex (daily dollar-volume depth proxy)
 
 Fix 2: Hasbrouck (1995) Information Shares
   - Replaces informal |alpha| comparison with literature-standard IS bounds
@@ -14,16 +15,25 @@ Fix 2: Hasbrouck (1995) Information Shares
   - (also updates cointegration_vecm_merged.tex with IS columns)
 
 Fix 3: GENIUS Act counterfactual quantification
-  - Back-of-envelope: under reserve composition rules, $0 locked at SVB
-    -> D_t stays at pre-crisis level (~0 bps vs observed +320 bps)
+  - Scenario range (25%-75% mitigation) instead of deterministic point claim
   - tables/genius_counterfactual.tex
+
+Fix 4: Data quality transparency table
+  - Explicit overall and regime-specific coverage + forward-fill exposure
+  - tables/data_coverage_core.tex
+
+Fix 5: HAC uncertainty intervals for headline means
+  - Newey-West 95% CIs for key paper claims
+  - tables/hac_headline_metrics.tex
 """
 
 import os
+import re
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import statsmodels.api as sm
 from statsmodels.tsa.vector_ar.vecm import VECM, coint_johansen, select_order
 
 plt.style.use('seaborn-v0_8-whitegrid')
@@ -39,6 +49,7 @@ os.makedirs(TABLES_DIR,  exist_ok=True)
 prices  = pd.read_parquet(os.path.join(DATA_PROCESSED, 'prices.parquet'))
 volumes = pd.read_parquet(os.path.join(DATA_PROCESSED, 'volumes.parquet'))
 basis   = pd.read_parquet(os.path.join(DATA_PROCESSED, 'basis.parquet'))
+ranges  = pd.read_parquet(os.path.join(DATA_PROCESSED, 'intraminute_ranges.parquet'))
 
 pff_path = os.path.join(DATA_PROCESSED, 'price_ffill_flags.parquet')
 price_ff_flags = (pd.read_parquet(pff_path) if os.path.exists(pff_path)
@@ -46,8 +57,48 @@ price_ff_flags = (pd.read_parquet(pff_path) if os.path.exists(pff_path)
 price_ff_flags = price_ff_flags.reindex(
     index=prices.index, columns=prices.columns).fillna(False).astype(bool)
 
+bff_path = os.path.join(DATA_PROCESSED, 'basis_ffill_flags.parquet')
+basis_ff_flags = (pd.read_parquet(bff_path) if os.path.exists(bff_path)
+                  else pd.DataFrame(False, index=basis.index, columns=basis.columns))
+basis_ff_flags = basis_ff_flags.reindex(
+    index=basis.index, columns=basis.columns).fillna(False).astype(bool)
+
 svb_start = pd.Timestamp('2023-03-10', tz='UTC')
 svb_end   = pd.Timestamp('2023-03-13', tz='UTC')
+
+
+# Peg-recovery provenance artifact for timeline wording in the manuscript.
+if 'kraken_usdcusd' in prices.columns:
+    usdc_spot = prices['kraken_usdcusd'].dropna()
+    crisis_usdc = usdc_spot[(usdc_spot.index >= svb_start) & (usdc_spot.index < svb_end)]
+    if not crisis_usdc.empty:
+        trough_ts = crisis_usdc.idxmin()
+        trough_px = float(crisis_usdc.min())
+        first_print_after_trough = usdc_spot[
+            (usdc_spot.index > trough_ts) & (usdc_spot >= 0.999)
+        ].index.min()
+        daily_min = usdc_spot.resample('D').min()
+        daily_min_after_trough = daily_min[daily_min.index > trough_ts.normalize()]
+        first_daily_min = daily_min_after_trough[daily_min_after_trough >= 0.999].index.min()
+        peg_rows = [
+            {
+                'metric': 'crisis_trough',
+                'timestamp_utc': trough_ts.isoformat(),
+                'value': trough_px,
+            },
+            {
+                'metric': 'first_print_ge_0.999_after_trough',
+                'timestamp_utc': first_print_after_trough.isoformat() if pd.notna(first_print_after_trough) else '',
+                'value': 0.999,
+            },
+            {
+                'metric': 'first_daily_min_ge_0.999_day',
+                'timestamp_utc': first_daily_min.isoformat() if pd.notna(first_daily_min) else '',
+                'value': 0.999,
+            },
+        ]
+        pd.DataFrame(peg_rows).to_csv(os.path.join(TABLES_DIR, 'peg_recovery_thresholds.csv'), index=False)
+
 
 def assign_regime(idx):
     if idx < svb_start:  return 'Pre-SVB'
@@ -56,6 +107,45 @@ def assign_regime(idx):
 
 REGIME_ORDER  = ['Pre-SVB', 'Crisis', 'Post-SVB']
 REGIME_COLORS = {'Pre-SVB': '#3498db', 'Crisis': '#e74c3c', 'Post-SVB': '#2ecc71'}
+
+
+def enforce_table_H_placement(tables_dir: str = TABLES_DIR) -> int:
+    """
+    Ensure all generated LaTeX table floats use [H] placement.
+    """
+    updated_files = 0
+    for fname in os.listdir(tables_dir):
+        if not fname.endswith('.tex'):
+            continue
+        path = os.path.join(tables_dir, fname)
+        with open(path, 'r') as f:
+            tex = f.read()
+        updated = re.sub(r'\\begin\{table\*\}(?:\[[^\]]*\])*', r'\\begin{table*}[H]', tex)
+        updated = re.sub(r'\\begin\{table\}(?:\[[^\]]*\])*', r'\\begin{table}[H]', updated)
+        if updated != tex:
+            with open(path, 'w') as f:
+                f.write(updated)
+            updated_files += 1
+    return updated_files
+
+
+def convert_to_tabularx(latex_text: str, colspec: str) -> str:
+    """
+    Replace the first tabular environment emitted by pandas with tabularx.
+    """
+    replacement = (
+        '\\setlength{\\tabcolsep}{4pt}\n'
+        f'\\begin{{tabularx}}{{\\textwidth}}{{{colspec}}}'
+    )
+    latex_text = re.sub(
+        r'\\begin\{tabular\}\{[^}]*\}',
+        lambda _: replacement,
+        latex_text,
+        count=1,
+    )
+    latex_text = latex_text.replace(r'\end{tabular}', r'\end{tabularx}', 1)
+    return latex_text
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 # FIX 1 – Roll (1984) effective spread and Amihud (2002) ILLIQ
@@ -106,6 +196,22 @@ def amihud_daily(price_col: str, vol_col: str) -> pd.Series:
     return s
 
 
+def dollar_volume_daily(price_col: str, vol_col: str) -> pd.Series:
+    """
+    Daily traded dollar volume from 1-minute candles:
+      DollarVol_day = sum_t (close_t * volume_t)
+    Used as a direct tradable-depth proxy when L2 order-book snapshots are unavailable.
+    """
+    if price_col not in prices.columns or vol_col not in volumes.columns:
+        return pd.Series(dtype=float)
+    dvol = (prices[price_col] * volumes[vol_col]).dropna()
+    if dvol.empty:
+        return pd.Series(dtype=float)
+    out = dvol.groupby(dvol.index.date).sum()
+    out.index = pd.DatetimeIndex(out.index).tz_localize('UTC')
+    return out
+
+
 PAIRS = {
     'Kraken BTC/USD':  ('kraken_btcusd',   'kraken_btcusd'),
     'Kraken BTC/USDT': ('kraken_btcusdt',  'kraken_btcusdt'),
@@ -117,10 +223,12 @@ PAIR_ORDER = list(PAIRS.keys())
 
 roll_series   = {}
 amihud_series = {}
+depth_series  = {}
 for lbl, (pc, vc) in PAIRS.items():
     if pc in prices.columns:
         roll_series[lbl]   = roll_spread_daily(pc)
         amihud_series[lbl] = amihud_daily(pc, vc)
+        depth_series[lbl]  = dollar_volume_daily(pc, vc)
 
 
 def regime_stats(daily_dict):
@@ -172,7 +280,7 @@ grouped_bar(axes[0], df_roll,
             'Roll Effective Spread (bps)',
             'Panel A: Roll (1984) Effective Spread by Pair and Regime')
 grouped_bar(axes[1], df_amihud,
-            'Amihud ILLIQ (×10⁻⁶)',
+            'Amihud ILLIQ (x10^-6)',
             'Panel B: Amihud (2002) Illiquidity Ratio by Pair and Regime')
 
 plt.tight_layout()
@@ -223,6 +331,307 @@ with open(os.path.join(TABLES_DIR, 'liquidity_spread_table.tex'), 'w') as f:
 print("Saved tables/liquidity_spread_table.tex")
 print("\nRoll spread summary:\n", roll_pivot.to_string())
 print("\nAmihud ILLIQ summary:\n", amihud_pivot.to_string())
+
+# ── Table: daily dollar-volume depth proxy summary ──────────────────────────
+depth_rows = []
+for lbl in PAIR_ORDER:
+    if lbl not in depth_series:
+        continue
+    s = depth_series[lbl].dropna()
+    for reg in REGIME_ORDER:
+        if reg == 'Pre-SVB':
+            mask = s.index < svb_start
+        elif reg == 'Crisis':
+            mask = (s.index >= svb_start) & (s.index < svb_end)
+        else:
+            mask = s.index >= svb_end
+        sub = s[mask].dropna()
+        depth_rows.append({
+            'Pair': lbl,
+            'Regime': reg,
+            'median_usd_mm': (sub.median() / 1e6) if len(sub) else np.nan,
+            'mean_usd_mm': (sub.mean() / 1e6) if len(sub) else np.nan,
+            'n_days': int(len(sub)),
+        })
+
+df_depth = pd.DataFrame(depth_rows)
+df_depth.to_csv(os.path.join(TABLES_DIR, 'depth_proxy_table.csv'), index=False)
+depth_pivot = df_depth.pivot(index='Pair', columns='Regime', values='median_usd_mm')[REGIME_ORDER].reindex(PAIR_ORDER)
+
+tbl_depth = pd.DataFrame(index=PAIR_ORDER)
+for reg in REGIME_ORDER:
+    tbl_depth[f'Median DollarVol {reg} ($MM/day$)'] = depth_pivot[reg].round(2)
+tbl_depth.index.name = 'Pair'
+
+tbl_depth_latex = tbl_depth.reset_index().to_latex(
+    index=False,
+    caption=(r'Daily traded dollar volume depth proxy by pair and regime (median, USD millions/day). '
+             r'Because historical L2 order-book snapshots are unavailable in the candle APIs used here, '
+             r'dollar volume and Amihud ILLIQ are used as complementary depth proxies.'),
+    label='tab:depth_proxy',
+    column_format='l' + 'r' * 3,
+    float_format='%.2f',
+    na_rep='---',
+    escape=False,
+)
+tbl_depth_latex = tbl_depth_latex.replace(
+    r'\begin{tabular}',
+    r'\footnotesize' + '\n' + r'\resizebox{\textwidth}{!}{%' + '\n' + r'\begin{tabular}',
+    1,
+)
+tbl_depth_latex = tbl_depth_latex.replace(r'\end{tabular}', r'\end{tabular}' + '%\n}', 1)
+with open(os.path.join(TABLES_DIR, 'depth_proxy_table.tex'), 'w') as f:
+    f.write(tbl_depth_latex)
+print("Saved tables/depth_proxy_table.tex")
+print("\nDollar-volume depth proxy summary (median $MM/day):\n", depth_pivot.to_string())
+
+# ── Table: core data coverage and forward-fill diagnostics ──────────────────
+coverage_specs = [
+    ('kraken_btcusd', 'Kraken BTC/USD'),
+    ('kraken_btcusdt', 'Kraken BTC/USDT'),
+    ('kraken_btcusdc', 'Kraken BTC/USDC'),
+    ('kraken_usdcusd', 'Kraken USDC/USD'),
+    ('kraken_usdtusd', 'Kraken USDT/USD'),
+    ('coinbase_btcusd', 'Coinbase BTC/USD'),
+    ('coinbase_btcusdt', 'Coinbase BTC/USDT'),
+    ('coinbase_usdtusd', 'Coinbase USDT/USD'),
+    ('binance_btcusdt', 'Binance BTC/USDT'),
+    ('binance_btcusdc', 'Binance BTC/USDC'),
+]
+
+cov_rows = []
+for col, label in coverage_specs:
+    if col not in prices.columns:
+        continue
+    s = prices[col]
+    ff = price_ff_flags[col] if col in price_ff_flags.columns else pd.Series(False, index=prices.index)
+    ff = ff.reindex(prices.index).fillna(False).astype(bool)
+
+    def cov_for(mask):
+        sub = s.loc[mask]
+        return (sub.notna().mean() * 100.0) if len(sub) else np.nan
+
+    def ff_for(mask):
+        sub = ff.loc[mask]
+        return (sub.mean() * 100.0) if len(sub) else np.nan
+
+    m_pre = prices.index < svb_start
+    m_cri = (prices.index >= svb_start) & (prices.index < svb_end)
+    m_post = prices.index >= svb_end
+
+    cov_rows.append({
+        'Pair': label,
+        'Coverage Overall (%)': cov_for(prices.index == prices.index),
+        'Coverage Pre-SVB (%)': cov_for(m_pre),
+        'Coverage Crisis (%)': cov_for(m_cri),
+        'Coverage Post-SVB (%)': cov_for(m_post),
+        'Forward-Fill Share Overall (%)': ff_for(prices.index == prices.index),
+    })
+
+df_cov = pd.DataFrame(cov_rows)
+df_cov.to_csv(os.path.join(TABLES_DIR, 'data_coverage_core.csv'), index=False)
+cov_latex = df_cov.to_latex(
+    index=False,
+    caption=(r'Core series data coverage and forward-fill exposure. '
+             r'Coverage is the share of non-missing 1-minute observations on the unified UTC grid; '
+             r'forward-fill share is the percent of minutes filled by carry-forward (up to 5 minutes).'),
+    label='tab:data_coverage',
+    column_format='lrrrrr',
+    float_format='%.2f',
+    escape=True,
+)
+cov_latex = cov_latex.replace(
+    r'\begin{tabular}',
+    r'\footnotesize' + '\n' + r'\resizebox{\textwidth}{!}{%' + '\n' + r'\begin{tabular}',
+    1,
+)
+cov_latex = cov_latex.replace(r'\end{tabular}', r'\end{tabular}' + '%\n}', 1)
+with open(os.path.join(TABLES_DIR, 'data_coverage_core.tex'), 'w') as f:
+    f.write(cov_latex)
+print("Saved tables/data_coverage_core.tex")
+
+# ── Table: no-forward-fill sensitivity for headline metrics ──────────────────
+ff_rows = []
+
+
+def add_ff_row(metric, statistic, all_value, noff_value, n_all, n_noff):
+    delta = noff_value - all_value
+    retention = (100.0 * n_noff / n_all) if n_all > 0 else np.nan
+    ff_rows.append({
+        'Metric': metric,
+        'Statistic': statistic,
+        'All-sample': all_value,
+        'No-FF sample': noff_value,
+        'Delta (No-FF - All)': delta,
+        'N all': int(n_all),
+        'N no-FF': int(n_noff),
+        'Retention (%)': retention,
+    })
+
+
+def compare_mean(metric, series, ff_mask, mask):
+    all_vals = series.loc[mask].dropna()
+    valid_noff = mask & (~ff_mask.reindex(series.index).fillna(False))
+    noff_vals = series.loc[valid_noff].dropna()
+    add_ff_row(metric, 'mean (bps)', all_vals.mean(), noff_vals.mean(), len(all_vals), len(noff_vals))
+
+
+m_all = prices.index == prices.index
+m_pre = prices.index < svb_start
+m_cri = (prices.index >= svb_start) & (prices.index < svb_end)
+m_post = prices.index >= svb_end
+m_calm = m_pre | m_post
+
+compare_mean(
+    'USDC dispersion D_t (Kraken, crisis)',
+    basis['dispersion_usdc_kraken'],
+    basis_ff_flags['dispersion_usdc_kraken'],
+    m_cri,
+)
+compare_mean(
+    'USDC adjusted residual B_t (Kraken, crisis)',
+    basis['basis_usdc_kraken'],
+    basis_ff_flags['basis_usdc_kraken'],
+    m_cri,
+)
+compare_mean(
+    'USDT premium to USD (Kraken, crisis)',
+    (prices['kraken_usdtusd'] - 1.0) * 10000.0,
+    price_ff_flags['kraken_usdtusd'],
+    m_cri,
+)
+compare_mean(
+    'USDT premium to USD (Coinbase, crisis)',
+    (prices['coinbase_usdtusd'] - 1.0) * 10000.0,
+    price_ff_flags['coinbase_usdtusd'],
+    m_cri,
+)
+compare_mean(
+    'Cross-exchange BTC/USDT basis (Binance-Kraken, calm)',
+    basis['xbasis_btcusdt_binance_kraken'],
+    basis_ff_flags['xbasis_btcusdt_binance_kraken'],
+    m_calm,
+)
+
+# USDC crisis arbitrage sensitivity (strict no-FF on basis + all execution legs)
+fee_bps = 15.0  # 3-leg * 5 bps
+arb_abs = basis['basis_usdc_kraken'].abs()
+arb_slip = 0.5 * (
+    ranges['kraken_btcusdc'] + ranges['kraken_usdcusd'] + ranges['kraken_btcusd']
+) * 10000.0
+arb_df = pd.DataFrame({'abs_basis_bps': arb_abs, 'slippage_bps': arb_slip})
+arb_df = arb_df.dropna()
+arb_cri = arb_df.loc[(arb_df.index >= svb_start) & (arb_df.index < svb_end)]
+
+strict_ff = (
+    basis_ff_flags['basis_usdc_kraken']
+    | price_ff_flags['kraken_btcusdc']
+    | price_ff_flags['kraken_usdcusd']
+    | price_ff_flags['kraken_btcusd']
+).reindex(arb_df.index).fillna(False)
+arb_cri_noff = arb_df.loc[
+    (arb_df.index >= svb_start) & (arb_df.index < svb_end) & (~strict_ff)
+]
+
+all_fee_prof = (arb_cri['abs_basis_bps'] > fee_bps).mean() * 100.0
+noff_fee_prof = (arb_cri_noff['abs_basis_bps'] > fee_bps).mean() * 100.0
+all_slip_prof = (arb_cri['abs_basis_bps'] > (fee_bps + arb_cri['slippage_bps'])).mean() * 100.0
+noff_slip_prof = (arb_cri_noff['abs_basis_bps'] > (fee_bps + arb_cri_noff['slippage_bps'])).mean() * 100.0
+
+add_ff_row(
+    'USDC crisis arbitrage (Kraken, 3-leg)',
+    '% profitable, fee-only',
+    all_fee_prof,
+    noff_fee_prof,
+    len(arb_cri),
+    len(arb_cri_noff),
+)
+add_ff_row(
+    'USDC crisis arbitrage (Kraken, 3-leg)',
+    '% profitable, fee+slippage',
+    all_slip_prof,
+    noff_slip_prof,
+    len(arb_cri),
+    len(arb_cri_noff),
+)
+
+# Realized-volatility strict no-FF window retention (60-minute rolling)
+# Use simple returns to match the main realized-volatility implementation.
+ret_1m = prices.pct_change(fill_method=None)
+rv_cols = ['kraken_btcusdc', 'kraken_btcusdt']
+for col in rv_cols:
+    rv_all = ret_1m[col].rolling(60).std() * 10000.0 * np.sqrt(60.0)
+    ff_ret = price_ff_flags[col] | price_ff_flags[col].shift(1, fill_value=False)
+    rv_noff = ret_1m[col].where(~ff_ret).rolling(60, min_periods=60).std() * 10000.0 * np.sqrt(60.0)
+    all_vals = rv_all.loc[m_cri].dropna()
+    noff_vals = rv_noff.loc[m_cri].dropna()
+    add_ff_row(
+        f'Crisis RV (60m rolling, {col})',
+        'mean (bps/hr)',
+        all_vals.mean(),
+        noff_vals.mean(),
+        len(all_vals),
+        len(noff_vals),
+    )
+
+df_ff = pd.DataFrame(ff_rows)
+df_ff = df_ff.round({
+    'All-sample': 3,
+    'No-FF sample': 3,
+    'Delta (No-FF - All)': 3,
+    'Retention (%)': 1,
+})
+df_ff.to_csv(os.path.join(TABLES_DIR, 'ff_sensitivity_core.csv'), index=False)
+
+# Compact display labels to prevent wasteful one-word wraps in manuscript Table 2.
+df_ff_tex = df_ff.copy()
+df_ff_tex['Metric'] = df_ff_tex['Metric'].replace({
+    'USDC dispersion D_t (Kraken, crisis)': r'USDC $D_t$ (Kraken, crisis)',
+    'USDC adjusted residual B_t (Kraken, crisis)': r'USDC $B_t$ (Kraken, crisis)',
+    'USDT premium to USD (Kraken, crisis)': 'USDT premium (Kraken, crisis)',
+    'USDT premium to USD (Coinbase, crisis)': 'USDT premium (Coinbase, crisis)',
+    'Cross-exchange BTC/USDT basis (Binance-Kraken, calm)': 'BTC/USDT basis (BN-KR, calm)',
+    'USDC crisis arbitrage (Kraken, 3-leg)': 'USDC arb (Kraken, 3-leg, crisis)',
+    'Crisis RV (60m rolling, kraken_btcusdc)': 'RV 60m (KR BTC/USDC, crisis)',
+    'Crisis RV (60m rolling, kraken_btcusdt)': 'RV 60m (KR BTC/USDT, crisis)',
+})
+df_ff_tex['Statistic'] = df_ff_tex['Statistic'].replace({
+    'mean (bps)': 'Mean bps',
+    'mean (bps/hr)': 'Mean bps/hr',
+    '% profitable, fee-only': 'Fee-only \\%',
+    '% profitable, fee+slippage': 'Fee+slip \\%',
+})
+df_ff_tex = df_ff_tex.rename(columns={
+    'All-sample': 'All',
+    'No-FF sample': 'No-FF',
+    'Delta (No-FF - All)': r'$\Delta$ (No-FF-All)',
+    'N all': 'N',
+    'N no-FF': 'N (No-FF)',
+    'Retention (%)': r'Retention (\%)',
+})
+
+ff_latex = df_ff_tex.to_latex(
+    index=False,
+    caption=(
+        r'Forward-fill sensitivity for selected headline metrics. '
+        r'All-sample uses the baseline aligned 1-minute series; No-FF sample removes '
+        r'observations with forward-filled inputs for each metric. Signs are largely stable, '
+        r'but magnitudes can move in thinner channels and rolling-volatility windows can become sparse.'
+    ),
+    label='tab:ff_sensitivity',
+    column_format='llrrrrrr',
+    float_format='%.3f',
+    escape=False,
+)
+ff_latex = ff_latex.replace(r'\begin{table}', r'\begin{table}[H]', 1)
+ff_latex = ff_latex.replace(r'\begin{tabular}', r'\footnotesize' + '\n' + r'\begin{tabular}', 1)
+ff_latex = convert_to_tabularx(
+    ff_latex,
+    r'>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{1.90cm}rrrrrr',
+)
+with open(os.path.join(TABLES_DIR, 'ff_sensitivity_core.tex'), 'w') as f:
+    f.write(ff_latex)
+print("Saved tables/ff_sensitivity_core.tex")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -427,37 +836,88 @@ if not df_is.empty:
         f.write(is_latex)
     print("\nSaved tables/hasbrouck_is.tex")
 
-# ── Update cointegration_vecm_merged.tex to include IS midpoint column ─────
-# Read existing and re-emit with IS column appended.
-is_mid_usd  = df_is.loc[df_is['Channel'].str.contains('USDT'), 'IS_USD_mid'].values
-is_mid_usdt = df_is.loc[df_is['Channel'].str.contains('USDT'), 'IS_other_mid'].values
+# ── Update cointegration_vecm_merged.tex from canonical CSV artifacts ───────
+joh_path = os.path.join(TABLES_DIR, 'cointegration_johansen.csv')
+disc_path = os.path.join(TABLES_DIR, 'price_discovery_metrics.csv')
+if os.path.exists(joh_path) and os.path.exists(disc_path):
+    df_joh = pd.read_csv(joh_path)
+    df_disc = pd.read_csv(disc_path)
 
-if len(is_mid_usd) > 0 and not np.isnan(is_mid_usd[0]):
-    mid = is_mid_usd[0]
-    lo  = df_is.loc[df_is['Channel'].str.contains('USDT'), 'IS_USD_lower'].values[0]
-    hi  = df_is.loc[df_is['Channel'].str.contains('USDT'), 'IS_USD_upper'].values[0]
+    def fetch_row(df: pd.DataFrame, channel: str):
+        exact = df[df['channel'] == channel]
+        if not exact.empty:
+            return exact.iloc[0]
+        contains = df[df['channel'].astype(str).str.contains(channel, regex=False)]
+        if not contains.empty:
+            return contains.iloc[0]
+        return None
 
-    updated_vecm = rf"""\begin{{table}}[H]
-\caption{{Johansen Cointegration and VECM Price Discovery (Primary Kraken Channels, No-FF Sample)}}
-\label{{tab:coint_vecm}}
-\footnotesize
-\centering
-\begin{{tabular}}{{lccccccl}}
-\toprule
-Channel & Rank & $k_\Delta$ & Trace$_{{r=0}}$ & $\alpha_{{\text{{USD}}}}$ & $\alpha_{{\text{{other}}}}$ & IS$_{{\text{{USD}}}}$ [{lo:.2f}, {hi:.2f}] & Leader \\\\
-\midrule
-BTC/USD vs BTC/USDC & 0 & 2 & 7.71 & --- & --- & --- & undetermined \\\\
-BTC/USD vs BTC/USDT & 1 & 8 & 27.03 & 0.0079 & 0.0118 & {mid:.2f} & BTC/USD \\\\
-\bottomrule
-\multicolumn{{8}}{{l}}{{\footnotesize 95\% critical value for trace $r=0$: 15.49. IS = Hasbrouck (1995) midpoint; bounds [{lo:.2f}, {hi:.2f}].}}
-\end{{tabular}}
-\end{{table}}
-"""
-    with open(os.path.join(TABLES_DIR, 'cointegration_vecm_merged.tex'), 'w') as f:
-        f.write(updated_vecm)
-    print("Updated tables/cointegration_vecm_merged.tex with Hasbrouck IS.")
+    ch_usdc = 'Kraken BTC/USD vs BTC/USDC'
+    ch_usdt = 'Kraken BTC/USD vs BTC/USDT'
+    j_usdc = fetch_row(df_joh, ch_usdc)
+    j_usdt = fetch_row(df_joh, ch_usdt)
+    d_usdc = fetch_row(df_disc, ch_usdc)
+    d_usdt = fetch_row(df_disc, ch_usdt)
+
+    is_usdt = None
+    if not df_is.empty:
+        cand = df_is[df_is['Channel'].astype(str).str.contains('BTC/USD vs BTC/USDT', regex=False)]
+        if not cand.empty:
+            is_usdt = cand.iloc[0]
+
+    def fmt_alpha(x):
+        return '---' if (x is None or pd.isna(x)) else f'{float(x):.4f}'
+
+    def fmt_is_mid(x):
+        return '---' if (x is None or pd.isna(x)) else f'{float(x):.2f}'
+
+    if (j_usdc is None) or (j_usdt is None):
+        print("WARNING: Could not update cointegration_vecm_merged.tex — missing Johansen channel rows.")
+    else:
+        is_lo = float(is_usdt['IS_USD_lower']) if is_usdt is not None and not pd.isna(is_usdt['IS_USD_lower']) else np.nan
+        is_hi = float(is_usdt['IS_USD_upper']) if is_usdt is not None and not pd.isna(is_usdt['IS_USD_upper']) else np.nan
+        is_mid = float(is_usdt['IS_USD_mid']) if is_usdt is not None and not pd.isna(is_usdt['IS_USD_mid']) else np.nan
+        is_head = f'IS$_{{\\text{{USD}}}}$ [{is_lo:.2f}, {is_hi:.2f}]' if np.isfinite(is_lo) and np.isfinite(is_hi) else r'IS$_{\text{USD}}$'
+        is_note = f'IS = Hasbrouck (1995) midpoint; bounds [{is_lo:.2f}, {is_hi:.2f}].' if np.isfinite(is_lo) and np.isfinite(is_hi) else 'IS unavailable.'
+
+        rank_usdc = int(j_usdc['rank_used'])
+        rank_usdt = int(j_usdt['rank_used'])
+        k_usdc = int(j_usdc['k_ar_diff_used'])
+        k_usdt = int(j_usdt['k_ar_diff_used'])
+        tr_usdc = float(j_usdc['trace_stat_r0'])
+        tr_usdt = float(j_usdt['trace_stat_r0'])
+        a1_usdc = fmt_alpha(None if d_usdc is None else d_usdc.get('alpha_market_1', np.nan))
+        a2_usdc = fmt_alpha(None if d_usdc is None else d_usdc.get('alpha_market_2', np.nan))
+        a1_usdt = fmt_alpha(None if d_usdt is None else d_usdt.get('alpha_market_1', np.nan))
+        a2_usdt = fmt_alpha(None if d_usdt is None else d_usdt.get('alpha_market_2', np.nan))
+
+        leader_usdc_raw = '' if d_usdc is None else str(d_usdc.get('leader_by_adjustment', ''))
+        leader_usdt_raw = '' if d_usdt is None else str(d_usdt.get('leader_by_adjustment', ''))
+        leader_usdc = 'undetermined' if ('undetermined' in leader_usdc_raw or rank_usdc == 0) else leader_usdc_raw.replace('Kraken ', '')
+        leader_usdt = leader_usdt_raw.replace('Kraken ', '') if leader_usdt_raw else 'undetermined'
+
+        updated_vecm = [
+            r'\begin{table}[H]',
+            r'\caption{Johansen Cointegration and VECM Price Discovery (Primary Kraken Channels, No-FF Sample)}',
+            r'\label{tab:coint_vecm}',
+            r'\footnotesize',
+            r'\centering',
+            r'\begin{tabular}{lccccccl}',
+            r'\toprule',
+            f'Channel & Rank & $k_\\Delta$ & Trace$_{{r=0}}$ & $\\alpha_{{\\text{{USD}}}}$ & $\\alpha_{{\\text{{other}}}}$ & {is_head} & Leader \\\\',
+            r'\midrule',
+            f'BTC/USD vs BTC/USDC & {rank_usdc:d} & {k_usdc:d} & {tr_usdc:.2f} & {a1_usdc} & {a2_usdc} & --- & {leader_usdc} \\\\',
+            f'BTC/USD vs BTC/USDT & {rank_usdt:d} & {k_usdt:d} & {tr_usdt:.2f} & {a1_usdt} & {a2_usdt} & {fmt_is_mid(is_mid)} & {leader_usdt} \\\\',
+            r'\bottomrule',
+            f'\\multicolumn{{8}}{{l}}{{\\footnotesize 95\\% critical value for trace $r=0$: {float(j_usdt["trace_crit95_r0"]):.2f}. {is_note}}}',
+            r'\end{tabular}',
+            r'\end{table}',
+        ]
+        with open(os.path.join(TABLES_DIR, 'cointegration_vecm_merged.tex'), 'w') as f:
+            f.write('\n'.join(updated_vecm) + '\n')
+        print("Updated tables/cointegration_vecm_merged.tex from canonical CSV artifacts.")
 else:
-    print("WARNING: Could not update cointegration_vecm_merged.tex — IS computation may have failed.")
+    print("WARNING: Could not update cointegration_vecm_merged.tex — required CSV artifacts missing.")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -495,61 +955,168 @@ print(f"  B_t pre-crisis: mean={pre_b['mean']:.2f} bps")
 print(f"  B_t crisis:     mean={cri_b['mean']:.2f} bps")
 
 # Illustrative scenario analysis (not a structural causal estimate):
-# under GENIUS-style reserve composition rules (T-bills, central bank reserves,
-# Treasury-backed repos), concentrated uninsured bank-deposit exposure would
-# likely be reduced materially. We summarize this with a simple lower-risk
-# benchmark in which lock-up risk is set to zero.
+# map assumed mitigation of reserve lock-up shock into a range of implied
+# crisis D_t means. This avoids a single deterministic counterfactual.
+shock_component = cri_d['mean'] - pre_d['mean']
+mitigation_grid = [0.00, 0.25, 0.50, 0.75, 1.00]
+scenario_map = {
+    0.00: 'Observed baseline',
+    0.25: 'Low mitigation',
+    0.50: 'Moderate mitigation',
+    0.75: 'High mitigation',
+    1.00: 'Full-mitigation lower bound',
+}
 
-genius_locked_bn         = 0.0   # no bank concentration → no lock-up
-genius_locked_frac       = 0.0
-# Conservative counterfactual: D_t stays at pre-crisis mean ± pre-crisis std
-genius_Dt_mean_cf = pre_d['mean']
-genius_Dt_std_cf  = pre_d['std']
-# Crisis D_t reduction
-Dt_reduction_abs  = cri_d['mean'] - genius_Dt_mean_cf
-Dt_reduction_pct  = Dt_reduction_abs / cri_d['mean'] * 100 if cri_d['mean'] > 0 else np.nan
-
-print(f"\n  Counterfactual D_t (GENIUS Act): mean≈{genius_Dt_mean_cf:.2f} bps")
-print(f"  Reduction in crisis D_t: {Dt_reduction_abs:.1f} bps ({Dt_reduction_pct:.1f}%)")
-
-# Build counterfactual table
-cf_rows = [
-    {'Metric': r'Circle reserve exposure at SVB',
-     'Observed':        r'\$3.3B locked (8.3\%)',
-     'Counterfactual':  r'Illustrative lower-risk case: \$0 lock-up',
-     'Provision':       r'Reserve composition: T-bills/CB reserves only'},
-    {'Metric': r'$D_t$ crisis mean (USDC, Kraken)',
-     'Observed':        f'{cri_d["mean"]:.1f} bps',
-     'Counterfactual':  f'$\\approx {genius_Dt_mean_cf:.1f}$ bps (pre-crisis level)',
-     'Provision':       r'Reserve composition $\Rightarrow$ lower de-peg risk'},
-    {'Metric': r'$D_t$ crisis std (USDC, Kraken)',
-     'Observed':        f'{cri_d["std"]:.1f} bps',
-     'Counterfactual':  f'$\\approx {genius_Dt_std_cf:.1f}$ bps',
-     'Provision':       r'Transparency $\Rightarrow$ lower panic risk'},
-    {'Metric': r'$B_t$ P99 crisis (USDC, Kraken)',
-     'Observed':        f'{cri_b["p99"]:.1f} bps',
-     'Counterfactual':  f'$\\approx {pre_b["p99"]:.1f}$ bps (pre-crisis P99)',
-     'Provision':       r'Bankruptcy super-priority + redemption guarantee'},
-]
+cf_rows = []
+for m in mitigation_grid:
+    implied_mean = pre_d['mean'] + (1.0 - m) * shock_component
+    reduction = cri_d['mean'] - implied_mean
+    cf_rows.append({
+        'Scenario': scenario_map[m],
+        'Assumed mitigation of lock-up shock (%)': int(round(m * 100)),
+        'Implied crisis D_t mean (bps)': implied_mean,
+        'Reduction vs observed (bps)': reduction,
+        'Policy mapping': (
+            'Reserve composition + redemption + transparency'
+            if m > 0 else
+            'SVB/No GENIUS baseline'
+        ),
+    })
 
 df_cf = pd.DataFrame(cf_rows)
-df_cf.columns = ['Metric', 'Observed (SVB/No GENIUS Act)',
-                 'Counterfactual (GENIUS Act)', 'Relevant Provision']
+df_cf = df_cf.round({
+    'Implied crisis D_t mean (bps)': 1,
+    'Reduction vs observed (bps)': 1,
+})
+df_cf.to_csv(os.path.join(TABLES_DIR, 'genius_counterfactual.csv'), index=False)
 
 cf_latex = df_cf.to_latex(
     index=False,
-    caption=(r'GENIUS Act illustrative scenario analysis (not a structural causal estimate). '
-             r'Under reserve composition rules emphasizing Treasury bills, central bank reserves, '
-             r'and Treasury-backed repos, concentrated bank lock-up risk is plausibly lower. '
-             r'The counterfactual columns benchmark outcomes to pre-crisis levels to quantify '
-             r'potential directional effects under that lower-risk reserve configuration.'),
+    caption=(
+        r'GENIUS Act scenario range (illustrative, not structural causal identification). '
+        r'The table maps assumed mitigation of reserve lock-up shock into implied crisis '
+        r'$D_t$ means, anchored to observed pre- and crisis-period moments. '
+        r'Tail benchmark for context: USDC $B_t$ crisis P99 = '
+        + f'{cri_b["p99"]:.1f}'
+        + r' bps versus pre-crisis P99 = '
+        + f'{pre_b["p99"]:.1f}'
+        + r' bps.'
+    ),
     label='tab:genius_cf',
-    column_format='p{3.5cm}p{3.2cm}p{3.4cm}p{4.5cm}',
-    escape=False,
+    column_format='p{3.3cm}rrrp{4.5cm}',
+    float_format='%.1f',
+    escape=True,
 )
+cf_latex = cf_latex.replace(
+    r'\begin{tabular}',
+    r'\footnotesize' + '\n' + r'\resizebox{\textwidth}{!}{%' + '\n' + r'\begin{tabular}',
+    1,
+)
+cf_latex = cf_latex.replace(r'\end{tabular}', r'\end{tabular}' + '%\n}', 1)
 with open(os.path.join(TABLES_DIR, 'genius_counterfactual.tex'), 'w') as f:
     f.write(cf_latex)
 print("\nSaved tables/genius_counterfactual.tex")
+
+Dt_reduction_abs_low = 0.25 * shock_component
+Dt_reduction_abs_high = 0.75 * shock_component
+Dt_reduction_pct_low = 100.0 * Dt_reduction_abs_low / cri_d['mean'] if cri_d['mean'] > 0 else np.nan
+Dt_reduction_pct_high = 100.0 * Dt_reduction_abs_high / cri_d['mean'] if cri_d['mean'] > 0 else np.nan
+
+# ═══════════════════════════════════════════════════════════════════════════
+# FIX 5 – HAC uncertainty intervals for headline means
+# ═══════════════════════════════════════════════════════════════════════════
+
+def hac_mean_ci(series: pd.Series, maxlags: int = 60):
+    s = series.dropna()
+    n = int(len(s))
+    if n < 10:
+        return {'mean': np.nan, 'se': np.nan, 'ci_lo': np.nan, 'ci_hi': np.nan, 'N': n}
+    lag_use = min(maxlags, max(1, n // 10))
+    model = sm.OLS(s.values, np.ones((n, 1))).fit(
+        cov_type='HAC',
+        cov_kwds={'maxlags': lag_use},
+    )
+    mean = float(model.params[0])
+    se = float(model.bse[0])
+    return {
+        'mean': mean,
+        'se': se,
+        'ci_lo': mean - 1.96 * se,
+        'ci_hi': mean + 1.96 * se,
+        'N': n,
+    }
+
+
+hac_specs = [
+    ('USDC dispersion $D_t$ (Kraken, crisis)', basis.loc[m_cri, 'dispersion_usdc_kraken']),
+    ('USDC adjusted residual $B_t$ (Kraken, crisis)', basis.loc[m_cri, 'basis_usdc_kraken']),
+    ('USDT premium to USD (Kraken, crisis)', (prices.loc[m_cri, 'kraken_usdtusd'] - 1.0) * 10000.0),
+    ('USDT premium to USD (Coinbase, crisis)', (prices.loc[m_cri, 'coinbase_usdtusd'] - 1.0) * 10000.0),
+    ('BTC/USDT cross-exchange basis (Binance-Kraken, calm)', basis.loc[m_calm, 'xbasis_btcusdt_binance_kraken']),
+    ('BTC/USD cross-exchange basis (Coinbase-Kraken, full)', basis.loc[m_all, 'xbasis_btcusd_coinbase_kraken']),
+]
+
+hac_rows = []
+for metric, ser in hac_specs:
+    out = hac_mean_ci(ser, maxlags=60)
+    hac_rows.append({
+        'Metric': metric,
+        'Mean (bps)': out['mean'],
+        'HAC SE (bps)': out['se'],
+        '95% CI low': out['ci_lo'],
+        '95% CI high': out['ci_hi'],
+        'N': out['N'],
+    })
+
+df_hac = pd.DataFrame(hac_rows).round({
+    'Mean (bps)': 3,
+    'HAC SE (bps)': 3,
+    '95% CI low': 3,
+    '95% CI high': 3,
+})
+df_hac.to_csv(os.path.join(TABLES_DIR, 'hac_headline_metrics.csv'), index=False)
+
+df_hac_tex = df_hac.rename(columns={
+    '95% CI low': r'95\% CI low',
+    '95% CI high': r'95\% CI high',
+})
+
+# Compact display labels to prevent wasteful wraps in manuscript Table 4.
+df_hac_tex['Metric'] = df_hac_tex['Metric'].replace({
+    'USDC dispersion $D_t$ (Kraken, crisis)': r'USDC $D_t$ (Kraken, crisis)',
+    'USDC adjusted residual $B_t$ (Kraken, crisis)': r'USDC $B_t$ (Kraken, crisis)',
+    'USDT premium to USD (Kraken, crisis)': 'USDT premium (Kraken, crisis)',
+    'USDT premium to USD (Coinbase, crisis)': 'USDT premium (Coinbase, crisis)',
+    'BTC/USDT cross-exchange basis (Binance-Kraken, calm)': 'BTC/USDT basis (BN-KR, calm)',
+    'BTC/USD cross-exchange basis (Coinbase-Kraken, full)': 'BTC/USD basis (CB-KR, full)',
+})
+df_hac_tex = df_hac_tex.rename(columns={
+    'Mean (bps)': 'Mean',
+    'HAC SE (bps)': 'HAC SE',
+    r'95\% CI low': '95\\% CI low',
+    r'95\% CI high': '95\\% CI high',
+})
+
+hac_latex = df_hac_tex.to_latex(
+    index=False,
+    caption=(
+        r'HAC uncertainty for headline mean estimates (Newey--West, 60-lag cap). '
+        r'Values are in basis points with 95\% confidence intervals.'
+    ),
+    label='tab:hac_headline',
+    column_format='lrrrrr',
+    float_format='%.3f',
+    escape=False,
+)
+hac_latex = hac_latex.replace(r'\begin{table}', r'\begin{table}[H]', 1)
+hac_latex = hac_latex.replace(r'\begin{tabular}', r'\footnotesize' + '\n' + r'\begin{tabular}', 1)
+hac_latex = convert_to_tabularx(
+    hac_latex,
+    r'>{\raggedright\arraybackslash}Xrrrrr',
+)
+with open(os.path.join(TABLES_DIR, 'hac_headline_metrics.tex'), 'w') as f:
+    f.write(hac_latex)
+print("Saved tables/hac_headline_metrics.tex")
 
 # Print key numbers for inline text use
 print(f"\n=== KEY NUMBERS FOR INLINE TEXT ===")
@@ -561,5 +1128,12 @@ print(f"Amihud ILLIQ: Kraken USD crisis   = {amihud_pivot.loc['Kraken BTC/USD','
 if not df_is.empty and len(is_rows) > 0 and not np.isnan(is_rows[-1].get('IS_USD_mid', np.nan)):
     r = is_rows[-1]
     print(f"Hasbrouck IS BTC/USD midpoint = {r['IS_USD_mid']:.2f}  bounds [{r['IS_USD_lower']:.2f}, {r['IS_USD_upper']:.2f}]")
-print(f"GENIUS D_t reduction: {Dt_reduction_abs:.0f} bps ({Dt_reduction_pct:.0f}%)")
+print(
+    "GENIUS D_t reduction range (25%-75% mitigation): "
+    f"{Dt_reduction_abs_low:.0f}-{Dt_reduction_abs_high:.0f} bps "
+    f"({Dt_reduction_pct_low:.0f}% - {Dt_reduction_pct_high:.0f}%)"
+)
 print("=== END KEY NUMBERS ===")
+
+num_h_updates = enforce_table_H_placement(TABLES_DIR)
+print(f"Enforced [H] placement in {num_h_updates} table files.")

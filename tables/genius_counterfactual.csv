@@ -1,0 +1,6 @@
+Scenario,Assumed mitigation of lock-up shock (%),Implied crisis D_t mean (bps),Reduction vs observed (bps),Policy mapping
+Observed baseline,0,320.0,0.0,SVB/No GENIUS baseline
+Low mitigation,25,240.0,80.0,Reserve composition + redemption + transparency
+Moderate mitigation,50,160.0,159.9,Reserve composition + redemption + transparency
+High mitigation,75,80.1,239.9,Reserve composition + redemption + transparency
+Full-mitigation lower bound,100,0.1,319.9,Reserve composition + redemption + transparency

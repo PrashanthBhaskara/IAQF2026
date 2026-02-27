@@ -1,0 +1,10 @@
+Metric,Statistic,All-sample,No-FF sample,Delta (No-FF - All),N all,N no-FF,Retention (%)
+"USDC dispersion D_t (Kraken, crisis)",mean (bps),319.974,360.511,40.537,4311,3324,77.1
+"USDC adjusted residual B_t (Kraken, crisis)",mean (bps),5.271,6.37,1.099,4283,3002,70.1
+"USDT premium to USD (Kraken, crisis)",mean (bps),58.114,58.128,0.014,4320,4319,100.0
+"USDT premium to USD (Coinbase, crisis)",mean (bps),59.68,59.721,0.041,4320,4317,99.9
+"Cross-exchange BTC/USDT basis (Binance-Kraken, calm)",mean (bps),0.157,0.061,-0.096,25456,17098,67.2
+"USDC crisis arbitrage (Kraken, 3-leg)","% profitable, fee-only",29.162,35.143,5.981,4283,3002,70.1
+"USDC crisis arbitrage (Kraken, 3-leg)","% profitable, fee+slippage",6.724,7.295,0.571,4283,3002,70.1
+"Crisis RV (60m rolling, kraken_btcusdc)",mean (bps/hr),136.991,412.777,275.786,4105,431,10.5
+"Crisis RV (60m rolling, kraken_btcusdt)",mean (bps/hr),66.623,99.348,32.725,4009,142,3.5

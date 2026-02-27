@@ -1,27 +1,20 @@
 \begin{table}[H]
 \caption{Arbitrage Profitability by Channel and Regime (5 bps/leg; 3-leg intra-exchange, 2-leg cross-exchange)}
 \label{tab:arb}
-\footnotesize
-\centering
 \begin{tabular}{llcrr}
 \toprule
-Channel & Regime & Cost Variant & \%Profitable & AvgNet$_{\text{uncond}}$ (bps) \\
+Channel & Regime & Cost Variant & \%Profitable & AvgNetUncond (bps) \\
 \midrule
-\multirow{2}{*}{USDC/USD (Kraken)} & \multirow{2}{*}{Crisis} & Fee-only & 29.16 & 4.83 \\
- & & Fee+slip & 6.72 & 0.64 \\
-\cmidrule(lr){2-5}
- & \multirow{2}{*}{Post-SVB} & Fee-only & 9.38 & 0.56 \\
- & & Fee+slip & 1.78 & 0.08 \\
-\midrule
-\multirow{2}{*}{USDT/USD (Kraken)} & \multirow{2}{*}{Crisis} & Fee-only & 3.76 & 0.14 \\
- & & Fee+slip & 0.37 & 0.01 \\
-\midrule
-\multirow{2}{*}{Cross BTC/USD (CB--KR)} & \multirow{2}{*}{Crisis} & Fee-only & 11.32 & 0.72 \\
- & & Fee+slip & 2.29 & 0.15 \\
-\midrule
-\multirow{2}{*}{Cross BTC/USDT (BN--KR)} & \multirow{2}{*}{Crisis} & Fee-only & 11.85 & 0.49 \\
- & & Fee+slip & 1.81 & 0.05 \\
+USDC/USD (Kraken) & Crisis & Fee-only & 29.16 & 4.83 \\
+USDC/USD (Kraken) & Crisis & Fee+slip & 6.72 & 0.64 \\
+USDC/USD (Kraken) & Post-SVB & Fee-only & 9.38 & 0.56 \\
+USDC/USD (Kraken) & Post-SVB & Fee+slip & 1.78 & 0.08 \\
+USDT/USD (Kraken) & Crisis & Fee-only & 3.76 & 0.14 \\
+USDT/USD (Kraken) & Crisis & Fee+slip & 0.37 & 0.01 \\
+Cross BTC/USD (CB--KR) & Crisis & Fee-only & 11.32 & 0.72 \\
+Cross BTC/USD (CB--KR) & Crisis & Fee+slip & 2.29 & 0.15 \\
+Cross BTC/USDT (BN--KR) & Crisis & Fee-only & 11.85 & 0.49 \\
+Cross BTC/USDT (BN--KR) & Crisis & Fee+slip & 1.81 & 0.05 \\
 \bottomrule
-\multicolumn{5}{l}{\footnotesize Pre-SVB rows omitted (near-zero profitability). Full regime matrix available in repo CSV outputs.}
 \end{tabular}
 \end{table}

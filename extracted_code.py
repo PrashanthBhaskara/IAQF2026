@@ -1,3 +1,8 @@
+# DEPRECATED SUPPORT ARTIFACT
+# This file is a legacy notebook extract retained for archival reference only.
+# It is NOT part of the canonical reproducible pipeline for the submission.
+# Use run_all.py and scripts in src/ for all manuscript tables/figures.
+#
 # ============================================================
 # Cell 1: Imports & Configuration
 # ============================================================

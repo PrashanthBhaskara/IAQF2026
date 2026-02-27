@@ -1,14 +1,18 @@
-\begin{table}
-\caption{GENIUS Act illustrative scenario analysis (not a structural causal estimate). Under reserve composition rules emphasizing Treasury bills, central bank reserves, and Treasury-backed repos, concentrated bank lock-up risk is plausibly lower. The counterfactual columns benchmark outcomes to pre-crisis levels to quantify potential directional effects under that lower-risk reserve configuration.}
+\begin{table}[H]
+\caption{GENIUS Act scenario range (illustrative, not structural causal identification). The table maps assumed mitigation of reserve lock-up shock into implied crisis $D_t$ means, anchored to observed pre- and crisis-period moments. Tail benchmark for context: USDC $B_t$ crisis P99 = 81.4 bps versus pre-crisis P99 = 13.6 bps.}
 \label{tab:genius_cf}
-\begin{tabular}{p{3.5cm}p{3.2cm}p{3.4cm}p{4.5cm}}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{p{3.3cm}rrrp{4.5cm}}
 \toprule
-Metric & Observed (SVB/No GENIUS Act) & Counterfactual (GENIUS Act) & Relevant Provision \\
+Scenario & Assumed mitigation of lock-up shock (\%) & Implied crisis D\_t mean (bps) & Reduction vs observed (bps) & Policy mapping \\
 \midrule
-Circle reserve exposure at SVB & \$3.3B locked (8.3\%) & Illustrative lower-risk case: \$0 lock-up & Reserve composition: T-bills/CB reserves only \\
-$D_t$ crisis mean (USDC, Kraken) & 320.0 bps & $\approx 0.1$ bps (pre-crisis level) & Reserve composition $\Rightarrow$ lower de-peg risk \\
-$D_t$ crisis std (USDC, Kraken) & 322.9 bps & $\approx 4.9$ bps & Transparency $\Rightarrow$ lower panic risk \\
-$B_t$ P99 crisis (USDC, Kraken) & 81.4 bps & $\approx 13.6$ bps (pre-crisis P99) & Bankruptcy super-priority + redemption guarantee \\
+Observed baseline & 0 & 320.0 & 0.0 & SVB/No GENIUS baseline \\
+Low mitigation & 25 & 240.0 & 80.0 & Reserve composition + redemption + transparency \\
+Moderate mitigation & 50 & 160.0 & 159.9 & Reserve composition + redemption + transparency \\
+High mitigation & 75 & 80.1 & 239.9 & Reserve composition + redemption + transparency \\
+Full-mitigation lower bound & 100 & 0.1 & 319.9 & Reserve composition + redemption + transparency \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}

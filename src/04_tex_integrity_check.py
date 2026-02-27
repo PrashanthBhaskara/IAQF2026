@@ -16,6 +16,7 @@ TABLE_ARTIFACT_MAP = {
     'tab:ou_stats': ['tables/ou_basis_stats.csv', 'tables/ou_basis_stats.tex'],
     'tab:granger': ['tables/granger_causality.csv', 'tables/granger_causality.tex'],
     'tab:arb': ['tables/arbitrage_compact.tex'],
+    'tab:regression_hac': ['tables/regression_hac.tex', 'tables/regression_results.txt'],
     'tab:dispersion_vs_adjusted': [
         'tables/dispersion_adjusted_stats.csv',
         'tables/dispersion_adjusted_stats.tex',
@@ -34,6 +35,22 @@ TABLE_ARTIFACT_MAP = {
     'tab:granger_fdr': [
         'tables/granger_causality_fdr.csv',
         'tables/granger_causality_fdr.tex',
+    ],
+    'tab:data_coverage': [
+        'tables/data_coverage_core.csv',
+        'tables/data_coverage_core.tex',
+    ],
+    'tab:depth_proxy': [
+        'tables/depth_proxy_table.csv',
+        'tables/depth_proxy_table.tex',
+    ],
+    'tab:ff_sensitivity': [
+        'tables/ff_sensitivity_core.csv',
+        'tables/ff_sensitivity_core.tex',
+    ],
+    'tab:hac_headline': [
+        'tables/hac_headline_metrics.csv',
+        'tables/hac_headline_metrics.tex',
     ],
 }
 
