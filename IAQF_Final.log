@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2026.2.26)  26 FEB 2026 23:00
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2026.2.26)  27 FEB 2026 15:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -547,83 +547,115 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 46.
 (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (30.87091pt too wide) in paragraph at lines 49--50
-\TU/TimesNewRoman(0)/m/n/12 from Binance, Coinbase, and Kraken, we decompose th
-is fragmentation into a large stablecoin-driven component—
+File: figures/fig_stablecoin_peg.png Graphic file (type bmp)
+<figures/fig_stablecoin_peg.png>
+
+Overfull \hbox (0.50032pt too wide) in paragraph at lines 71--72
+\TU/TimesNewRoman(0)/m/n/12 We collect 1-minute OHLCV candles for BTC quoted in
+ USD, USDT, and USDC from Binance (BTC/USDT,
+ []
+
+
+Overfull \hbox (1.27167pt too wide) in paragraph at lines 71--72
+\TU/TimesNewRoman(0)/m/n/12 gateway), and Kraken (BTC/USD, BTC/USDT, BTC/USDC, 
+USDT/USD, USDC/USD; broadest stablecoin-
  []
 
 
 
 [1
 
-] (./tables/data_coverage_core.tex) (./tables/ff_sensitivity_core.tex)
+] (./tables/data_coverage_core.tex)
 
-[2] (./tables/dispersion_adjusted_stats.tex)
+[2]
+File: figures/fig_dispersion_vs_adjusted_kraken.png Graphic file (type bmp)
+<figures/fig_dispersion_vs_adjusted_kraken.png>
+File: figures/fig_stablecoin_substitution_scatter.png Graphic file (type bmp)
+<figures/fig_stablecoin_substitution_scatter.png>
+ (./tables/dispersion_adjusted_stats.tex)
 
-[3] (./tables/hac_headline_metrics.tex)
-File: figures/fig_stablecoin_peg.png Graphic file (type bmp)
-<figures/fig_stablecoin_peg.png>
+[3]
+File: figures/fig_half_life_robustness.png Graphic file (type bmp)
+<figures/fig_half_life_robustness.png>
+File: figures/fig_two_layer_persistence.png Graphic file (type bmp)
+<figures/fig_two_layer_persistence.png>
+File: figures/fig_svb_crisis_zoom.png Graphic file (type bmp)
+<figures/fig_svb_crisis_zoom.png>
 
 
 [4]
 File: figures/fig_cross_exchange_basis.png Graphic file (type bmp)
 <figures/fig_cross_exchange_basis.png>
-
-
-[5]
-
-[6]
 File: figures/fig_liquidity_roll_amihud.png Graphic file (type bmp)
 <figures/fig_liquidity_roll_amihud.png>
- (./tables/liquidity_spread_table.tex) (./tables/regression_hac.tex)
+ (./tables/liquidity_spread_table.tex) (./tables/depth_proxy_table.tex)
 
-[7] (./tables/distributional_robustness.tex)
+[5] (./tables/regression_hac.tex)
 
-[8] (./tables/cointegration_vecm_merged.tex)
-(./tables/granger_causality_fdr.tex
-Overfull \hbox (57.2394pt too wide) in paragraph at lines 4--18
-[][] 
+[6]
+File: figures/fig_volume_share.png Graphic file (type bmp)
+<figures/fig_volume_share.png>
+File: figures/fig_realized_volatility.png Graphic file (type bmp)
+<figures/fig_realized_volatility.png>
+
+
+[7]
+File: figures/fig_tail_blowout_kde.png Graphic file (type bmp)
+<figures/fig_tail_blowout_kde.png>
+ (./tables/distributional_robustness.tex)
+
+[8]
+File: figures/fig_correlation_regime_heatmap.png Graphic file (type bmp)
+<figures/fig_correlation_regime_heatmap.png>
+
+Overfull \hbox (30.65585pt too wide) in paragraph at lines 237--238
+\TU/TimesNewRoman(0)/m/n/12 Given the liquidity asymmetry documented above—Coin
+base BTC/USD is $\OT1/cmr/m/n/12 26\OMS/cmsy/m/n/12 ^^B$ \TU/TimesNewRoman(0)/m
+/n/12 deeper than Kraken BTC/USDC—
  []
 
-) (./tables/arbitrage_compact.tex)
+(./tables/cointegration_vecm_merged.tex)
+File: figures/fig_var_irf.png Graphic file (type bmp)
+<figures/fig_var_irf.png>
 
-[9] (./tables/genius_counterfactual.tex
+
+[9] (./tables/arbitrage_compact.tex)
+
+[10]
+File: figures/fig_arbitrage_after_fees.png Graphic file (type bmp)
+<figures/fig_arbitrage_after_fees.png>
+
+
+[11] (./tables/genius_counterfactual.tex
 Underfull \hbox (badness 10000) in paragraph at lines 17--17
 []|\TU/TimesNewRoman(0)/m/n/10 Full-mitigation lower
  []
 
 )
 
-[10] (./tables/depth_proxy_table.tex)
-
-[11]
-
 [12]
-Overfull \hbox (2.12881pt too wide) in paragraph at lines 210--211
-\TU/TimesNewRoman(0)/m/n/12 and \TU/lmtt/m/n/12 src/06_three_fixes.py\TU/TimesN
-ewRoman(0)/m/n/12 ), with artifact-label integrity checks in \TU/lmtt/m/n/12 sr
-c/04_tex_integrity_check.py\TU/TimesNewRoman(0)/m/n/12 .
+Overfull \hbox (4.87993pt too wide) in paragraph at lines 289--291
+\TU/TimesNewRoman(0)/m/n/12 tional signs; (ii) no-FF filters preserve rank-orde
+r conclusions; (iii) cointegration is rank-stable for BTC/USD–
  []
 
 
 
-[13
-
-] (./IAQF_Final.aux)
+[13] (./IAQF_Final.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `IAQF_Final.out' has not changed.
-(rerunfilecheck)             Checksum: 37F56E64A85AD7EC9B664916BAC57559;2903.
+(rerunfilecheck)             Checksum: AAC9CE56833B671AD54256F7F5153FF3;2462.
  ) 
 Here is how much of TeX's memory you used:
- 13047 strings out of 473832
- 252428 string characters out of 5729481
- 711340 words of memory out of 5000000
- 35894 multiletter control sequences out of 15000+600000
- 567334 words of font info for 100 fonts, out of 8000000 for 9000
+ 13144 strings out of 473832
+ 256142 string characters out of 5729481
+ 711617 words of memory out of 5000000
+ 35987 multiletter control sequences out of 15000+600000
+ 567350 words of font info for 102 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 79i,13n,93p,2424b,330s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 79i,13n,93p,1317b,359s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on IAQF_Final.pdf (13 pages).

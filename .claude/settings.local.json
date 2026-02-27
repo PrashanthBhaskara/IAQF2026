@@ -14,7 +14,28 @@
       "Bash(xelatex --version)",
       "Bash(export PATH=\"/Library/TeX/texbin:$PATH\")",
       "Bash(xelatex -interaction=nonstopmode IAQF_Final.tex)",
-      "Bash(export PATH=\"/Library/TeX/texbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:$PATH\")"
+      "Bash(export PATH=\"/Library/TeX/texbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:$PATH\")",
+      "Bash(python src/07_academic_figures.py)",
+      "Bash(/Library/TeX/texbin/xelatex --version)",
+      "Bash(/Library/TeX/texbin/xelatex -interaction=nonstopmode IAQF_Final.tex)",
+      "Bash(python3 -c \"print\\(\\(-0.08*12618 + -0.88*4312 + 0.39*12837\\) / \\(12618+4312+12837\\)\\)\")",
+      "Bash(python3 -c \"print\\(\\(-0.33*12688 + 2.37*4320 + 4.59*12952\\) / \\(12688+4320+12952\\)\\)\")",
+      "Bash(python3 -c \"print\\(571.62 / 0.61\\)\")",
+      "Bash(python3:*)",
+      "Bash(/Library/TeX/texbin/xelatex -interaction=nonstopmode IAQF_column_Final.tex)",
+      "Bash(python src/08_column_figures.py)",
+      "Bash(xelatex -interaction=nonstopmode IAQF_column_Final.tex)",
+      "Bash(python -:*)",
+      "Bash(/usr/local/texlive/2025/bin/universal-darwin/xelatex -interaction=nonstopmode IAQF_column_Final.tex)",
+      "Bash(python src/09_additional_figures.py)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''src/08_column_figures.py''\\).read\\(\\)\\); print\\(''syntax OK''\\)\")",
+      "Bash(pip3 list)",
+      "Bash(/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3 -c \"import pandas; print\\(''ok''\\)\")",
+      "Bash(pip3 show pandas)",
+      "Bash(/opt/anaconda3/bin/python3 -c \"import pandas, numpy, statsmodels, scipy; print\\(''All imports OK''\\)\")",
+      "Bash(/opt/anaconda3/bin/python3 -c \":*)",
+      "Bash(/opt/anaconda3/bin/python3 10_novel_contributions.py)",
+      "Bash(/opt/anaconda3/bin/python3 src/10_novel_contributions.py)"
     ]
   }
 }

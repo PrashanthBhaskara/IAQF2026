@@ -234,16 +234,21 @@ plt.close()
 # ============================================================
 # FIGURE 2: Cross-Exchange Basis (Spatial Arbitrage)
 # ============================================================
-fig, axes = plt.subplots(3, 1, figsize=(16, 14), sharex=True)
+xbas_zoom_start = pd.Timestamp('2023-03-09 00:00:00', tz='UTC')
+xbas_zoom_end = pd.Timestamp('2023-03-21 23:59:00', tz='UTC')
+basis_xzoom = basis.loc[(basis.index >= xbas_zoom_start) & (basis.index <= xbas_zoom_end)]
+
+fig, axes = plt.subplots(1, 3, figsize=(18, 5), sharex=True)
 
 for ax in axes:
     ax.axvspan(svb_start, svb_end, alpha=0.15, color='red', label='SVB Crisis')
     ax.axhline(0, color='black', linewidth=0.8, linestyle='--')
+    ax.set_xlim(xbas_zoom_start, xbas_zoom_end)
 
 # Panel A: BTC/USDT Binance vs Kraken
 ax = axes[0]
-if 'xbasis_btcusdt_binance_kraken' in basis.columns:
-    ax.plot(basis.index, basis['xbasis_btcusdt_binance_kraken'], linewidth=0.4,
+if 'xbasis_btcusdt_binance_kraken' in basis_xzoom.columns:
+    ax.plot(basis_xzoom.index, basis_xzoom['xbasis_btcusdt_binance_kraken'], linewidth=0.4,
             color='#e67e22', label='Binance − Kraken BTC/USDT')
 ax.set_title('Panel A: Cross-Exchange BTC/USDT — Binance vs Kraken')
 ax.set_ylabel('Basis (bps)')
@@ -251,8 +256,8 @@ ax.legend(loc='upper right', fontsize=9)
 
 # Panel B: BTC/USDT Coinbase vs Kraken
 ax = axes[1]
-if 'xbasis_btcusdt_coinbase_kraken' in basis.columns:
-    ax.plot(basis.index, basis['xbasis_btcusdt_coinbase_kraken'], linewidth=0.4,
+if 'xbasis_btcusdt_coinbase_kraken' in basis_xzoom.columns:
+    ax.plot(basis_xzoom.index, basis_xzoom['xbasis_btcusdt_coinbase_kraken'], linewidth=0.4,
             color='#1abc9c', label='Coinbase − Kraken BTC/USDT')
 ax.set_title('Panel B: Cross-Exchange BTC/USDT — Coinbase vs Kraken')
 ax.set_ylabel('Basis (bps)')
@@ -260,8 +265,8 @@ ax.legend(loc='upper right', fontsize=9)
 
 # Panel C: BTC/USD Coinbase vs Kraken (fiat-to-fiat)
 ax = axes[2]
-if 'xbasis_btcusd_coinbase_kraken' in basis.columns:
-    ax.plot(basis.index, basis['xbasis_btcusd_coinbase_kraken'], linewidth=0.4,
+if 'xbasis_btcusd_coinbase_kraken' in basis_xzoom.columns:
+    ax.plot(basis_xzoom.index, basis_xzoom['xbasis_btcusd_coinbase_kraken'], linewidth=0.4,
             color='#2c3e50', label='Coinbase − Kraken BTC/USD')
 ax.set_title('Panel C: Cross-Exchange BTC/USD — Coinbase vs Kraken (Fiat-Fiat)')
 ax.set_ylabel('Basis (bps)')
@@ -269,6 +274,7 @@ ax.legend(loc='upper right', fontsize=9)
 
 for ax in axes:
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d'))
+    plt.setp(ax.xaxis.get_majorticklabels(), rotation=30, ha='right')
 
 plt.tight_layout()
 plt.savefig(os.path.join(FIGURES_DIR, 'fig_cross_exchange_basis.png'), dpi=150)
@@ -277,20 +283,25 @@ plt.close()
 # ============================================================
 # FIGURE 3: USDT/USD and USDC/USD Peg Deviation Overlay
 # ============================================================
-fig, axes = plt.subplots(2, 1, figsize=(16, 10), sharex=True)
+peg_zoom_start = pd.Timestamp('2023-03-09 00:00:00', tz='UTC')
+peg_zoom_end = pd.Timestamp('2023-03-15 23:59:00', tz='UTC')
+prices_zoom = prices.loc[(prices.index >= peg_zoom_start) & (prices.index <= peg_zoom_end)]
+basis_zoom = basis.loc[(basis.index >= peg_zoom_start) & (basis.index <= peg_zoom_end)]
+
+fig, axes = plt.subplots(1, 2, figsize=(16, 5), sharex=True)
 
 for ax in axes:
     ax.axvspan(svb_start, svb_end, alpha=0.15, color='red', label='SVB Crisis')
-    ax.axhline(0, color='black', linewidth=0.8, linestyle='--')
+    ax.set_xlim(peg_zoom_start, peg_zoom_end)
 
 # Panel A: Direct peg prices
 ax = axes[0]
-if 'kraken_usdcusd' in prices.columns:
-    ax.plot(prices.index, prices['kraken_usdcusd'], linewidth=0.5, color='#2ecc71', label='USDC/USD (Kraken)')
-if 'kraken_usdtusd' in prices.columns:
-    ax.plot(prices.index, prices['kraken_usdtusd'], linewidth=0.5, color='#3498db', label='USDT/USD (Kraken)')
-if 'coinbase_usdtusd' in prices.columns:
-    ax.plot(prices.index, prices['coinbase_usdtusd'], linewidth=0.5, color='#e74c3c', label='USDT/USD (Coinbase)')
+if 'kraken_usdcusd' in prices_zoom.columns:
+    ax.plot(prices_zoom.index, prices_zoom['kraken_usdcusd'], linewidth=0.5, color='#2ecc71', label='USDC/USD (Kraken)')
+if 'kraken_usdtusd' in prices_zoom.columns:
+    ax.plot(prices_zoom.index, prices_zoom['kraken_usdtusd'], linewidth=0.5, color='#3498db', label='USDT/USD (Kraken)')
+if 'coinbase_usdtusd' in prices_zoom.columns:
+    ax.plot(prices_zoom.index, prices_zoom['coinbase_usdtusd'], linewidth=0.5, color='#e74c3c', label='USDT/USD (Coinbase)')
 ax.axhline(1.0, color='grey', linewidth=1.0, linestyle='-', alpha=0.5)
 ax.set_title('Panel A: Direct Stablecoin Spot Prices Against USD')
 ax.set_ylabel('Price (USD)')
@@ -299,19 +310,20 @@ ax.legend(loc='lower right', fontsize=9)
 
 # Panel B: Peg deviations in bps
 ax = axes[1]
+ax.axhline(0, color='black', linewidth=0.8, linestyle='--')
 for col, lbl, c in [
     ('usdc_peg_dev_kraken',   'USDC Peg Deviation (Kraken)', '#2ecc71'),
     ('usdt_peg_dev_kraken',   'USDT Peg Deviation (Kraken)', '#3498db'),
     ('usdt_peg_dev_coinbase', 'USDT Peg Deviation (Coinbase)', '#e74c3c'),
 ]:
-    if col in basis.columns:
-        ax.plot(basis.index, basis[col], linewidth=0.5, color=c, label=lbl, alpha=0.8)
+    if col in basis_zoom.columns:
+        ax.plot(basis_zoom.index, basis_zoom[col], linewidth=0.5, color=c, label=lbl, alpha=0.8)
 ax.set_title('Panel B: Stablecoin Peg Deviations from $1.00 (bps)')
 ax.set_ylabel('Deviation (bps)')
 ax.legend(loc='lower right', fontsize=9)
 
 for ax in axes:
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d'))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d\n%H:%M'))
 
 plt.tight_layout()
 plt.savefig(os.path.join(FIGURES_DIR, 'fig_stablecoin_peg.png'), dpi=150)
