@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import seaborn as sns
 import os
+import re
 import statsmodels.api as sm
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.api import VAR
@@ -98,6 +99,26 @@ def make_width_safe_latex(latex_text: str, add_footnotesize: bool = False) -> st
     )
     latex_text = latex_text.replace('\\end{tabular}', '\\end{tabular}%\n}', 1)
     return latex_text
+
+
+def enforce_table_H_placement(tables_dir: str = TABLES_DIR) -> int:
+    """
+    Ensure all generated LaTeX table floats use [H] placement.
+    """
+    updated_files = 0
+    for fname in os.listdir(tables_dir):
+        if not fname.endswith('.tex'):
+            continue
+        path = os.path.join(tables_dir, fname)
+        with open(path, 'r') as f:
+            tex = f.read()
+        updated = re.sub(r'\\begin\{table\*\}(?:\[[^\]]*\])*', r'\\begin{table*}[H]', tex)
+        updated = re.sub(r'\\begin\{table\}(?:\[[^\]]*\])*', r'\\begin{table}[H]', updated)
+        if updated != tex:
+            with open(path, 'w') as f:
+                f.write(updated)
+            updated_files += 1
+    return updated_files
 
 
 def gg_component_share_from_alpha(alpha_vec):
@@ -450,6 +471,39 @@ vol_cols = ['binance_btcusdt', 'binance_btcusdc', 'coinbase_btcusd', 'coinbase_b
             'kraken_btcusd', 'kraken_btcusdt', 'kraken_btcusdc']
 vols_daily = volumes[vol_cols].resample('D').sum()
 vols_pct = vols_daily.div(vols_daily.sum(axis=1), axis=0) * 100
+
+# Deterministic provenance artifact for quote-currency volume-share claims.
+quote_daily = pd.DataFrame(index=vols_daily.index)
+quote_daily['USD'] = vols_daily['coinbase_btcusd'] + vols_daily['kraken_btcusd']
+quote_daily['USDT'] = vols_daily['coinbase_btcusdt'] + vols_daily['kraken_btcusdt'] + vols_daily['binance_btcusdt']
+quote_daily['USDC'] = vols_daily['kraken_btcusdc'] + vols_daily['binance_btcusdc']
+quote_share_pct = quote_daily.div(quote_daily.sum(axis=1), axis=0) * 100.0
+
+vol_quote_rows = []
+for regime, (t0, t1) in regimes.items():
+    mask = (quote_share_pct.index >= t0.normalize()) & (quote_share_pct.index < t1.normalize())
+    sub = quote_share_pct.loc[mask]
+    if sub.empty:
+        continue
+    vol_quote_rows.append({
+        'Regime': regime,
+        'USD_share_pct': sub['USD'].mean(),
+        'USDT_share_pct': sub['USDT'].mean(),
+        'USDC_share_pct': sub['USDC'].mean(),
+    })
+pd.DataFrame(vol_quote_rows).to_csv(os.path.join(TABLES_DIR, 'volume_share_quote_regime.csv'), index=False)
+
+vol_pair_rows = []
+for regime, (t0, t1) in regimes.items():
+    mask = (vols_pct.index >= t0.normalize()) & (vols_pct.index < t1.normalize())
+    sub = vols_pct.loc[mask]
+    if sub.empty:
+        continue
+    row = {'Regime': regime}
+    for c in vol_cols:
+        row[f'{c}_share_pct'] = sub[c].mean()
+    vol_pair_rows.append(row)
+pd.DataFrame(vol_pair_rows).to_csv(os.path.join(TABLES_DIR, 'volume_share_pair_regime.csv'), index=False)
 
 fig, ax = plt.subplots(figsize=(14, 6))
 ax.stackplot(vols_pct.index,
@@ -822,6 +876,50 @@ with open(os.path.join(TABLES_DIR, 'regression_results.txt'), 'w') as f:
     f.write("\n\n" + "="*60 + "\n\n")
     f.write("=== USDT/USD Basis Regression (Kraken) ===\n\n")
     f.write(model_usdt.summary().as_text())
+
+# Deterministic manuscript table: HAC regression headline coefficients.
+def fmt_coef(x: float) -> str:
+    return f"${x:+.3f}$"
+
+def fmt_pval(x: float) -> str:
+    return "$<0.001$" if x < 0.001 else f"{x:.3f}"
+
+reg_rows = [
+    ('const', 'Constant'),
+    ('Crisis', 'Crisis'),
+    ('RealizedVol60m', 'RealizedVol (60m)'),
+    ('RangeProxy', 'Range Proxy'),
+]
+
+reg_lines = [
+    r"\begin{table}[H]",
+    r"\caption{HAC Regressions of Adjusted Residual $B_t$ on Crisis Dummy, Realized Volatility, and Range Proxy (Kraken, Newey--West 60 lags)}",
+    r"\label{tab:regression_hac}",
+    r"\footnotesize",
+    r"\centering",
+    r"\begin{tabular}{lcccc}",
+    r"\toprule",
+    r" & \multicolumn{2}{c}{USDC Channel} & \multicolumn{2}{c}{USDT Channel} \\",
+    r"\cmidrule(lr){2-3} \cmidrule(lr){4-5}",
+    r" & Coef. & $p$-value & Coef. & $p$-value \\",
+    r"\midrule",
+]
+for key, label in reg_rows:
+    reg_lines.append(
+        f"{label:<17} & {fmt_coef(float(model_usdc.params[key]))} & {fmt_pval(float(model_usdc.pvalues[key]))} & "
+        f"{fmt_coef(float(model_usdt.params[key]))} & {fmt_pval(float(model_usdt.pvalues[key]))} \\\\"
+    )
+reg_lines.extend([
+    r"\midrule",
+    f"$R^2$             & \\multicolumn{{2}}{{c}}{{{model_usdc.rsquared:.3f}}} & \\multicolumn{{2}}{{c}}{{{model_usdt.rsquared:.3f}}} \\\\",
+    f"$N$               & \\multicolumn{{2}}{{c}}{{{int(model_usdc.nobs):,}}} & \\multicolumn{{2}}{{c}}{{{int(model_usdt.nobs):,}}} \\\\",
+    r"\bottomrule",
+    r"\multicolumn{5}{l}{\footnotesize OLS with HAC standard errors (Newey--West, 60 lags). Dependent variable: $B_t$ (bps).}",
+    r"\end{tabular}",
+    r"\end{table}",
+])
+with open(os.path.join(TABLES_DIR, 'regression_hac.tex'), 'w') as f:
+    f.write("\n".join(reg_lines) + "\n")
 
 # ============================================================
 # TABLE 7: Johansen Cointegration (Primary Channels, No-FF)
@@ -1230,6 +1328,46 @@ vol_cols_btc = ['kraken_btcusd', 'kraken_btcusdt', 'kraken_btcusdc', 'binance_bt
 rv = returns[vol_cols_btc].rolling(60).std() * 10000 * np.sqrt(60)  # annualize to hourly vol in bps
 rv['Regime'] = rv.index.map(assign_regime)
 
+# Deterministic provenance artifacts for realized-volatility headline values.
+# Use per-series simple-return RV (not globally synchronized returns) so the
+# stored headline means match manuscript prose and FF-sensitivity definitions.
+rv_provenance = prices[vol_cols_btc].pct_change(fill_method=None).rolling(60).std() * 10000 * np.sqrt(60)
+
+rv_regime_rows = []
+for regime, (t0, t1) in regimes.items():
+    mask = (rv_provenance.index >= t0) & (rv_provenance.index < t1)
+    for col in vol_cols_btc:
+        vals = rv_provenance.loc[mask, col].dropna()
+        if vals.empty:
+            continue
+        rv_regime_rows.append({
+            'Regime': regime,
+            'Series': col,
+            'mean_bps_per_hr': vals.mean(),
+            'std_bps_per_hr': vals.std(),
+            'n_obs': len(vals),
+        })
+pd.DataFrame(rv_regime_rows).to_csv(os.path.join(TABLES_DIR, 'realized_vol_regime_means.csv'), index=False)
+
+rv_crisis = rv_provenance.loc[
+    (rv_provenance.index >= svb_start) & (rv_provenance.index < svb_end),
+    ['kraken_btcusd', 'kraken_btcusdt', 'kraken_btcusdc']
+].dropna(how='all')
+rv_headline_rows = []
+for col in ['kraken_btcusd', 'kraken_btcusdt', 'kraken_btcusdc']:
+    vals = rv_crisis[col].dropna()
+    if vals.empty:
+        continue
+    peak_ts = vals.idxmax()
+    rv_headline_rows.append({
+        'Series': col,
+        'crisis_mean_bps_per_hr': vals.mean(),
+        'crisis_peak_bps_per_hr': vals.max(),
+        'crisis_peak_timestamp_utc': peak_ts.isoformat(),
+        'n_crisis_obs': len(vals),
+    })
+pd.DataFrame(rv_headline_rows).to_csv(os.path.join(TABLES_DIR, 'realized_vol_headline.csv'), index=False)
+
 fig, ax = plt.subplots(figsize=(14, 6))
 ax.axvspan(svb_start, svb_end, alpha=0.15, color='red', label='SVB Crisis')
 nice_names = {'kraken_btcusd': 'Kraken USD', 'kraken_btcusdt': 'Kraken USDT',
@@ -1297,6 +1435,53 @@ for channel_obj in arb_channel_data.values():
         raise AssertionError("Conservative arbitrage net exceeded fee-only upper bound.")
 
 df_arb.to_csv(os.path.join(TABLES_DIR, 'arbitrage_summary.csv'), index=False)
+
+# Deterministic manuscript table: compact crisis-focused arbitrage rows.
+compact_specs = [
+    ('USDC/USD (Kraken, 3-leg triangular)', 'Crisis'),
+    ('USDC/USD (Kraken, 3-leg triangular)', 'Post-SVB'),
+    ('USDT/USD (Kraken, 3-leg triangular)', 'Crisis'),
+    ('Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)', 'Crisis'),
+    ('Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)', 'Crisis'),
+]
+compact_channel_label = {
+    'USDC/USD (Kraken, 3-leg triangular)': 'USDC/USD (Kraken)',
+    'USDT/USD (Kraken, 3-leg triangular)': 'USDT/USD (Kraken)',
+    'Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)': 'Cross BTC/USD (CB--KR)',
+    'Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)': 'Cross BTC/USDT (BN--KR)',
+}
+compact_cost_label = {
+    'fee_only_upper': 'Fee-only',
+    'fee_plus_slippage_conservative': 'Fee+slip',
+}
+compact_rows = []
+for channel, reg in compact_specs:
+    sub = df_arb[(df_arb['channel'] == channel) & (df_arb['regime'] == reg)]
+    if sub.empty:
+        continue
+    for cost_variant in ['fee_only_upper', 'fee_plus_slippage_conservative']:
+        row = sub[sub['cost_variant'] == cost_variant]
+        if row.empty:
+            continue
+        r = row.iloc[0]
+        compact_rows.append({
+            'Channel': compact_channel_label.get(channel, channel),
+            'Regime': reg,
+            'Cost Variant': compact_cost_label[cost_variant],
+            '%Profitable': float(r['pct_profitable']),
+            'AvgNetUncond (bps)': float(r['avg_net_uncond_bps']),
+        })
+
+df_arb_compact = pd.DataFrame(compact_rows)
+with open(os.path.join(TABLES_DIR, 'arbitrage_compact.tex'), 'w') as f:
+    f.write(df_arb_compact.to_latex(
+        index=False,
+        caption='Arbitrage Profitability by Channel and Regime (5 bps/leg; 3-leg intra-exchange, 2-leg cross-exchange)',
+        label='tab:arb',
+        column_format='llcrr',
+        float_format='%.2f',
+        escape=True,
+    ))
 
 channel_short_map = {
     'USDC/USD (Kraken, 3-leg triangular)': 'USDC/USD (Kraken, intra)',
@@ -1394,5 +1579,8 @@ if not df_spot.empty:
     print(df_spot.to_string(index=False))
 else:
     print("\nArbitrage spot-checks unavailable (empty sample).")
+
+num_h_updates = enforce_table_H_placement(TABLES_DIR)
+print(f"Enforced [H] placement in {num_h_updates} table files.")
 
 print("All analysis and figures completed successfully.")

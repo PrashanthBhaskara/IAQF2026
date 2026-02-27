@@ -1,0 +1,4 @@
+metric,timestamp_utc,value
+crisis_trough,2023-03-11T07:15:00+00:00,0.874
+first_print_ge_0.999_after_trough,2023-03-13T14:02:00+00:00,0.999
+first_daily_min_ge_0.999_day,2023-03-16T00:00:00+00:00,0.999

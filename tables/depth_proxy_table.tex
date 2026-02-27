@@ -1,0 +1,18 @@
+\begin{table}[H]
+\caption{Daily traded dollar volume depth proxy by pair and regime (median, USD millions/day). Because historical L2 order-book snapshots are unavailable in the candle APIs used here, dollar volume and Amihud ILLIQ are used as complementary depth proxies.}
+\label{tab:depth_proxy}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrr}
+\toprule
+Pair & Median DollarVol Pre-SVB ($MM/day$) & Median DollarVol Crisis ($MM/day$) & Median DollarVol Post-SVB ($MM/day$) \\
+\midrule
+Kraken BTC/USD & 59.50 & 160.36 & 203.77 \\
+Kraken BTC/USDT & 5.55 & 13.84 & 17.37 \\
+Kraken BTC/USDC & 2.56 & 15.65 & 5.52 \\
+Binance BTC/USDT & 52.44 & 73.92 & 71.46 \\
+Coinbase BTC/USD & 239.07 & 407.27 & 664.46 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
