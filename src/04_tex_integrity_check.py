@@ -52,6 +52,10 @@ TABLE_ARTIFACT_MAP = {
         'tables/hac_headline_metrics.csv',
         'tables/hac_headline_metrics.tex',
     ],
+    'tab:dist_robust': [
+        'tables/distributional_robustness.csv',
+        'tables/distributional_robustness.tex',
+    ],
 }
 
 

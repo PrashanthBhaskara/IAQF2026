@@ -481,7 +481,7 @@ quote_share_pct = quote_daily.div(quote_daily.sum(axis=1), axis=0) * 100.0
 
 vol_quote_rows = []
 for regime, (t0, t1) in regimes.items():
-    mask = (quote_share_pct.index >= t0.normalize()) & (quote_share_pct.index < t1.normalize())
+    mask = (quote_share_pct.index >= t0.normalize()) & (quote_share_pct.index <= t1.normalize())
     sub = quote_share_pct.loc[mask]
     if sub.empty:
         continue
@@ -495,7 +495,7 @@ pd.DataFrame(vol_quote_rows).to_csv(os.path.join(TABLES_DIR, 'volume_share_quote
 
 vol_pair_rows = []
 for regime, (t0, t1) in regimes.items():
-    mask = (vols_pct.index >= t0.normalize()) & (vols_pct.index < t1.normalize())
+    mask = (vols_pct.index >= t0.normalize()) & (vols_pct.index <= t1.normalize())
     sub = vols_pct.loc[mask]
     if sub.empty:
         continue
