@@ -10,7 +10,11 @@
       "Bash(python src/06_three_fixes.py)",
       "Bash(python src/03_analysis_and_figures.py)",
       "Bash(ls -lh \"/Users/dhruvkohli/Desktop/Github Repos/IAQF2026/tables/\"*csv)",
-      "Bash(xargs -I {} basename {} .tex)"
+      "Bash(xargs -I {} basename {} .tex)",
+      "Bash(xelatex --version)",
+      "Bash(export PATH=\"/Library/TeX/texbin:$PATH\")",
+      "Bash(xelatex -interaction=nonstopmode IAQF_Final.tex)",
+      "Bash(export PATH=\"/Library/TeX/texbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:$PATH\")"
     ]
   }
 }
