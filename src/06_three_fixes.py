@@ -494,12 +494,11 @@ print(f"  D_t crisis:     mean={cri_d['mean']:.2f} bps, std={cri_d['std']:.2f}")
 print(f"  B_t pre-crisis: mean={pre_b['mean']:.2f} bps")
 print(f"  B_t crisis:     mean={cri_b['mean']:.2f} bps")
 
-# Counterfactual: under GENIUS Act reserve composition rules
-# (T-bills, FDIC-insured deposits at diversified banks, central bank reserves,
-#  Treasury-backed repos) the $3.3B at SVB would instead be in T-bills or Fed
-# reserves — instruments that cannot "fail" in the same way as bank deposits.
-# Therefore: locked reserves = $0, reserve confidence gap = 0 bps.
-# Counterfactual D_t ≈ pre-crisis level (pure BTC price noise, no peg shock).
+# Illustrative scenario analysis (not a structural causal estimate):
+# under GENIUS-style reserve composition rules (T-bills, central bank reserves,
+# Treasury-backed repos), concentrated uninsured bank-deposit exposure would
+# likely be reduced materially. We summarize this with a simple lower-risk
+# benchmark in which lock-up risk is set to zero.
 
 genius_locked_bn         = 0.0   # no bank concentration → no lock-up
 genius_locked_frac       = 0.0
@@ -517,19 +516,19 @@ print(f"  Reduction in crisis D_t: {Dt_reduction_abs:.1f} bps ({Dt_reduction_pct
 cf_rows = [
     {'Metric': r'Circle reserve exposure at SVB',
      'Observed':        r'\$3.3B locked (8.3\%)',
-     'Counterfactual':  r'\$0 locked (0\%)',
+     'Counterfactual':  r'Illustrative lower-risk case: \$0 lock-up',
      'Provision':       r'Reserve composition: T-bills/CB reserves only'},
     {'Metric': r'$D_t$ crisis mean (USDC, Kraken)',
      'Observed':        f'{cri_d["mean"]:.1f} bps',
-     'Counterfactual':  f'$\\approx${genius_Dt_mean_cf:.1f}$ bps (pre-crisis level)',
-     'Provision':       r'Reserve composition $\Rightarrow$ no de-peg'},
+     'Counterfactual':  f'$\\approx {genius_Dt_mean_cf:.1f}$ bps (pre-crisis level)',
+     'Provision':       r'Reserve composition $\Rightarrow$ lower de-peg risk'},
     {'Metric': r'$D_t$ crisis std (USDC, Kraken)',
      'Observed':        f'{cri_d["std"]:.1f} bps',
-     'Counterfactual':  f'$\\approx${genius_Dt_std_cf:.1f}$ bps',
-     'Provision':       r'Transparency (no information-driven panic)'},
+     'Counterfactual':  f'$\\approx {genius_Dt_std_cf:.1f}$ bps',
+     'Provision':       r'Transparency $\Rightarrow$ lower panic risk'},
     {'Metric': r'$B_t$ P99 crisis (USDC, Kraken)',
      'Observed':        f'{cri_b["p99"]:.1f} bps',
-     'Counterfactual':  f'$\\approx${pre_b["p99"]:.1f}$ bps (pre-crisis P99)',
+     'Counterfactual':  f'$\\approx {pre_b["p99"]:.1f}$ bps (pre-crisis P99)',
      'Provision':       r'Bankruptcy super-priority + redemption guarantee'},
 ]
 
@@ -539,12 +538,11 @@ df_cf.columns = ['Metric', 'Observed (SVB/No GENIUS Act)',
 
 cf_latex = df_cf.to_latex(
     index=False,
-    caption=(r'GENIUS Act quantitative counterfactual. '
-             r'Under reserve composition rules (no bank deposits; exclusively '
-             r'Treasury bills, central bank reserves, and Treasury-backed repos), '
-             r'Circle\textquotesingle s \$3.3B held at SVB would have been in instruments '
-             r'immune to bank failure, eliminating the reserve lock-up that caused the '
-             r'USDC de-peg. Counterfactual $D_t$ is bounded by the observed pre-crisis level.'),
+    caption=(r'GENIUS Act illustrative scenario analysis (not a structural causal estimate). '
+             r'Under reserve composition rules emphasizing Treasury bills, central bank reserves, '
+             r'and Treasury-backed repos, concentrated bank lock-up risk is plausibly lower. '
+             r'The counterfactual columns benchmark outcomes to pre-crisis levels to quantify '
+             r'potential directional effects under that lower-risk reserve configuration.'),
     label='tab:genius_cf',
     column_format='p{3.5cm}p{3.2cm}p{3.4cm}p{4.5cm}',
     escape=False,

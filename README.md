@@ -27,4 +27,11 @@ To reproduce all data fetching, processing, models, and figures end-to-end, simp
 ```bash
 python run_all.py
 ```
+This executes:
+- `src/01_fetch_data.py`
+- `src/02_build_master_data.py`
+- `src/03_analysis_and_figures.py`
+- `src/06_three_fixes.py` (liquidity/Hasbrouck/counterfactual tables used in the paper)
+- `src/04_tex_integrity_check.py`
+
 *(Note: Data fetching respects exchange API rate limits and may take some time if `data_raw/` is empty).*

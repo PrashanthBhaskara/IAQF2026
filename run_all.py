@@ -11,6 +11,7 @@ def main():
         "src/01_fetch_data.py",
         "src/02_build_master_data.py",
         "src/03_analysis_and_figures.py",
+        "src/06_three_fixes.py",
         "src/04_tex_integrity_check.py"
     ]
 
