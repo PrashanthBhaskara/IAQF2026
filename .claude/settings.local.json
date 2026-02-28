@@ -36,7 +36,10 @@
       "Bash(/opt/anaconda3/bin/python3 -c \":*)",
       "Bash(/opt/anaconda3/bin/python3 10_novel_contributions.py)",
       "Bash(/opt/anaconda3/bin/python3 src/10_novel_contributions.py)",
-      "Bash(open IAQF_column_Final.pdf)"
+      "Bash(open IAQF_column_Final.pdf)",
+      "Bash(python create_notebook.py)",
+      "Bash(python -c \"import json; nb = json.load\\(open\\(''IAQF_Code_Addendum.ipynb''\\)\\); print\\(f''Valid notebook: {len\\(nb[\"\"cells\"\"]\\)} cells''\\); code_cells = [c for c in nb[''cells''] if c[''cell_type''] == ''code'']; md_cells = [c for c in nb[''cells''] if c[''cell_type''] == ''markdown'']; print\\(f''Code cells: {len\\(code_cells\\)}, Markdown cells: {len\\(md_cells\\)}''\\)\")",
+      "Bash(jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=600 IAQF_Code_Addendum.ipynb --output IAQF_Code_Addendum_executed.ipynb)"
     ]
   }
 }
