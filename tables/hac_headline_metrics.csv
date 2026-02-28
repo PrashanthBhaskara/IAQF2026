@@ -1,7 +1,6 @@
-Metric,Mean (bps),HAC SE (bps),95% CI low,95% CI high,N
-"USDC dispersion $D_t$ (Kraken, crisis)",319.974,37.908,245.674,394.273,4311
-"USDC adjusted residual $B_t$ (Kraken, crisis)",5.271,0.873,3.559,6.983,4283
-"USDT premium to USD (Kraken, crisis)",58.114,5.467,47.399,68.83,4320
-"USDT premium to USD (Coinbase, crisis)",59.68,5.405,49.087,70.273,4320
-"BTC/USDT cross-exchange basis (Binance-Kraken, calm)",0.157,0.066,0.028,0.286,25456
-"BTC/USD cross-exchange basis (Coinbase-Kraken, full)",2.185,0.235,1.725,2.645,29961
+Metric,Mean (bps),HAC SE,95% CI,N
+"USDC D_t (Kraken, crisis)",319.974,37.908,"[245.674, 394.273]",4311
+"USDC B_t (Kraken, crisis)",5.271,0.873,"[3.559, 6.983]",4283
+"USDT premium (Kraken, crisis)",58.114,5.467,"[47.399, 68.830]",4320
+"USDT premium (Coinbase, crisis)",59.68,5.405,"[49.087, 70.273]",4320
+"BTC/USDT basis (BN-KR, calm)",0.157,0.066,"[0.028, 0.286]",25456

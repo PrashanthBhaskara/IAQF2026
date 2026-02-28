@@ -1,25 +1,25 @@
-channel,regime,cost_variant,cost_variant_label,n_legs,fee_bps_per_leg,fee_component_bps,mean_abs_bps,pct_profitable,avg_net_cond_bps,avg_net_uncond_bps,n_minutes,execution_assumption
-"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Crisis,fee_only_upper,Fee-only upper bound,2,5.0,10.0,4.741030776102751,11.319444444444445,6.358598268287982,0.7197579984242646,4320,cross_exchange_prefunded
-"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Crisis,fee_plus_slippage_conservative,Fee + slippage conservative bound,2,5.0,10.0,4.741030776102751,2.2916666666666665,6.370549050593823,0.14599174907610843,4320,cross_exchange_prefunded
-"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Post-SVB,fee_only_upper,Fee-only upper bound,2,5.0,10.0,5.982175204231891,19.363804817788758,7.379427985944771,1.4289380318676252,12952,cross_exchange_prefunded
-"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Post-SVB,fee_plus_slippage_conservative,Fee + slippage conservative bound,2,5.0,10.0,5.982175204231891,6.6553428042001235,4.67196859569636,0.3109355257481673,12952,cross_exchange_prefunded
-"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Pre-SVB,fee_only_upper,Fee-only upper bound,2,5.0,10.0,1.7572186723127838,0.18915510718789408,1.6139206569313795,0.003052813348546115,12688,cross_exchange_prefunded
-"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Pre-SVB,fee_plus_slippage_conservative,Fee + slippage conservative bound,2,5.0,10.0,1.7572186723127838,0.0,0.0,0.0,12688,cross_exchange_prefunded
-"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Crisis,fee_only_upper,Fee-only upper bound,2,5.0,10.0,4.838833948352572,11.85064935064935,4.122945061956564,0.488595762212385,4312,cross_exchange_prefunded
-"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Crisis,fee_plus_slippage_conservative,Fee + slippage conservative bound,2,5.0,10.0,4.838833948352572,1.8089053803339517,2.7518327473123123,0.04977805062392403,4312,cross_exchange_prefunded
-"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Post-SVB,fee_only_upper,Fee-only upper bound,2,5.0,10.0,5.118586757132954,12.57303108202851,4.255746540481813,0.5350763353071315,12837,cross_exchange_prefunded
-"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Post-SVB,fee_plus_slippage_conservative,Fee + slippage conservative bound,2,5.0,10.0,5.118586757132954,1.86959569992989,3.3429890379367677,0.06250037930239341,12837,cross_exchange_prefunded
-"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Pre-SVB,fee_only_upper,Fee-only upper bound,2,5.0,10.0,3.126682862775771,4.5411317165953395,3.902581694708459,0.17722137510444974,12618,cross_exchange_prefunded
-"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Pre-SVB,fee_plus_slippage_conservative,Fee + slippage conservative bound,2,5.0,10.0,3.126682862775771,0.9827230939927089,2.89899884340375,0.028489131128710175,12618,cross_exchange_prefunded
-"USDC/USD (Kraken, 3-leg triangular)",Crisis,fee_only_upper,Fee-only upper bound,3,5.0,15.0,13.373970840680585,29.16180247490077,16.576481702549625,4.834000851385591,4283,intra_exchange_triangular
-"USDC/USD (Kraken, 3-leg triangular)",Crisis,fee_plus_slippage_conservative,Fee + slippage conservative bound,3,5.0,15.0,13.373970840680585,6.724258697174877,9.55713279735491,0.6426463333266902,4283,intra_exchange_triangular
-"USDC/USD (Kraken, 3-leg triangular)",Post-SVB,fee_only_upper,Fee-only upper bound,3,5.0,15.0,6.678833578071776,9.380787503019567,5.984588690047012,0.5614015479430525,12419,intra_exchange_triangular
-"USDC/USD (Kraken, 3-leg triangular)",Post-SVB,fee_plus_slippage_conservative,Fee + slippage conservative bound,3,5.0,15.0,6.678833578071776,1.7795313632337546,4.2207692683415,0.07510991289986887,12419,intra_exchange_triangular
-"USDC/USD (Kraken, 3-leg triangular)",Pre-SVB,fee_only_upper,Fee-only upper bound,3,5.0,15.0,3.5264741072578576,1.500401893364294,4.107566243484594,0.06163000168843546,11197,intra_exchange_triangular
-"USDC/USD (Kraken, 3-leg triangular)",Pre-SVB,fee_plus_slippage_conservative,Fee + slippage conservative bound,3,5.0,15.0,3.5264741072578576,0.20541216397249262,3.0369635845769323,0.006238292618136061,11197,intra_exchange_triangular
-"USDT/USD (Kraken, 3-leg triangular)",Crisis,fee_only_upper,Fee-only upper bound,3,5.0,15.0,4.937689671492467,3.7569573283859,3.794435763032437,0.14255533247014257,4312,intra_exchange_triangular
-"USDT/USD (Kraken, 3-leg triangular)",Crisis,fee_plus_slippage_conservative,Fee + slippage conservative bound,3,5.0,15.0,4.937689671492467,0.3710575139146568,2.5129298438169254,0.00932441500488655,4312,intra_exchange_triangular
-"USDT/USD (Kraken, 3-leg triangular)",Post-SVB,fee_only_upper,Fee-only upper bound,3,5.0,15.0,4.922885336096666,3.435382098621173,4.406633072649076,0.1513846837297065,12837,intra_exchange_triangular
-"USDT/USD (Kraken, 3-leg triangular)",Post-SVB,fee_plus_slippage_conservative,Fee + slippage conservative bound,3,5.0,15.0,4.922885336096666,0.3972890862351017,2.6954573744304358,0.01070875797273134,12837,intra_exchange_triangular
-"USDT/USD (Kraken, 3-leg triangular)",Pre-SVB,fee_only_upper,Fee-only upper bound,3,5.0,15.0,3.0210215761925876,1.0699001426533523,3.8964407181314207,0.04168802480169138,12618,intra_exchange_triangular
-"USDT/USD (Kraken, 3-leg triangular)",Pre-SVB,fee_plus_slippage_conservative,Fee + slippage conservative bound,3,5.0,15.0,3.0210215761925876,0.1902044698050404,3.4136940042386796,0.006492998581528632,12618,intra_exchange_triangular
+channel,regime,cost_variant,mean_abs_bps,pct_profitable,avg_net_uncond_bps
+"USDC/USD (Kraken, 3-leg triangular)",Pre-SVB,fee_only_upper,3.5264741072578576,1.500401893364294,0.06163000168843546
+"USDC/USD (Kraken, 3-leg triangular)",Pre-SVB,fee_plus_slippage_conservative,3.5264741072578576,0.20541216397249262,0.006238292618136061
+"USDC/USD (Kraken, 3-leg triangular)",Crisis,fee_only_upper,13.373970840680585,29.16180247490077,4.834000851385591
+"USDC/USD (Kraken, 3-leg triangular)",Crisis,fee_plus_slippage_conservative,13.373970840680585,6.724258697174877,0.6426463333266902
+"USDC/USD (Kraken, 3-leg triangular)",Post-SVB,fee_only_upper,6.678833578071776,9.380787503019567,0.5614015479430525
+"USDC/USD (Kraken, 3-leg triangular)",Post-SVB,fee_plus_slippage_conservative,6.678833578071776,1.7795313632337546,0.07510991289986887
+"USDT/USD (Kraken, 3-leg triangular)",Pre-SVB,fee_only_upper,3.0210215761925876,1.0699001426533523,0.04168802480169138
+"USDT/USD (Kraken, 3-leg triangular)",Pre-SVB,fee_plus_slippage_conservative,3.0210215761925876,0.1902044698050404,0.006492998581528632
+"USDT/USD (Kraken, 3-leg triangular)",Crisis,fee_only_upper,4.937689671492467,3.7569573283859,0.14255533247014257
+"USDT/USD (Kraken, 3-leg triangular)",Crisis,fee_plus_slippage_conservative,4.937689671492467,0.3710575139146568,0.00932441500488655
+"USDT/USD (Kraken, 3-leg triangular)",Post-SVB,fee_only_upper,4.922885336096666,3.435382098621173,0.1513846837297065
+"USDT/USD (Kraken, 3-leg triangular)",Post-SVB,fee_plus_slippage_conservative,4.922885336096666,0.3972890862351017,0.01070875797273134
+"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Pre-SVB,fee_only_upper,3.126682862775771,4.5411317165953395,0.17722137510444974
+"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Pre-SVB,fee_plus_slippage_conservative,3.126682862775771,0.9827230939927089,0.028489131128710175
+"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Crisis,fee_only_upper,4.838833948352572,11.85064935064935,0.488595762212385
+"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Crisis,fee_plus_slippage_conservative,4.838833948352572,1.8089053803339517,0.04977805062392403
+"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Post-SVB,fee_only_upper,5.118586757132954,12.57303108202851,0.5350763353071315
+"Cross BTC/USDT (Binance-Kraken, 2-leg pre-funded)",Post-SVB,fee_plus_slippage_conservative,5.118586757132954,1.86959569992989,0.06250037930239341
+"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Pre-SVB,fee_only_upper,1.7572186723127838,0.18915510718789408,0.003052813348546115
+"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Pre-SVB,fee_plus_slippage_conservative,1.7572186723127838,0.0,0.0
+"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Crisis,fee_only_upper,4.741030776102751,11.319444444444445,0.7197579984242646
+"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Crisis,fee_plus_slippage_conservative,4.741030776102751,2.2916666666666665,0.14599174907610843
+"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Post-SVB,fee_only_upper,5.982175204231891,19.363804817788758,1.4289380318676252
+"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",Post-SVB,fee_plus_slippage_conservative,5.982175204231891,6.6553428042001235,0.3109355257481673
