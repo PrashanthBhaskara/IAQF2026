@@ -1,5 +1,5 @@
 """
-08_column_figures.py
+05_column_figures.py
 ====================
 Generate single-column-optimised figures for IAQF_column_Final.tex.
 
@@ -21,7 +21,7 @@ Output: figures_col/   (referenced by IAQF_column_Final.tex)
 
 Run from the project root:
     cd /path/to/IAQF2026
-    python src/08_column_figures.py
+    python src/05_column_figures.py
 """
 
 import os

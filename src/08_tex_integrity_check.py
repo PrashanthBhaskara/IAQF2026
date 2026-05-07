@@ -4,7 +4,7 @@ import sys
 from collections import Counter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MAIN_TEX = os.path.join(ROOT, 'IAQF_Final.tex')
+MAIN_TEX = os.path.join(ROOT, 'IAQF_column_Final.tex')
 
 INCLUDE_PATTERN = re.compile(r'\\(?:input|include)\{([^}]+)\}')
 GRAPHICS_PATTERN = re.compile(r'\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}')
@@ -13,9 +13,8 @@ REF_PATTERN = re.compile(r'\\(?:ref|eqref|autoref|cref|Cref)\{([^}]+)\}')
 
 # Labels with generated artifacts we expect to exist alongside the paper.
 TABLE_ARTIFACT_MAP = {
-    'tab:ou_stats': ['tables/ou_basis_stats.csv', 'tables/ou_basis_stats.tex'],
-    'tab:granger': ['tables/granger_causality.csv', 'tables/granger_causality.tex'],
-    'tab:arb': ['tables/arbitrage_compact.tex'],
+    'tab:arb': ['tables/arbitrage_summary.csv', 'tables/arbitrage_compact.tex'],
+    'tab:contagion': ['tables/contagion_intensity.csv', 'tables/contagion_intensity.tex'],
     'tab:regression_hac': ['tables/regression_hac.tex', 'tables/regression_results.txt'],
     'tab:dispersion_vs_adjusted': [
         'tables/dispersion_adjusted_stats.csv',
@@ -23,18 +22,11 @@ TABLE_ARTIFACT_MAP = {
     ],
     'tab:half_life_robustness': [
         'tables/half_life_robustness.csv',
-        'tables/half_life_robustness.tex',
-    ],
-    'tab:range_vol_corr': [
-        'tables/range_vol_corr.csv',
-        'tables/range_vol_corr.tex',
     ],
     'tab:coint_vecm': [
+        'tables/cointegration_johansen.csv',
+        'tables/price_discovery_metrics.csv',
         'tables/cointegration_vecm_merged.tex',
-    ],
-    'tab:granger_fdr': [
-        'tables/granger_causality_fdr.csv',
-        'tables/granger_causality_fdr.tex',
     ],
     'tab:data_coverage': [
         'tables/data_coverage_core.csv',
@@ -46,15 +38,17 @@ TABLE_ARTIFACT_MAP = {
     ],
     'tab:ff_sensitivity': [
         'tables/ff_sensitivity_core.csv',
-        'tables/ff_sensitivity_core.tex',
     ],
     'tab:hac_headline': [
         'tables/hac_headline_metrics.csv',
-        'tables/hac_headline_metrics.tex',
     ],
     'tab:dist_robust': [
         'tables/distributional_robustness.csv',
         'tables/distributional_robustness.tex',
+    ],
+    'tab:genius_cf': [
+        'tables/genius_counterfactual.csv',
+        'tables/genius_counterfactual.tex',
     ],
 }
 

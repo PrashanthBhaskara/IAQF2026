@@ -4,14 +4,13 @@ Six targeted improvements to bring the IAQF 2026 paper to 90+ quality.
 Fix 1: Roll (1984) effective spread + Amihud (2002) ILLIQ
   - Directly answers competition Q3: "How do order book depth, spread, and
     volatility vary between BTC quoted in USD versus stablecoins?"
-  - fig_liquidity_roll_amihud.png
   - tables/liquidity_spread_table.tex
   - tables/depth_proxy_table.tex (daily dollar-volume depth proxy)
 
 Fix 2: Hasbrouck (1995) Information Shares
   - Replaces informal |alpha| comparison with literature-standard IS bounds
   - Remains valid even when GG component shares fall outside [0,1]
-  - tables/hasbrouck_is.tex
+  - tables/hasbrouck_is.csv
   - (also updates cointegration_vecm_merged.tex with IS columns)
 
 Fix 3: GENIUS Act counterfactual quantification
@@ -24,7 +23,7 @@ Fix 4: Data quality transparency table
 
 Fix 5: HAC uncertainty intervals for headline means
   - Newey-West 95% CIs for key paper claims
-  - tables/hac_headline_metrics.tex
+  - tables/hac_headline_metrics.csv
 
 Fix 6: Distributional robustness
   - Chow structural break test at SVB onset
@@ -37,18 +36,11 @@ import os
 import re
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 import statsmodels.api as sm
 from statsmodels.tsa.vector_ar.vecm import VECM, coint_johansen, select_order
 
-plt.style.use('seaborn-v0_8-whitegrid')
-plt.rcParams.update({'font.size': 10, 'axes.titlesize': 11, 'axes.labelsize': 10})
-
 DATA_PROCESSED = 'data_processed'
-FIGURES_DIR    = 'figures'
 TABLES_DIR     = 'tables'
-os.makedirs(FIGURES_DIR, exist_ok=True)
 os.makedirs(TABLES_DIR,  exist_ok=True)
 
 # ── Load data ──────────────────────────────────────────────────────────────
@@ -133,24 +125,6 @@ def enforce_table_H_placement(tables_dir: str = TABLES_DIR) -> int:
                 f.write(updated)
             updated_files += 1
     return updated_files
-
-
-def convert_to_tabularx(latex_text: str, colspec: str) -> str:
-    """
-    Replace the first tabular environment emitted by pandas with tabularx.
-    """
-    replacement = (
-        '\\setlength{\\tabcolsep}{4pt}\n'
-        f'\\begin{{tabularx}}{{\\textwidth}}{{{colspec}}}'
-    )
-    latex_text = re.sub(
-        r'\\begin\{tabular\}\{[^}]*\}',
-        lambda _: replacement,
-        latex_text,
-        count=1,
-    )
-    latex_text = latex_text.replace(r'\end{tabular}', r'\end{tabularx}', 1)
-    return latex_text
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -259,40 +233,6 @@ def regime_stats(daily_dict):
 
 df_roll   = regime_stats(roll_series)
 df_amihud = regime_stats(amihud_series)
-
-# ── Figure: Roll Spread + Amihud (replaces fig_liquidity_regime.png) ───────
-fig, axes = plt.subplots(1, 2, figsize=(13, 5))
-
-# pivot for grouped bar chart
-def grouped_bar(ax, df, ylabel, title):
-    pivot = df.pivot(index='Pair', columns='Regime', values='mean')[REGIME_ORDER]
-    pivot = pivot.reindex(PAIR_ORDER)
-    x     = np.arange(len(pivot))
-    w     = 0.25
-    for i, reg in enumerate(REGIME_ORDER):
-        bars = ax.bar(x + (i - 1) * w, pivot[reg], w,
-                      label=reg, color=REGIME_COLORS[reg], alpha=0.85,
-                      edgecolor='white', linewidth=0.5)
-    ax.set_xticks(x)
-    short_names = ['Kraken\nBTC/USD', 'Kraken\nBTC/USDT', 'Kraken\nBTC/USDC',
-                   'Binance\nBTC/USDT', 'Coinbase\nBTC/USD']
-    ax.set_xticklabels(short_names, fontsize=8.5)
-    ax.set_ylabel(ylabel, fontsize=10)
-    ax.set_title(title, fontsize=11)
-    ax.legend(fontsize=8)
-    ax.grid(axis='y', linewidth=0.5, alpha=0.6)
-
-grouped_bar(axes[0], df_roll,
-            'Roll Effective Spread (bps)',
-            'Panel A: Roll (1984) Effective Spread by Pair and Regime')
-grouped_bar(axes[1], df_amihud,
-            'Amihud ILLIQ (x10^-6)',
-            'Panel B: Amihud (2002) Illiquidity Ratio by Pair and Regime')
-
-plt.tight_layout()
-plt.savefig(os.path.join(FIGURES_DIR, 'fig_liquidity_roll_amihud.png'), dpi=150)
-plt.close()
-print("Saved fig_liquidity_roll_amihud.png")
 
 # ── Table: compact Roll + Amihud summary ───────────────────────────────────
 roll_pivot   = df_roll.pivot(index='Pair', columns='Regime', values='mean')[REGIME_ORDER].reindex(PAIR_ORDER)
@@ -596,55 +536,7 @@ df_ff = df_ff.round({
 })
 df_ff.to_csv(os.path.join(TABLES_DIR, 'ff_sensitivity_core.csv'), index=False)
 
-# Compact display labels to prevent wasteful one-word wraps in manuscript Table 2.
-df_ff_tex = df_ff.copy()
-df_ff_tex['Metric'] = df_ff_tex['Metric'].replace({
-    'USDC dispersion D_t (Kraken, crisis)': r'USDC $D_t$ (Kraken, crisis)',
-    'USDC adjusted residual B_t (Kraken, crisis)': r'USDC $B_t$ (Kraken, crisis)',
-    'USDT premium to USD (Kraken, crisis)': 'USDT premium (Kraken, crisis)',
-    'USDT premium to USD (Coinbase, crisis)': 'USDT premium (Coinbase, crisis)',
-    'Cross-exchange BTC/USDT basis (Binance-Kraken, calm)': 'BTC/USDT basis (BN-KR, calm)',
-    'USDC crisis arbitrage (Kraken, 3-leg)': 'USDC arb (Kraken, 3-leg, crisis)',
-    'Crisis RV (60m rolling, kraken_btcusdc)': 'RV 60m (KR BTC/USDC, crisis)',
-    'Crisis RV (60m rolling, kraken_btcusdt)': 'RV 60m (KR BTC/USDT, crisis)',
-})
-df_ff_tex['Statistic'] = df_ff_tex['Statistic'].replace({
-    'mean (bps)': 'Mean bps',
-    'mean (bps/hr)': 'Mean bps/hr',
-    '% profitable, fee-only': 'Fee-only \\%',
-    '% profitable, fee+slippage': 'Fee+slip \\%',
-})
-df_ff_tex = df_ff_tex.rename(columns={
-    'All-sample': 'All',
-    'No-FF sample': 'No-FF',
-    'Delta (No-FF - All)': r'$\Delta$ (No-FF-All)',
-    'N all': 'N',
-    'N no-FF': 'N (No-FF)',
-    'Retention (%)': r'Retention (\%)',
-})
-
-ff_latex = df_ff_tex.to_latex(
-    index=False,
-    caption=(
-        r'Forward-fill sensitivity for selected headline metrics. '
-        r'All-sample uses the baseline aligned 1-minute series; No-FF sample removes '
-        r'observations with forward-filled inputs for each metric. Signs are largely stable, '
-        r'but magnitudes can move in thinner channels and rolling-volatility windows can become sparse.'
-    ),
-    label='tab:ff_sensitivity',
-    column_format='llrrrrrr',
-    float_format='%.3f',
-    escape=False,
-)
-ff_latex = ff_latex.replace(r'\begin{table}', r'\begin{table}[H]', 1)
-ff_latex = ff_latex.replace(r'\begin{tabular}', r'\footnotesize' + '\n' + r'\begin{tabular}', 1)
-ff_latex = convert_to_tabularx(
-    ff_latex,
-    r'>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{1.90cm}rrrrrr',
-)
-with open(os.path.join(TABLES_DIR, 'ff_sensitivity_core.tex'), 'w') as f:
-    f.write(ff_latex)
-print("Saved tables/ff_sensitivity_core.tex")
+print("Saved tables/ff_sensitivity_core.csv")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -812,42 +704,7 @@ for spec in vecm_specs:
 df_is = pd.DataFrame(is_rows)
 df_is.to_csv(os.path.join(TABLES_DIR, 'hasbrouck_is.csv'), index=False)
 
-# LaTeX table for Hasbrouck IS
-if not df_is.empty:
-    tbl_is = df_is[['Channel', 'Rank', 'k_diff',
-                    'alpha_USD', 'alpha_USDT',
-                    'IS_USD_lower', 'IS_USD_upper', 'IS_USD_mid',
-                    'IS_other_lower', 'IS_other_upper', 'IS_other_mid']].copy()
-    tbl_is.columns = ['Channel', 'Rank', r'$k_\Delta$',
-                      r'$\alpha_\text{USD}$', r'$\alpha_\text{USDT}$',
-                      'IS\\textsubscript{USD,lo}',
-                      'IS\\textsubscript{USD,hi}',
-                      'IS\\textsubscript{USD,mid}',
-                      'IS\\textsubscript{USDT,lo}',
-                      'IS\\textsubscript{USDT,hi}',
-                      'IS\\textsubscript{USDT,mid}']
-    is_latex = tbl_is.to_latex(
-        index=False,
-        caption=(r'Hasbrouck (1995) Information Share bounds for Kraken BTC/USD vs '
-                 r'BTC/USDT (no-FF sample). '
-                 r'Common-factor weights $\psi = \alpha_\perp = [-\alpha_2, \alpha_1]$. '
-                 r'IS bounds via both Cholesky orderings of the residual covariance $\Sigma_u$; '
-                 r'midpoint = $(\text{lower}+\text{upper})/2$. '
-                 r'BTC/USD IS midpoint $>0.5$ confirms USD as the relative price-discovery leader.'),
-        label='tab:hasbrouck_is',
-        column_format='l' + 'r' * 10,
-        float_format='%.3f',
-        na_rep='---',
-        escape=False,
-    )
-    is_latex = is_latex.replace(r'\begin{tabular}',
-                                r'\footnotesize' + '\n' +
-                                r'\resizebox{\textwidth}{!}{%' + '\n' +
-                                r'\begin{tabular}', 1)
-    is_latex = is_latex.replace(r'\end{tabular}', r'\end{tabular}' + '%\n}', 1)
-    with open(os.path.join(TABLES_DIR, 'hasbrouck_is.tex'), 'w') as f:
-        f.write(is_latex)
-    print("\nSaved tables/hasbrouck_is.tex")
+print("\nSaved tables/hasbrouck_is.csv")
 
 # ── Update cointegration_vecm_merged.tex from canonical CSV artifacts ───────
 joh_path = os.path.join(TABLES_DIR, 'cointegration_johansen.csv')
@@ -1089,47 +946,7 @@ df_hac = pd.DataFrame(hac_rows).round({
 })
 df_hac.to_csv(os.path.join(TABLES_DIR, 'hac_headline_metrics.csv'), index=False)
 
-df_hac_tex = df_hac.rename(columns={
-    '95% CI low': r'95\% CI low',
-    '95% CI high': r'95\% CI high',
-})
-
-# Compact display labels to prevent wasteful wraps in manuscript Table 4.
-df_hac_tex['Metric'] = df_hac_tex['Metric'].replace({
-    'USDC dispersion $D_t$ (Kraken, crisis)': r'USDC $D_t$ (Kraken, crisis)',
-    'USDC adjusted residual $B_t$ (Kraken, crisis)': r'USDC $B_t$ (Kraken, crisis)',
-    'USDT premium to USD (Kraken, crisis)': 'USDT premium (Kraken, crisis)',
-    'USDT premium to USD (Coinbase, crisis)': 'USDT premium (Coinbase, crisis)',
-    'BTC/USDT cross-exchange basis (Binance-Kraken, calm)': 'BTC/USDT basis (BN-KR, calm)',
-    'BTC/USD cross-exchange basis (Coinbase-Kraken, full)': 'BTC/USD basis (CB-KR, full)',
-})
-df_hac_tex = df_hac_tex.rename(columns={
-    'Mean (bps)': 'Mean',
-    'HAC SE (bps)': 'HAC SE',
-    r'95\% CI low': '95\\% CI low',
-    r'95\% CI high': '95\\% CI high',
-})
-
-hac_latex = df_hac_tex.to_latex(
-    index=False,
-    caption=(
-        r'HAC uncertainty for headline mean estimates (Newey--West, 60-lag cap). '
-        r'Values are in basis points with 95\% confidence intervals.'
-    ),
-    label='tab:hac_headline',
-    column_format='lrrrrr',
-    float_format='%.3f',
-    escape=False,
-)
-hac_latex = hac_latex.replace(r'\begin{table}', r'\begin{table}[H]', 1)
-hac_latex = hac_latex.replace(r'\begin{tabular}', r'\footnotesize' + '\n' + r'\begin{tabular}', 1)
-hac_latex = convert_to_tabularx(
-    hac_latex,
-    r'>{\raggedright\arraybackslash}Xrrrrr',
-)
-with open(os.path.join(TABLES_DIR, 'hac_headline_metrics.tex'), 'w') as f:
-    f.write(hac_latex)
-print("Saved tables/hac_headline_metrics.tex")
+print("Saved tables/hac_headline_metrics.csv")
 
 # ═══════════════════════════════════════════════════════════════════════════
 # FIX 6 – Distributional robustness: Chow break test, higher moments,

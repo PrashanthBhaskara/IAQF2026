@@ -1,17 +1,16 @@
 """
-09_additional_figures.py
+06_additional_figures.py
 ========================
-Generate academic-quality versions of two previously unused figures:
+Generate the two final single-column figures not covered by 05_column_figures.py:
   1. SVB Crisis Zoom (all intra-exchange B_t + cross-exchange basis)
   2. VAR Impulse-Response Function (BTC/USD vs BTC/USDC on Kraken)
 
-Outputs go to both:
-  figures/       (full-width, for IAQF_Final.tex)
-  figures_col/   (single-column, for IAQF_column_Final.tex)
+Outputs:
+  figures_col/   (referenced by IAQF_column_Final.tex)
 
 Run from the project root:
     cd /path/to/IAQF2026
-    python src/09_additional_figures.py
+    python src/06_additional_figures.py
 """
 
 import os
@@ -27,9 +26,7 @@ from statsmodels.tsa.api import VAR
 # ── Path setup ────────────────────────────────────────────────────────────────
 ROOT           = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_PROCESSED = os.path.join(ROOT, 'data_processed')
-FIGURES_DIR    = os.path.join(ROOT, 'figures')
 FIGURES_COL    = os.path.join(ROOT, 'figures_col')
-os.makedirs(FIGURES_DIR, exist_ok=True)
 os.makedirs(FIGURES_COL, exist_ok=True)
 
 # ── Load data ─────────────────────────────────────────────────────────────────
@@ -51,27 +48,6 @@ CB_ORANGE = '#CCBB44'
 CB_PURPLE = '#AA3377'
 CB_CYAN   = '#66CCEE'
 CB_DARK   = '#332288'
-
-# ── Full-width RC (for figures/) ──────────────────────────────────────────────
-FULL_RC = {
-    'font.family':       'serif',
-    'font.serif':        ['Times New Roman', 'Times', 'DejaVu Serif'],
-    'mathtext.fontset':  'stix',
-    'axes.facecolor':    'white',
-    'figure.facecolor':  'white',
-    'axes.grid':         False,
-    'axes.spines.top':   False,
-    'axes.spines.right': False,
-    'axes.linewidth':    0.8,
-    'font.size':         11,
-    'axes.titlesize':    13,
-    'axes.labelsize':    12,
-    'legend.fontsize':   10,
-    'xtick.labelsize':   10,
-    'ytick.labelsize':   10,
-    'xtick.direction':   'out',
-    'ytick.direction':   'out',
-}
 
 # ── Single-column RC (for figures_col/) ───────────────────────────────────────
 COL_RC = {
@@ -155,10 +131,6 @@ def plot_crisis_zoom(rc_dict, figsize_a, figsize_b, lw, save_dir, dpi=300):
         print(f"  saved → {path}")
 
 
-# Full-width version
-plot_crisis_zoom(FULL_RC, figsize_a=12, figsize_b=7, lw=0.55,
-                 save_dir=FIGURES_DIR)
-# Column version
 plot_crisis_zoom(COL_RC, figsize_a=3.4, figsize_b=4.5, lw=0.45,
                  save_dir=FIGURES_COL)
 
@@ -248,10 +220,6 @@ def plot_irf(rc_dict, figsize_w, figsize_h, lw_main, lw_ci, save_dir, dpi=300):
         print(f"  saved → {path}")
 
 
-# Full-width version
-plot_irf(FULL_RC, figsize_w=10, figsize_h=7, lw_main=1.6, lw_ci=0.8,
-         save_dir=FIGURES_DIR)
-# Column version
 plot_irf(COL_RC, figsize_w=3.4, figsize_h=3.4, lw_main=0.9, lw_ci=0.5,
          save_dir=FIGURES_COL)
 

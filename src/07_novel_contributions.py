@@ -4,9 +4,10 @@ Novel mathematical contributions for the IAQF column paper:
   2. Half-life ratio bootstrap CI (formal test of the ~940x gap)
   3. Asymmetry test (differential lambda for peg discounts vs premiums)
 
-All results are printed for integration into LaTeX. No files are modified.
+Core final-paper tables are also written to tables/.
 """
 
+import os
 import pandas as pd
 import numpy as np
 import statsmodels.api as sm
@@ -16,11 +17,12 @@ warnings.filterwarnings('ignore')
 
 # ── Load data ──────────────────────────────────────────────────────
 DATA_PROCESSED = 'data_processed'
+TABLES_DIR = 'tables'
+os.makedirs(TABLES_DIR, exist_ok=True)
 basis = pd.read_parquet(f'{DATA_PROCESSED}/basis.parquet')
 prices = pd.read_parquet(f'{DATA_PROCESSED}/prices.parquet')
 
 basis_ff_flags_path = f'{DATA_PROCESSED}/basis_ffill_flags.parquet'
-import os
 if os.path.exists(basis_ff_flags_path):
     basis_ff_flags = pd.read_parquet(basis_ff_flags_path)
 else:
@@ -134,6 +136,62 @@ for regime, (t0, t1) in regimes.items():
         sig = '***' if res['lambda_p'] < 0.001 else ('**' if res['lambda_p'] < 0.01 else ('*' if res['lambda_p'] < 0.05 else ''))
         print(f"  {regime:10s}: lambda={res['lambda']:+.5f} (SE={res['lambda_se']:.5f}, t={res['lambda_t']:.2f}, p={res['lambda_p']:.4f}) {sig}")
         print(f"             beta={res['beta']:+.5f} (p={res['beta_p']:.4f}), rho={res['rho_implied']:.4f}, HL={res['half_life_min']:.2f} min, R2={res['R2']:.4f}, N={res['n_obs']}")
+
+
+def fmt_pvalue(p):
+    return "${<}0.001$" if p < 0.001 else f"{p:.3f}"
+
+
+contagion_rows = []
+for channel, results in [('USDC', usdc_results), ('USDT', usdt_results)]:
+    for regime in ['Pre-SVB', 'Crisis', 'Post-SVB']:
+        if regime not in results:
+            continue
+        res = results[regime]
+        contagion_rows.append({
+            'Channel': channel,
+            'Regime': regime,
+            'lambda': res['lambda'],
+            'SE': res['lambda_se'],
+            't_stat': res['lambda_t'],
+            'p_value': res['lambda_p'],
+            'R2': res['R2'],
+            'N': res['n_obs'],
+        })
+
+df_contagion = pd.DataFrame(contagion_rows)
+df_contagion.to_csv(os.path.join(TABLES_DIR, 'contagion_intensity.csv'), index=False)
+
+tex_lines = [
+    r"\begin{table}[H]",
+    r"\caption{Contagion intensity $\hat\lambda$ from Eq.~(\ref{eq:contagion}): regime-specific OLS with Newey--West HAC (60 lags). $S_t$ is the peg deviation (bps; negative = discount).}",
+    r"\label{tab:contagion}",
+    r"\footnotesize",
+    r"\centering",
+    r"\resizebox{\columnwidth}{!}{%",
+    r"\begin{tabular}{llrrrrrr}",
+    r"\toprule",
+    r"Channel & Regime & $\hat\lambda$ & SE & $t$-stat & $p$-value & $R^2$ & $N$ \\",
+    r"\midrule",
+]
+for channel in ['USDC', 'USDT']:
+    sub = df_contagion[df_contagion['Channel'] == channel]
+    for _, row in sub.iterrows():
+        tex_lines.append(
+            f"{row['Channel']} & {row['Regime']} & ${row['lambda']:+.3f}$ & {row['SE']:.3f} & "
+            f"${row['t_stat']:+.2f}$ & {fmt_pvalue(float(row['p_value']))} & {row['R2']:.3f} & {int(row['N']):,} \\\\"
+        )
+    if channel == 'USDC':
+        tex_lines.append(r"\midrule")
+tex_lines.extend([
+    r"\bottomrule",
+    r"\end{tabular}%",
+    r"}",
+    r"\end{table}",
+])
+with open(os.path.join(TABLES_DIR, 'contagion_intensity.tex'), 'w') as f:
+    f.write("\n".join(tex_lines) + "\n")
+print(f"\nSaved tables/contagion_intensity.csv and tables/contagion_intensity.tex")
 
 # Robustness: no-FF filter for USDC crisis
 print("\n--- USDC Crisis No-FF Robustness ---")

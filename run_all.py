@@ -10,9 +10,12 @@ def main():
     scripts = [
         "src/01_fetch_data.py",
         "src/02_build_master_data.py",
-        "src/03_analysis_and_figures.py",
-        "src/06_three_fixes.py",
-        "src/04_tex_integrity_check.py"
+        "src/03_analysis_tables.py",
+        "src/04_enhanced_tables.py",
+        "src/05_column_figures.py",
+        "src/06_additional_figures.py",
+        "src/07_novel_contributions.py",
+        "src/08_tex_integrity_check.py"
     ]
 
     for script in scripts:
@@ -25,8 +28,8 @@ def main():
 
     print("\n" + "=" * 60)
     print("Pipeline completed successfully!")
-    print("Figures are saved in `figures/`")
-    print("Tables are saved in `tables/`")
+    print("Final paper figures are saved in `figures_col/`")
+    print("Final paper tables and numeric provenance are saved in `tables/`")
     print("=" * 60)
 
 if __name__ == "__main__":

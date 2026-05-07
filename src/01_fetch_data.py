@@ -215,16 +215,6 @@ def load_or_fetch(name: str, fetch_fn, *args, **kwargs) -> pd.DataFrame:
                 df = df.set_index('timestamp')
         return df
 
-    sparsh_path = os.path.join('data_sparsh', f"{name}.parquet")
-    if os.path.exists(sparsh_path):
-        print(f"  Copying from data_sparsh: {name}")
-        df = pd.read_parquet(sparsh_path)
-        if not isinstance(df.index, pd.DatetimeIndex):
-            if 'timestamp' in df.columns:
-                df = df.set_index('timestamp')
-        df.to_parquet(path)
-        return df
-
     print(f"  Fetching: {name} ...")
     df = fetch_fn(*args, **kwargs)
     if not df.empty:
@@ -237,23 +227,17 @@ def fetch_all_data():
         # Binance BTC Pairs
         ('binance_btcusdt', fetch_binance_klines, 'BTCUSDT'),
         ('binance_btcusdc', fetch_binance_klines, 'BTCUSDC'),
-        ('binance_btceur',  fetch_binance_klines, 'BTCEUR'),
-        # Binance Stablecoin Pairs
         ('binance_usdcusdt', fetch_binance_klines, 'USDCUSDT'),
 
         # Coinbase BTC Pairs
         ('coinbase_btcusd', fetch_coinbase_candles, 'BTC-USD'),
         ('coinbase_btcusdt', fetch_coinbase_candles, 'BTC-USDT'),
-        ('coinbase_btceur',  fetch_coinbase_candles, 'BTC-EUR'),
-        # Coinbase Stablecoin Pairs
         ('coinbase_usdtusd', fetch_coinbase_candles, 'USDT-USD'),
 
         # Kraken BTC Pairs
         ('kraken_btcusd',  fetch_kraken_ohlcv, 'XXBTZUSD'),
         ('kraken_btcusdt', fetch_kraken_ohlcv, 'XBTUSDT'),
         ('kraken_btcusdc', fetch_kraken_ohlcv, 'XBTUSDC'),
-        ('kraken_btceur',  fetch_kraken_ohlcv, 'XXBTZEUR'),
-        # Kraken Stablecoin Pairs
         ('kraken_usdcusd', fetch_kraken_ohlcv, 'USDCUSD'),
         ('kraken_usdtusd', fetch_kraken_ohlcv, 'USDTZUSD'),
     ]
