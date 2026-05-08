@@ -79,6 +79,16 @@ def write_text(path: str, text: str) -> None:
         f.write(text)
 
 
+def deterministic_summary_text(model) -> str:
+    """Statsmodels summaries include run timestamps; strip them for reproducible outputs."""
+    lines = []
+    for line in model.summary().as_text().splitlines():
+        if "Date:" in line or "Time:" in line:
+            continue
+        lines.append(line)
+    return "\n".join(lines) + "\n"
+
+
 def enforce_table_h_placement(tables_dir: str = TABLES_DIR) -> int:
     updated_files = 0
     for fname in os.listdir(tables_dir):
@@ -377,14 +387,14 @@ def export_regression_table() -> None:
     write_text(
         os.path.join(TABLES_DIR, "regression_results.txt"),
         "=== USDC/USD Basis Regression (Kraken) ===\n\n"
-        + model_usdc.summary().as_text()
+        + deterministic_summary_text(model_usdc)
         + "\n\n"
         + "=" * 60
         + "\n\n=== USDT/USD Basis Regression (Kraken) ===\n\n"
-        + model_usdt.summary().as_text(),
+        + deterministic_summary_text(model_usdt),
     )
-    write_text(os.path.join(TABLES_DIR, "regression_usdc.txt"), model_usdc.summary().as_text())
-    write_text(os.path.join(TABLES_DIR, "regression_usdt.txt"), model_usdt.summary().as_text())
+    write_text(os.path.join(TABLES_DIR, "regression_usdc.txt"), deterministic_summary_text(model_usdc))
+    write_text(os.path.join(TABLES_DIR, "regression_usdt.txt"), deterministic_summary_text(model_usdt))
 
     def fmt_coef(x: float) -> str:
         return f"${x:+.3f}$"

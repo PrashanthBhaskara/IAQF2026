@@ -36,6 +36,9 @@ TABLE_ARTIFACT_MAP = {
         'tables/depth_proxy_table.csv',
         'tables/depth_proxy_table.tex',
     ],
+    'tab:liquidity_spread': [
+        'tables/liquidity_spread_table.tex',
+    ],
     'tab:ff_sensitivity': [
         'tables/ff_sensitivity_core.csv',
     ],
@@ -170,6 +173,18 @@ def main():
                 f"Missing figure asset '{token}' referenced in {rel(src)} -> expected {rel(resolved)}"
             )
 
+    referenced_graphics = {os.path.normpath(path) for _, _, path in graphics_refs}
+    figures_col_dir = os.path.join(ROOT, 'figures_col')
+    if os.path.isdir(figures_col_dir):
+        actual_figures = {
+            os.path.normpath(os.path.join(figures_col_dir, fname))
+            for fname in os.listdir(figures_col_dir)
+            if fname.lower().endswith(('.png', '.pdf', '.jpg', '.jpeg', '.eps'))
+        }
+        unused_figures = sorted(actual_figures - referenced_graphics)
+        for fig in unused_figures:
+            errors.append(f"Unused figure asset in figures_col not referenced by final TeX: {rel(fig)}")
+
     label_counts = Counter(labels)
     duplicate_labels = [lbl for lbl, c in label_counts.items() if c > 1]
     for lbl in duplicate_labels:
@@ -189,6 +204,21 @@ def main():
             full = os.path.join(ROOT, rp)
             if not os.path.exists(full):
                 errors.append(f"Missing table artifact for {label}: {rp}")
+
+    allowed_root_tex = {'IAQF_column_Final.tex'}
+    allowed_root_pdf = {'IAQF_column_Final.pdf'}
+    for fname in os.listdir(ROOT):
+        full = os.path.join(ROOT, fname)
+        if not os.path.isfile(full):
+            continue
+        if fname.endswith('.tex') and fname not in allowed_root_tex:
+            errors.append(f"Unexpected root-level TeX file: {fname}")
+        if fname.endswith('.pdf') and fname not in allowed_root_pdf:
+            errors.append(f"Unexpected root-level PDF file: {fname}")
+        if fname.endswith(('.aux', '.log', '.out', '.toc', '.fls', '.fdb_latexmk', '.synctex.gz')):
+            errors.append(f"Unexpected root-level LaTeX build artifact: {fname}")
+        if fname.endswith('.ipynb'):
+            errors.append(f"Unexpected root-level notebook artifact: {fname}")
 
     # Emit compact summary
     print('TeX integrity summary:')
