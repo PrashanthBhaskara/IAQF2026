@@ -1,0 +1,7 @@
+Channel,fee_bps,fee_component_bps,pct_profitable_fee_slippage,N
+"USDC/USD (Kraken, 3-leg triangular)",3.0,9.0,14.032220406257295,4283
+"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",3.0,6.0,5.7407407407407405,4320
+"USDC/USD (Kraken, 3-leg triangular)",5.0,15.0,6.724258697174877,4283
+"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",5.0,10.0,2.2916666666666665,4320
+"USDC/USD (Kraken, 3-leg triangular)",10.0,30.0,0.9572729395283679,4283
+"Cross BTC/USD (Coinbase-Kraken, 2-leg pre-funded)",10.0,20.0,0.4398148148148148,4320

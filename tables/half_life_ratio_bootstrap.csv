@@ -1,0 +1,3 @@
+method,replications,block_length_minutes,seed,point_ratio,valid_replications,median_ratio,ci_95_low,ci_95_high,p_value_r_le_1
+parametric_ar1_residual_sieve,10000,,42,938.9842206184586,9994,566.5803758786469,215.52602387342148,1898.4667185368403,0.0
+moving_block,5000,60.0,42,938.9842206184586,5000,63.96637722603448,45.820778632537944,88.31701401481033,0.0

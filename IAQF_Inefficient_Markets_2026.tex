@@ -1,7 +1,7 @@
 \documentclass[12pt,twocolumn]{article}
 \usepackage{iftex}
 \ifPDFTeX
-  \PackageError{IAQF_column_Final}{Compile with XeLaTeX to enforce Times New Roman}{Run `xelatex IAQF_column_Final.tex` instead of `pdflatex`.}
+  \PackageError{IAQF_Inefficient_Markets_2026}{Compile with LuaLaTeX or XeLaTeX to enforce Times New Roman}{Run `lualatex IAQF_Inefficient_Markets_2026.tex` instead of `pdflatex`.}
 \fi
 \usepackage{fontspec}
 \defaultfontfeatures{Ligatures=TeX}
@@ -128,15 +128,19 @@ To isolate stablecoin peg risk from broader breakdowns in market arbitrage, we f
 \end{equation}
 
 Because large de-pegs inflate $D_{Q,t}$, this metric conflates asset risk with numeraire risk. To extract the true microstructural arbitrage opportunity, we mark the stablecoin leg back to its realized USD value, yielding the {adjusted parity residual}, $B_{Q,t}$:
-{\small\begin{equation}
+\begin{equation}
+    \resizebox{0.92\columnwidth}{!}{$\displaystyle
     B_{Q,t} = \left(\ln(P_{\text{BTC}/Q,t}\times P_{Q/\text{USD},t})-\ln(P_{\text{BTC/USD},t})\right)\times 10000.
-\end{equation}}
+    $}
+\end{equation}
 
 By satisfying $B_{Q,t}=D_{Q,t}+10000\cdot\ln(P_{Q/\text{USD},t})$, this decomposition localizes the dislocation: an immense $D_t$ coupled with a compressed $B_t$ proves the breakdown resides almost entirely in the peg layer. Both metrics are computed intra-exchange to eliminate cross-venue latency. 
 
 Theoretical gaps, however, do not immediately translate to executable arbitrage. A 320 bps dispersion appears massive, but standard triangular arbitrage incurs significant taker fees and market impact. To conservatively proxy execution costs without historical order-book depth, we utilize the intra-minute range:
 \begin{equation}
+    \resizebox{0.92\columnwidth}{!}{$\displaystyle
     \text{Intra-min Range (bps)} = \left( \frac{\text{High}_t - \text{Low}_t}{\text{Close}_t} \right)\times 10000.
+    $}
 \end{equation}
 Applying this friction strictly bounds the profitability of $B_t$, demonstrating how seemingly massive structural dislocations compress under realistic trading conditions.
 
@@ -405,6 +409,7 @@ Chow tests reject parameter stability at March~10 for $D_t$ ($F{=}2{,}089$), $B_
 \begin{table}[H]
 \label{tab:dist_robust}
 \footnotesize
+\resizebox{0.90\columnwidth}{!}{%
 \begin{tabular}{llcccc}
 \toprule
 Channel & Regime  & Skewness & Ex.Kurt. & Min  & Max   \\
@@ -417,6 +422,7 @@ USDT & Crisis   & -0.11 &  1.4 & $-$26.8 &  29.9 \\
 USDT & Post & -0.03 &  2.0 & $-$37.8 &  36.2 \\
 \bottomrule
 \end{tabular}
+}
 \caption{Higher-moment diagnostics for adjusted residual $B_t$ by regime. Excess kurtosis is Fisher ($0$ under Gaussian); Min/Max in bps.}
 \end{table}
 

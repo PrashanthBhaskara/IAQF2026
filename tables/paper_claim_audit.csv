@@ -1,0 +1,10 @@
+claim_id,paper_claim,reproduced_value,status,evidence_artifact,note
+bootstrap_numeric_interval,"median 567; 95% CI [216, 1,898]; p<1e-4","median 567; 95% CI [216, 1898]; empirical p=0.0000",verified,half_life_ratio_bootstrap.csv,Recovered from the February parametric-sieve description.
+bootstrap_method,"moving-block; 5,000 draws; 60-minute blocks","parametric AR(1) residual sieve; 10,000 draws; seed 42",method_mismatch,half_life_ratio_bootstrap.csv,"The submitted values reproduce under the earlier February method. The committed moving-block program gives 63.97 [45.82, 88.32]."
+chow_break_tests,"F=2,089; 230; 71",F=2088.65; 229.72; 70.96,verified,structural_break_tests.csv,
+usdc_crisis_jarque_bera,"JB=30,498",JB=30497.85,verified,normality_diagnostics.csv,
+fee_sensitivity,14.0% at 3 bps; 1.0% at 10 bps,14.032%; 0.957%,verified,arbitrage_fee_sensitivity.csv,
+contagion_robustness,"no-FF lambda=-0.009, N=3,001; 5-minute lambda=-0.012, N=861","no-FF lambda=-0.009237, N=3001; 5-minute lambda=-0.011948, N=861",verified,contagion_robustness.csv,
+vecm_residual_correlation,0.889,0.888165,verified,price_discovery_diagnostics.csv,
+forward_irf_impact,approximately 6 bps on impact,6.132133 bps,verified,var_irf_diagnostics.csv,
+reverse_irf_ci_all_horizons,95% CI contains zero at every horizon,"False; horizon 3 CI [-0.237665, -0.010469]",contradicted,var_irf_diagnostics.csv,The plotted asymptotic interval excludes zero at horizon 3.
