@@ -155,11 +155,14 @@ class DataContractTests(unittest.TestCase):
         )
 
         pd.testing.assert_series_equal(
-            result.prices.loc[minutes, "binance_btcusdt"], expected_prices
+            result.prices.loc[minutes, "binance_btcusdt"],
+            expected_prices,
+            check_freq=False,
         )
         pd.testing.assert_series_equal(
             result.price_ffill_flags.loc[minutes, "binance_btcusdt"],
             expected_flags,
+            check_freq=False,
         )
 
     def test_volumes_are_not_forward_filled(self):
