@@ -6,7 +6,6 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -233,6 +232,7 @@ def test_hac_regressions_match_frozen_paper_rows(
     assert row["crisis_p_value"] == pytest.approx(crisis_p_value, rel=1e-10)
 
 
+@pytest.mark.golden
 def test_reverse_granger_q_value_rounds_to_paper_display(
     paper_inputs: tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame],
 ) -> None:

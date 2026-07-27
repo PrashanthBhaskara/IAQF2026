@@ -6,7 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-
+import pytest
 
 RAW_MARKETS = [
     "binance_btcusdt",
@@ -88,6 +88,7 @@ def valid_raw(overrides=None):
 
 
 class DataContractTests(unittest.TestCase):
+    @pytest.mark.golden
     def test_committed_raw_data_rebuilds_all_six_processed_frames_exactly(self):
         _, data = data_api()
         raw = {

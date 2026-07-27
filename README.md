@@ -89,7 +89,7 @@ The implication is direct: cross-market crypto arbitrage corrected quickly, but 
 
 Following the collapse of Silicon Valley Bank in March 2023, USDC traded as low as roughly **$0.87**, creating visible violations of the [law of one price](https://en.wikipedia.org/wiki/Law_of_one_price) across crypto markets. Using 1-minute data from Binance, Coinbase, and Kraken, this paper decomposes Bitcoin price fragmentation into a dominant stablecoin-driven component and a smaller USD-adjusted arbitrage residual.
 
-The headline result is a sharp separation between the two layers. The adjusted BTC basis mean-reverts in about **0.6 minutes** during the crisis, while the USDC peg deviation persists for about **572 minutes**. A moving-block bootstrap confirms the half-life gap at high statistical confidence, localizing the durable dislocation to the fiat reserve layer rather than to a lasting failure of crypto-market arbitrage.
+The headline result is a sharp separation between the two layers. The adjusted BTC basis mean-reverts in about **0.6 minutes** during the crisis, while the USDC peg deviation persists for about **572 minutes**. The submitted paper reports a bootstrap confirmation of that gap; its surviving-code provenance is documented explicitly in the reproduction notes below.
 
 The paper then shows that the reserve shock was not fully quarantined. Peg stress transmits into the adjusted basis through liquidity withdrawal, volatility, cross-exchange basis widening, and sharply reduced post-friction arbitrage. Fiat-quoted BTC/USD remains the main information anchor during the event, while USDC-specific markets show severe tail risk and instability. These empirical channels map directly onto stablecoin policy issues around reserve composition, redemption speed, transparency, and bankruptcy priority.
 
@@ -134,7 +134,7 @@ X_t = c + rho X_{t-1} + epsilon_t
 half-life = log(2) * Delta t / -log(rho)
 ```
 
-Because peg deviations are close to unit-root behavior, the paper uses a 60-minute moving-block bootstrap rather than relying only on parametric intervals.
+Because peg deviations are close to unit-root behavior, the submitted paper reports a bootstrap interval rather than relying only on parametric uncertainty. The exact submitted interval is retained as a frozen legacy result; see the reproduction note below.
 
 The contagion model then tests whether peg stress predicts changes in the adjusted arbitrage basis:
 
@@ -148,7 +148,7 @@ Here, `S_t` is the stablecoin peg deviation. A significant `lambda` means stable
 
 **Dispersion decomposition.** During the crisis, Kraken USDC unadjusted dispersion averages roughly **+320 bps**, but the adjusted USDC residual averages only about **+5.3 bps**. USDT moves in the opposite direction, with a safe-haven premium visible in the unadjusted measure and a much smaller adjusted residual. This is the main evidence that the large headline price gaps were primarily stablecoin numeraire effects.
 
-**Two-layer persistence.** The adjusted USDC residual mean-reverts in about **0.6 minutes**, while the USDC peg deviation has a half-life near **572 minutes**. The estimated ratio is roughly **940x**, and the bootstrap rejects the null that the peg and basis layers have equal persistence. This is the paper's central result.
+**Two-layer persistence.** The adjusted USDC residual mean-reverts in about **0.6 minutes**, while the USDC peg deviation has a half-life near **572 minutes**. The estimated ratio is roughly **940x**. The submitted paper also reports a bootstrap rejection of equal persistence, subject to the frozen-provenance exception described below. This is the paper's central result.
 
 **Contagion intensity.** Before SVB, the USDC peg-stress transmission parameter is statistically indistinguishable from zero. During the crisis, it becomes highly significant. The sign implies that a deeper USDC discount predicts upward pressure in the adjusted residual, consistent with liquidity withdrawal from USDC order books. USDT shows the mirror pattern, consistent with safe-haven demand.
 
@@ -203,76 +203,88 @@ These are the exact figures referenced by the final paper.
 
 ```text
 .
-├── IAQF_column_Final.pdf          # final submitted paper
-├── IAQF_column_Final.tex          # final LaTeX source
-├── README.md                      # project overview and reproduction guide
-├── requirements.txt               # Python dependencies
-├── run_all.py                     # end-to-end reproduction entry point
-├── data_raw/                      # cached raw 1-minute exchange candles
-├── data_processed/                # aligned master data and basis series
-├── figures_col/                   # final paper figures
-├── src/                           # reproducible pipeline scripts
-└── tables/                        # generated tables and numeric provenance
+├── iaqf/
+│   ├── config.py                  # fixed study and artifact contract
+│   ├── data.py                    # raw refresh, validation, and processing
+│   ├── metrics.py                 # statistical and microstructure calculations
+│   ├── tables.py                  # deterministic table serialization
+│   ├── figures.py                 # deterministic plotting
+│   └── validation.py              # repository and paper checks
+├── run_all.py                     # single reproduction entry point
+├── data_raw/                      # 11 committed raw Parquet files
+├── data_processed/                # six processed Parquet files
+├── tables/                        # 36 generated table artifacts
+├── figures_col/                   # 14 paper PNGs
+├── tests/                         # unit, contract, golden, and integration tests
+├── pyproject.toml                 # exact Python and dependency pins
+├── uv.lock                        # locked dependency graph
+├── IAQF_column_Final.tex          # immutable submitted source
+└── IAQF_column_Final.pdf          # immutable submitted paper
 ```
 
 ## Reproduce the Results
 
-### 1. Create a Python environment
+### 1. Install the pinned environment
 
-Python 3.10+ is recommended.
+The reference environment is Python **3.12.4** with
+[uv](https://docs.astral.sh/uv/) **0.11.5**.
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+uv sync --frozen
 ```
 
 ### 2. Run the full pipeline
 
+Activate the environment, then use the repository's only execution entry point:
+
 ```bash
+source .venv/bin/activate
 python run_all.py
 ```
 
-This executes the full final-paper pipeline:
+The default run is offline: it validates the 11 committed raw files, rebuilds the
+six processed frames, writes all 36 tables and 14 figures, and validates the
+complete artifact surface. Paths are anchored to the checkout, so the command
+also works when invoked from another working directory.
 
-| Step | Script | Purpose |
-|---|---|---|
-| 1 | `src/01_fetch_data.py` | Fetch or load cached raw candles into `data_raw/`. |
-| 2 | `src/02_build_master_data.py` | Align all markets to a 1-minute UTC grid and write `data_processed/`. |
-| 3 | `src/03_analysis_tables.py` | Regenerate core analysis tables and numeric provenance. |
-| 4 | `src/04_enhanced_tables.py` | Regenerate liquidity, robustness, price discovery, HAC, and policy tables. |
-| 5 | `src/05_column_figures.py` | Regenerate the main single-column paper figures. |
-| 6 | `src/06_additional_figures.py` | Regenerate crisis-zoom and VAR/IRF figures. |
-| 7 | `src/07_novel_contributions.py` | Regenerate contagion-intensity and bootstrap diagnostics. |
-| 8 | `src/08_tex_integrity_check.py` | Verify final TeX references, labels, figures, and table provenance. |
-
-Expected final message:
-
-```text
-Pipeline completed successfully!
-Final paper figures are saved in `figures_col/`
-Final paper tables and numeric provenance are saved in `tables/`
-```
-
-### 3. Rebuild the paper PDF
-
-The final paper uses Times New Roman via `fontspec`, so compile with XeLaTeX:
+Network retrieval is opt-in:
 
 ```bash
-xelatex IAQF_column_Final.tex
+python run_all.py --refresh-data
 ```
 
-### 4. Validate final-paper dependencies
+The refresh flag replaces the raw cache before running the same deterministic
+pipeline. It is unnecessary for reproducing the committed study.
+
+### 3. Validate the repository
 
 ```bash
-python src/08_tex_integrity_check.py
+uv run ruff check .
+uv run python -m pytest -q
 ```
 
-Expected final line:
+The full suite includes exact table and PNG contracts plus an isolated two-run
+idempotence test. CI runs the platform-independent subset; the exact PNG hashes
+are reference-environment checks because font rendering is platform-sensitive.
 
-```text
-TeX integrity check passed.
-```
+The submitted `IAQF_column_Final.tex` and `IAQF_column_Final.pdf` are immutable.
+The pipeline validates their SHA-256 hashes and never formats, edits, or compiles
+over them.
+
+### Reproduction provenance
+
+The complete-case return sample used by HAC and Granger calculations is restored
+from repository history. It reproduces `N=26,489` for both HAC channels and the
+reverse-Granger q-value `0.127898`; other paper-facing semantics, including the
+Kraken end boundary and existing missing-data choices, remain unchanged.
+
+One result is an explicit frozen legacy exception. The paper reports a bootstrap
+ratio of **567 [216, 1,898]**. Both available repository histories show that the
+surviving 5,000-draw, 60-minute moving-block implementation instead produces
+approximately **64 [46, 88]**, and there is no surviving producer for the
+submitted sieve-bootstrap result. The main pipeline therefore does not execute
+or fabricate that statistic; it records the submitted value as uncomputed
+provenance.
 
 ## Methods Glossary
 
@@ -323,7 +335,7 @@ This project demonstrates:
 - event-study design around a real market stress event;
 - high-frequency financial data engineering;
 - careful treatment of missing data and forward-fill exposure;
-- econometric modeling with HAC inference, VECM, VAR, Granger tests, and bootstrap diagnostics;
+- econometric modeling with HAC inference, VECM, VAR, Granger tests, and explicit legacy-bootstrap provenance;
 - market microstructure reasoning around liquidity, spreads, volatility, and executable arbitrage;
 - policy interpretation connecting empirical findings to stablecoin regulation;
 - fully scripted reproducibility from raw data cache to final figures and tables.

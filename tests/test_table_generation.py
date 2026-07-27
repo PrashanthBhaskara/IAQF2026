@@ -118,6 +118,7 @@ def test_arbitrage_after_costs_aligns_legs_and_clips_both_net_bounds() -> None:
     pd.testing.assert_frame_equal(result, expected, check_freq=False)
 
 
+@pytest.mark.golden
 def test_half_life_robustness_is_the_exact_shared_table_and_figure_frame() -> None:
     result = half_life_robustness(committed_analysis_data())
 

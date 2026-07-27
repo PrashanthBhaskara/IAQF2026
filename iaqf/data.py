@@ -15,7 +15,6 @@ from pandas.api.types import is_bool_dtype, is_numeric_dtype
 
 from iaqf.config import STUDY_END, STUDY_START, RepoPaths
 
-
 STUDY_INDEX = pd.date_range(STUDY_START, STUDY_END, freq="1min", tz="UTC")
 STUDY_INDEX.freq = None
 

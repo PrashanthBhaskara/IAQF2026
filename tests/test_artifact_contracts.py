@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 
 import pytest
-
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -120,6 +120,7 @@ def test_validators_accept_the_committed_frozen_artifacts() -> None:
 
     assert validation_module().validate_frozen_paper(paths) is None
     assert validation_module().validate_artifacts(paths) is None
+    assert validation_module().validate_repository(paths) is None
 
 
 @pytest.mark.parametrize("mutation", ["missing", "stale"])
@@ -143,6 +144,17 @@ def test_frozen_paper_validation_rejects_tampering(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match=r"(?i)(sha|hash|frozen|paper)"):
         validation_module().validate_frozen_paper(repo_paths(tmp_path))
+
+
+def test_artifact_validation_rejects_wrong_figure_dimensions(tmp_path: Path) -> None:
+    copy_artifact_surface(tmp_path)
+    Image.new("RGB", (1, 1)).save(
+        tmp_path / "figures_col" / "fig_var_irf.png",
+        format="PNG",
+    )
+
+    with pytest.raises(ValueError, match=r"(?i)(dimension|size|figure)"):
+        validation_module().validate_artifacts(repo_paths(tmp_path))
 
 
 def test_legacy_bootstrap_claim_is_explicitly_uncomputed_provenance() -> None:

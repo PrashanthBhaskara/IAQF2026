@@ -5,7 +5,16 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 
-from iaqf.config import EXPECTED_FIGURES, EXPECTED_TABLES, PAPER_SHA256, RepoPaths
+from PIL import Image
+
+from iaqf.config import (
+    EXPECTED_FIGURE_DIMENSIONS,
+    EXPECTED_FIGURES,
+    EXPECTED_TABLES,
+    PAPER_SHA256,
+    RepoPaths,
+)
+from iaqf.data import PROCESSED_FILES, RAW_MARKETS, load_processed, validate_raw
 
 LEGACY_BOOTSTRAP_CLAIM = {
     "method": "moving-block bootstrap",
@@ -48,6 +57,25 @@ def validate_artifacts(paths: RepoPaths) -> None:
         errors.append(_set_difference("table", EXPECTED_TABLES, tables))
     if errors:
         raise ValueError("artifact set mismatch: " + "; ".join(errors))
+    _validate_figure_dimensions(paths.figures)
+
+
+def validate_repository(paths: RepoPaths) -> None:
+    """Validate the complete committed reproduction surface."""
+    validate_frozen_paper(paths)
+    _require_exact_files(
+        paths.raw,
+        {f"{market}.parquet" for market in RAW_MARKETS},
+        "raw data",
+    )
+    validate_raw(paths)
+    _require_exact_files(
+        paths.processed,
+        set(PROCESSED_FILES.values()),
+        "processed data",
+    )
+    load_processed(paths)
+    validate_artifacts(paths)
 
 
 def _owned_files(directory: Path, kind: str) -> set[str]:
@@ -57,6 +85,30 @@ def _owned_files(directory: Path, kind: str) -> set[str]:
         raise ValueError(
             f"{kind} artifact directory is missing: {directory}"
         ) from error
+
+
+def _require_exact_files(directory: Path, expected: set[str], kind: str) -> None:
+    observed = _owned_files(directory, kind)
+    if observed != expected:
+        raise ValueError(
+            f"{kind} set mismatch: {_set_difference(kind, expected, observed)}"
+        )
+
+
+def _validate_figure_dimensions(directory: Path) -> None:
+    errors = []
+    for name, expected in EXPECTED_FIGURE_DIMENSIONS.items():
+        path = directory / name
+        try:
+            with Image.open(path) as figure:
+                observed = figure.size
+                figure.verify()
+        except OSError as error:
+            raise ValueError(f"figure is corrupt or unreadable: {path}") from error
+        if observed != expected:
+            errors.append(f"{name}: expected {expected}, observed {observed}")
+    if errors:
+        raise ValueError("figure dimension mismatch: " + "; ".join(errors))
 
 
 def _set_difference(kind: str, expected: set[str], observed: set[str]) -> str:
