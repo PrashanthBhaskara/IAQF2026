@@ -6,7 +6,6 @@ from types import MappingProxyType
 
 import pandas as pd
 
-
 STUDY_START = pd.Timestamp("2023-03-01 00:00:00", tz="UTC")
 STUDY_END = pd.Timestamp("2023-03-21 23:59:00", tz="UTC")
 CRISIS_START = pd.Timestamp("2023-03-10 00:00:00", tz="UTC")
@@ -39,6 +38,25 @@ EXPECTED_FIGURES = frozenset(
         "fig_two_layer_persistence.png",
         "fig_var_irf.png",
         "fig_volume_share.png",
+    }
+)
+
+EXPECTED_FIGURE_DIMENSIONS = MappingProxyType(
+    {
+        "fig_arbitrage_after_fees.png": (1047, 1381),
+        "fig_correlation_regime_heatmap.png": (1949, 1787),
+        "fig_cross_exchange_basis.png": (1047, 1679),
+        "fig_dispersion_vs_adjusted_kraken.png": (1047, 1384),
+        "fig_half_life_robustness.png": (1051, 889),
+        "fig_liquidity_roll_amihud.png": (1038, 1377),
+        "fig_realized_volatility.png": (1053, 934),
+        "fig_stablecoin_peg.png": (1047, 1231),
+        "fig_stablecoin_substitution_scatter.png": (1047, 1166),
+        "fig_svb_crisis_zoom.png": (1041, 1384),
+        "fig_tail_blowout_kde.png": (1054, 985),
+        "fig_two_layer_persistence.png": (1038, 917),
+        "fig_var_irf.png": (1064, 1046),
+        "fig_volume_share.png": (1053, 937),
     }
 )
 
